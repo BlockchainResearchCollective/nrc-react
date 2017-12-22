@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM, { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import store from './store'
 import Login from './containers/Login'
 import './App.css'
 
@@ -7,19 +9,15 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      url: "",
-      user: {},
-      status: "success"
-    }
-  }
 
-  componentDidMount() {
-    this.setState({ status: "fail" })
+    }
   }
 
   render() {
     return (
-      <Login />
+      <Provider store={store}>
+        <Login />
+      </Provider>
     )
   }
 }

@@ -5,7 +5,8 @@
   "scripts": {
     "build": "webpack --progress --profile --colors",
     "watch": "webpack --watch --progress --colors",
-    "dev": "npm run watch"
+    "dev": "npm run watch",
+    "start": "react-scripts start"
   },
   "dependencies": {
     "antd": "^3.0.2",
