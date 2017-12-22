@@ -10,7 +10,7 @@ const iframeClass = css({
   border: 'none',
   width: '100%',
   height: '100%',
-  background: 'white',
+  backgroundImage: 'linear-gradient(#4c475e, #56506c)',
   borderRadius: '8px',
   boxShadow: '-1px 1px 8px rgba(0,0,0,.15)'
 })
