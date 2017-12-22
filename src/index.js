@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 import cx from 'classnames'
 import { css } from 'glamor'
 import { node, object, string, number, func } from 'prop-types'
 import App from './App'
+import store from './store'
 
 const iframeClass = css({
   position: 'fixed',
@@ -203,5 +205,10 @@ if (Frame.isReady()) {
 } else {
   const root = document.createElement('div')
   document.body.appendChild(root)
-  ReactDOM.render(<Frame />, root)
+  ReactDOM.render(
+    <Provider store={store}>
+      <Frame />
+    </Provider>, 
+    root
+  )
 }

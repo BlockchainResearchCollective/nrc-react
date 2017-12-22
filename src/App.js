@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import ReactDOM, { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import store from './store'
+import { Provider, connect } from 'react-redux'
 import Login from './containers/Login'
 import './App.css'
+import { checkLoginStatus } from './actions'
 
 class App extends Component {
   constructor(props){
@@ -12,14 +12,27 @@ class App extends Component {
 
     }
   }
-
+  componentWillMount() {
+    const { dispatch } = this.props
+    dispatch(checkLoginStatus())
+  }
   render() {
     return (
-      <Provider store={store}>
-        <Login />
-      </Provider>
+      <div>
+        { !this.props.loggedIn &&
+          <Login />
+        }
+      </div>
     )
   }
 }
 
-export default App
+const mapStateToProps = state => {
+  return {
+    loggedIn: state.user.loggedIn, 
+    profile: state.user.profile, 
+    isFetching: state.user.isFetching,
+  }
+}
+
+export default connect(mapStateToProps)(App)

@@ -1,0 +1,521 @@
+swagger: '2.0'
+info:
+  description: a decentralized, censorship resistant, blockchain-based reivew system, incentivizing honest, quality reivews using crypto-economics design.
+  version: "1.0.0"
+  title: NRC Server API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+# host: 188.166.190.168:8000
+# basePath: /
+produces:
+- application/json
+consumes:
+- application/json
+schemes:
+ - https
+ - http
+tags:
+- name: user
+  description: Operations about user
+- name: history
+  description: transaction history
+- name: utility
+  description: utility functions
+paths:
+  /user:
+    get:
+      tags:
+      - user
+      summary: "Check user login status"
+      operationId: "checkStatus"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: 'reply login status'
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                # success or fail
+              profile:
+                $ref: '#/definitions/BasicProfile'
+                # call /user/{userId} for full user record
+  /user/login:
+    post:
+      tags:
+      - user
+      summary: Logs user into the system
+      operationId: loginUser
+      parameters:
+      - in: body
+        name: loginRequest
+        description: "user information to login"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginRequest"
+      responses:
+        200:
+          description: "logged in"
+        403:
+          description: "wrong authentication information"
+  /user/logout:
+    get:
+      tags:
+      - user
+      summary: "Logs out current logged in user session"
+      operationId: logoutUser
+      parameters: []
+      responses:
+        200:
+          description: "logout success"
+  /user/{userId}:
+    get:
+      deprecated: true
+      tags:
+      - user
+      summary: "Get complete user info by user id"
+      operationId: getUserById
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "user profile updated"
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: "Invalid userId supplied"
+        404:
+          description: "User not found"
+    put:
+      deprecated: true
+      tags:
+      - user
+      summary: "Updated user"
+      description: "This can only be done by the logged in user"
+      operationId: "updateUser"
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: integer
+      - in: body
+        name: body
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        200:
+          description: "user successfully modified"
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+      security:
+        - nrc_auth:
+          - 'write:user'
+  /user/signup:
+    post:
+      tags:
+        - user
+      summary: "new user registration/signup"
+      operationId: "userSignup"
+      parameters:
+      - in: body
+        name: signupRequest
+        description: "user information to sign up"
+        required: true
+        schema:
+          $ref: '#/definitions/SignupRequest'
+      responses:
+        200:
+          description: "account created"
+        500:
+          description: "error message"
+    get:
+      tags:
+        - user
+      summary: "signup form validation before submit"
+      operationId: "signupValidation"
+      parameters:
+      - in: body
+        name: signupValidation
+        required: true
+        schema:
+          type: object
+          properties:
+            username:
+              type: string
+            email:
+              type: string
+      responses:
+        200:
+          description: "validation result"
+          schema:
+            type: object
+            properties:
+              username_status:
+                type: boolean
+                # 0 for invalid(already exist), 1 for valid
+              email_status:
+                type: boolean
+                # 0 for invalid(already exist), 1 for valid
+  /user/signup/verify/{username}/{key}:
+    get:
+      tags:
+        - user
+      summary: "verify reset code sent to user email"
+      operationId: "signupEmailVerify"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username"
+        required: true
+        type: "string"
+      - name: "key"
+        in: "path"
+        description: "verification key"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "email verified."
+        400:
+          description: "email verification failed"
+        500:
+          description: "email activation failed"
+  /user/password-reset:
+    post:
+      tags:
+        - user
+      summary: "reset password request from user"
+      operationId: "passwordReset"
+      parameters:
+      - in: body
+        name: email
+        required: true
+        schema:
+          type: object 
+          properties:
+            email:
+             type: string
+      responses:
+        200:
+          description: "waiting for verification"
+        400:
+          description: "email doesn't exist"
+        500:
+          description: "reset request fail"
+  /user/password-reset/verify:
+    post:
+      tags:
+        - user
+      summary: "verify reset code sent to user email"
+      operationId: "passwordResetVerify"
+      parameters:
+      - in: body
+        name: verificationCode
+        required: true
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+            verificationCode:
+              type: string
+      responses:
+        200:
+          description: "verification success"
+        400:
+          description: "verification fail because of internal server error"
+        403:
+          description: "verification fail or timeout"
+  /user/password-change:
+    post:
+      tags:
+        - user
+      summary: "change password"
+      operationId: "changePassword"
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            email: 
+              type: string
+            newPassword:
+              type: string
+      responses:
+        200:
+          description: "password update success"
+        500:
+          description: "password update fail"
+        403:
+          description: "permission denied"
+  /history/user/{userId}/{pageNum}:
+    get:
+      tags:
+      - history
+      summary: "get transaction history of a user"
+      operationId: "getUserHistory"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "user primary key"
+        required: true
+        type: "integer"
+      - name: "pageNum"
+        in: "path"
+        description: "current pagination number"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "reply paginated tx history"
+          schema:
+            type: object
+            properties:
+              currentPage:
+                type: integer
+              txHistory:
+                type: array
+                items:
+                  $ref: '#/definitions/Tx'
+        400:
+          description: "no transaction record"
+        403:
+          description: "permission denied"
+  /history/user/{userId}:
+    post:
+      tags:
+      - history
+      summary: "new transaction record"
+      operationId: "newTx"
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: "basic information about a transaction"
+        required: true
+        schema:
+          $ref: "#/definitions/Tx"
+      - in: path
+        name: "userId"
+        description: "user primary key"
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "new transaction saved"
+        400:
+          description: "wrong user id"
+        403:
+          description: "permission denied"
+      security:
+        - nrc_auth:
+          - 'write:history'
+  /history/tx/{txId}:
+    get:
+      deprecated: true
+      tags:
+      - history
+      summary: "complete detail of a transaction"
+      operationId: "txDetail"
+      parameters:
+      - in: path
+        name: txId
+        description: "get tx record by id"
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "tx detail response"
+          schema:
+            $ref: '#/definitions/Tx'
+        400:
+          description: "wrong tx id"
+    post:
+      deprecated: true
+      tags:
+      - history
+      summary: "post images attached in a review"
+      operationId: "imageUpload"
+      consumes:
+      - multipart/form-data
+      parameters:
+      - in: path
+        name: txId
+        description: "upload image by tx id"
+        required: true
+        type: integer
+      # multiple file upload format:
+      # https://swagger.io/docs/specification/2-0/file-upload/
+      - in: formData
+        name: pic1
+        type: file
+        required: true
+      - in: formData
+        name: pic2
+        type: file
+        required: false
+      - in: formData
+        name: pic3
+        type: file
+        required: false
+      - in: formData
+        name: pic4
+        type: file
+        required: false
+      responses:
+        200:
+          description: "image uploaded"
+        400:
+          description: "wrong tx id"
+        403:
+          description: "permission denied"
+      security:
+        - nrc_auth:
+          - 'write:history'
+  /utility/address-to-username/{ethAddress}:
+    get:
+      tags:
+      - utility
+      summary: "get username from ethAddress"
+      operationId: "addrToUsername"
+      parameters:
+      - in: path
+        name: ethAddress
+        required: true
+        type: string
+      responses:
+        200:
+          description: "respective username"
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+        400:
+          description: "ethAddress not found"        
+securityDefinitions:
+  nrc_auth:
+    type: oauth2
+    authorizationUrl: "http://188.166.190.168:8000/oauth"
+    flow: implicit
+    scopes:
+      'write:user': "modify user"
+      "write:history": "modify history"
+definitions:
+  User:
+    type: object
+    properties:
+      basicProfile:
+        $ref: '#/definitions/BasicProfile'
+      firstname:
+        type: string
+      lastname:
+        type: string
+      # field in model, but never shown or used by frontend
+      # 
+      # password:
+      #   type: string
+      phone:
+        type: string
+      txHistory:
+        type: array
+        items:
+          $ref: '#/definitions/Tx'
+      # reset:
+      #   type: object
+      #   properties:
+      #     activated:
+      #       type: boolean
+      #       description: "true if reset process starts, false when done."
+      #     uuidv4:
+      #       type: string
+      #       description: "random auth token"
+      #     timestamp:
+      #       type: integer
+      #       format: int64
+      #       description: "unix timestamp"
+      #     verified:
+      #       type: boolean
+  BasicProfile:
+    type: object
+    properties:
+      _id:
+        type: string
+      isActivated:
+        type: boolean
+      unverifiedEmail:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+      ethAddress:
+        type: string
+      # field in model, but not saved in backend server, fetch from 
+      # blockchain every time.
+      # 
+      # ethBalance:
+      #   type: integer
+      encryptedAccount:
+        type: string
+      totalTx:
+        type: integer
+  Tx:
+    type: object
+    properties:
+      action:
+        enum:
+          - 'submit review'
+          - 'update review'
+          - 'upvote review'
+          - 'downvote review'
+          - 'vote payout'
+      txHash:
+        type: string
+      value:
+        type: integer
+        format: int256
+      reviewIndex:
+        type: integer
+        # -1 for payment settlement transaction
+        # non-negative integer for newReview, updateReview and voteReview
+  LoginRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+        
+  SignupRequest:
+    type: object
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  
+  StatusResponse:
+    type: object
+    properties:
+      status:
+        type: string
+        description: "true if operation succeed, false otherwise"
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /NTUS/NanyangReviewChain/1.0.0
