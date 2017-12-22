@@ -1,0 +1,24 @@
+{
+  "name": "Nanyang Review Chain",
+  "version": "0.1.0",
+  "description": "A blockchain based peer review plugin",
+  "web_accessible_resources": ["Frame.js"],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "React Chrome Sidebar",
+    "default_icon": "favicon.png"
+  },
+  "manifest_version": 2,
+  "permissions": [
+    "https://*/*",
+    "http://*/*",
+    "tabs",
+    "webRequest",
+    "webRequestBlocking"
+  ]
+}
