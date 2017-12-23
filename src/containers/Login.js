@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Steps, Row, Col } from 'antd'
 import LoginForm from '../components/LoginForm'
 import SignUpForm from '../components/SignUpForm'
+import SignUpActivation from '../components/SignUpActivation'
 import Banner from '../components/Banner'
 import { URL } from '../constants'
 
@@ -40,7 +41,7 @@ class Login extends React.Component {
     super(props)
     this.state = {
       display: "loginPage",
-      step: 0
+      step: 1
     }
   }
 
@@ -86,9 +87,16 @@ class Login extends React.Component {
                 </Steps>
               </Col>
             </Row>
-            <div style={addMarginTop(80)}>
-              <SignUpForm />
-            </div>
+            { this.state.step === 0 &&
+              <div style={addMarginTop(80)}>
+                <SignUpForm />
+              </div>
+            }
+            { this.state.step === 1 &&
+              <div style={addMarginTop(80)}>
+                <SignUpActivation />
+              </div>
+            }
           </div>
         }
         { this.state.display === "forgetPasswordPage" &&

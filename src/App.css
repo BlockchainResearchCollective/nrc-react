@@ -24,17 +24,18 @@
   float: left;
 }
 
-.ant-steps-item-finish .ant-steps-item-title{
+.ant-steps-item-finish .ant-steps-item-icon {
+  background-color: #56506c;
+}
+.ant-steps-item-finish .ant-steps-item-title {
   color: #7f7993 !important;
   font-size: 12px !important;
 }
-
-.ant-steps-item-process .ant-steps-item-title{
-  color: white !important;
+.ant-steps-item-process .ant-steps-item-title {
+  color: #fff !important;
   font-size: 12px !important;
 }
-
-.ant-steps-item-wait .ant-steps-item-title{
+.ant-steps-item-wait .ant-steps-item-title {
   color: #7f7993 !important;
   font-size: 12px !important;
 }
