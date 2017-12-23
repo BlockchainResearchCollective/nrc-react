@@ -2,7 +2,6 @@
   "name": "Nanyang Review Chain",
   "version": "0.1.0",
   "description": "A blockchain based peer review plugin",
-  "web_accessible_resources": ["frame.js"],
   "background": {
     "scripts": [
       "background.js"

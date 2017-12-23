@@ -1,4 +1,4 @@
-import { REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS } from '../actions/'
+import { REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS, REQUEST_LOGIN, RESPONSE_LOGIN } from '../actions/'
 
 const initialState = {
 	isFetching: false,
@@ -20,8 +20,18 @@ const userProfile = (state = {initialState}, action) => {
 				profile: action.profile,
 				loggedIn: action.status === 'success'
 			}
+		case REQUEST_LOGIN:
+			return {
+				...state,
+				isFetching: true
+			}
+		case RESPONSE_LOGIN:
+			return {
+				...state,
+				isFetching: false
+			}
 		default:
-			return state 
+			return state
 	}
 }
 

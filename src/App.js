@@ -12,15 +12,20 @@ class App extends Component {
 
     }
   }
+
   componentWillMount() {
     const { dispatch } = this.props
     dispatch(checkLoginStatus())
   }
+  
   render() {
     return (
       <div>
         { !this.props.loggedIn &&
           <Login />
+        }
+        { this.props.loggedIn &&
+          <h1>Login success, in home page now</h1>
         }
       </div>
     )
@@ -29,8 +34,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    loggedIn: state.user.loggedIn, 
-    profile: state.user.profile, 
+    loggedIn: state.user.loggedIn,
+    profile: state.user.profile,
     isFetching: state.user.isFetching,
   }
 }

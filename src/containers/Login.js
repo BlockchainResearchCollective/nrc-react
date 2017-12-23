@@ -40,7 +40,7 @@ class Login extends React.Component {
       <div style={divStyle}>
         <img src={logo} style={logoStyle} alt="logo" />
         <p style={titleStyle} >nanyang review chain</p>
-        <LoginForm/>
+        <LoginForm />
       </div>
     )
   }
