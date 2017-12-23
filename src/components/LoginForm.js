@@ -41,8 +41,8 @@ class LoginForm extends React.Component {
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          <a className="login-form-forgot" href="">Forgot password</a>
-          <a className="login-form-signup" href="">Sign Up</a>
+          <a onClick={this.props.handleForgetPassword} className="login-form-forgot" href="#">Forgot password</a>
+          <a onClick={this.props.handleSignUp} className="login-form-signup" href="#">Sign Up</a>
         </FormItem>
       </Form>
     );
