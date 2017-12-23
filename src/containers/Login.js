@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Steps, Row, Col } from 'antd'
+import { Steps, Row, Col, Icon } from 'antd'
 import LoginForm from '../components/LoginForm'
 import SignUpForm from '../components/SignUpForm'
 import SignUpActivation from '../components/SignUpActivation'
@@ -59,6 +59,14 @@ class Login extends React.Component {
     })
   }
 
+  handleBack = (e) => {
+    e.preventDefault()
+    this.setState({
+      display: "loginPage",
+      step: 0
+    })
+  }
+
   render() {
     return (
       <div>
@@ -74,7 +82,12 @@ class Login extends React.Component {
         }
         { this.state.display === "signUpPage" &&
           <div>
-            <Row style={addMarginTop(50)}>
+            <Row style={addMarginTop(20)}>
+              <Col offset={2}>
+                <a onClick={this.handleBack} href="#" style={{textDecoration: 'none'}}><Icon type="left" />Back</a>
+              </Col>
+            </Row>
+            <Row style={addMarginTop(30)}>
               <Col span={16} offset={4}>
                 <Banner title="Nanyang Review Chain"/>
               </Col>
@@ -88,12 +101,12 @@ class Login extends React.Component {
               </Col>
             </Row>
             { this.state.step === 0 &&
-              <div style={addMarginTop(80)}>
+              <div style={addMarginTop(70)}>
                 <SignUpForm />
               </div>
             }
             { this.state.step === 1 &&
-              <div style={addMarginTop(80)}>
+              <div style={addMarginTop(100)}>
                 <SignUpActivation />
               </div>
             }
