@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import LoginForm from '../components/LoginForm'
-import logo from '../assets/Logo_vector.svg'
+import { URL } from '../constants'
 
 const divStyle = {
   width: '80%',
@@ -38,7 +38,7 @@ class Login extends React.Component {
   render() {
     return (
       <div style={divStyle}>
-        <img src={logo} style={logoStyle} alt="logo" />
+        <img src={`${URL}/images/Logo_vector.svg`} style={logoStyle} alt="logo" />
         <p style={titleStyle} >nanyang review chain</p>
         <LoginForm />
       </div>
