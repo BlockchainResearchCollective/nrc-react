@@ -5,6 +5,11 @@ import Login from './containers/Login'
 import './App.css'
 import { checkLoginStatus } from './actions'
 
+const divStyle = {
+  overflowY: 'scroll',
+  height: '100%'
+}
+
 class App extends Component {
   constructor(props){
     super(props)
@@ -20,7 +25,7 @@ class App extends Component {
   
   render() {
     return (
-      <div>
+      <div style={divStyle}>
         { !this.props.loggedIn &&
           <Login />
         }

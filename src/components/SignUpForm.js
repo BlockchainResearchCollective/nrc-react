@@ -226,7 +226,10 @@ class RegistrationForm extends React.Component {
         <div style={{marginTop: '70px'}}>
           <FormItem {...tailFormItemLayout}>
             {getFieldDecorator('agreement', {
-              valuePropName: 'checked'
+              valuePropName: 'checked',
+              rules: [{
+                required: true,
+              }]
             })(
               <Checkbox>I agree to the <a href="#">terms and conditions</a></Checkbox>
             )}
