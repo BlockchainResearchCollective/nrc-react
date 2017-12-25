@@ -1,9 +1,13 @@
-import { REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS, REQUEST_LOGIN, RESPONSE_LOGIN } from '../actions/'
+import { 
+	REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS, REQUEST_LOGIN, RESPONSE_LOGIN,
+	REQUEST_ETH_BALANCE, RESPONSE_ETH_BALANCE
+} from '../actions/'
 
 const initialState = {
 	isFetching: false,
 	loggedIn: false,
  	profile: {},
+ 	ethBalance: 0
 }
 
 const userProfile = (state = {initialState}, action) => {
@@ -29,6 +33,16 @@ const userProfile = (state = {initialState}, action) => {
 			return {
 				...state,
 				isFetching: false
+			}
+		case REQUEST_ETH_BALANCE:
+			return {
+				...state,
+				isFetching: true
+			}
+		case RESPONSE_ETH_BALANCE:
+			return {
+				...state,
+				ethBalance: action.ethBalance
 			}
 		default:
 			return state

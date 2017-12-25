@@ -1,4 +1,7 @@
 import { URL } from '../constants'
+import { getBalance } from '../service/blockchain'
+import Web3 from 'web3'
+const web3 = new Web3( new Web3.providers.HttpProvider('https://kovan.infura.io'))
 
 export const REQUEST_LOGIN_STATUS = 'REQUEST_LOGIN_STATUS'
 export const RESPONSE_LOGIN_STATUS = 'RESPONSE_LOGIN_STATUS'
@@ -10,6 +13,8 @@ export const REQUEST_EMAIL_VALIDATION ='REQUEST_EMAIL_VALIDATION'
 export const RESPONSE_EMAIL_VALIDATION = 'RESPONSE_EMAIL_VALIDATION'
 export const REQUEST_SIGN_UP ='REQUEST_SIGN_UP'
 export const RESPONSE_SIGN_UP = 'RESPONSE_SIGN_UP'
+export const REQUEST_ETH_BALANCE = 'REQUEST_ETH_BALANCE'
+export const RESPONSE_ETH_BALANCE = 'RESPONSE_ETH_BALANCE'
 
 export const requestLoginStatusAction = () => ({
 	type: REQUEST_LOGIN_STATUS,
@@ -62,6 +67,16 @@ export const responseSignUpAction = (status) => ({
 	status
 })
 
+export const requestEthBalance = (ethAddress) => ({
+	type: REQUEST_ETH_BALANCE,
+	ethAddress
+})
+
+export const responseEthBalance = (ethAddress, ethBalance) => ({
+	type: RESPONSE_ETH_BALANCE,
+	ethAddress,
+	ethBalance
+})
 
 export const checkLoginStatus = () => dispatch => {
 	dispatch(requestLoginStatusAction())
@@ -158,5 +173,12 @@ export const signUp = (username, email, password, cb) => dispatch => {
 			cb(true)
 		}
 		cb(false)
+	})
+}
+
+export const updateEthBalance = (ethAddress) => dispatch => {
+	dispatch(requestEthBalance(ethAddress))
+	getBalance(ethAddress).then(balance =>{
+		dispatch(responseEthBalance(ethAddress, balance/(10**18)))
 	})
 }

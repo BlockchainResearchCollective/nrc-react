@@ -45,10 +45,8 @@ exports.validPrivateKey = function(address, privateKey){
 	}
 }
 
-exports.getBalance = function(cb){
-	web3.eth.getBalance(ethAccount.address).then(balance => {
-		cb(balance/(10**18));
-	});
+exports.getBalance = (address) => {
+	return web3.eth.getBalance(address)
 }
 
 /*

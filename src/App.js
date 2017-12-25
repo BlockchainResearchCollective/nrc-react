@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM, { render } from 'react-dom'
 import { Provider, connect } from 'react-redux'
 import Login from './containers/Login'
+import Home from './containers/Home'
 import './App.css'
 import { checkLoginStatus } from './actions'
 
@@ -30,7 +31,9 @@ class App extends Component {
           <Login />
         }
         { this.props.loggedIn &&
-          <h1>Login success, in home page now</h1>
+          <Home 
+            profile={this.props.profile}
+          />
         }
       </div>
     )
@@ -42,6 +45,7 @@ const mapStateToProps = state => {
     loggedIn: state.user.loggedIn,
     profile: state.user.profile,
     isFetching: state.user.isFetching,
+    ethBalance: state.user.ethBalance
   }
 }
 
