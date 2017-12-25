@@ -4,14 +4,10 @@ import { connect } from 'react-redux'
 import { validateUsername, validateEmail } from '../actions'
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
 const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
-
 
 const tooltipStyle = {
   zIndex: '99999'
 }
-
 
 class RegistrationForm extends React.Component {
   constructor(props) {
@@ -19,49 +15,32 @@ class RegistrationForm extends React.Component {
     this.state = {
       confirmDirty: false,
       validateStatus: {
-        username: '',
-        email: ''
+        username: undefined,
+        email: undefined
       },
       help: {
-        username: '',
-        email: ''
+        username: undefined,
+        email: undefined
       }
     }
   }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
+        const { handleSignUpSubmit } = this.props
+        handleSignUpSubmit(e, values)
       }
     });
   }
+
   handleConfirmBlur = (e) => {
     const value = e.target.value;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   }
-  checkUsername = (rule, value, callback) => {
-    this.setState(preState => ({
-      ...preState,
-      validateStatus:{
-        ...preState.validateStatus,
-        username: 'validating',
-      }
-    }))
-    const form = this.props.form;
-    if (value && !/^[a-zA-Z0-9.+-_@]+$/i.test(value)) {
-      this.setState(preState => ({
-        ...preState,
-        validateStatus:{
-          ...preState.validateStatus,
-          username: 'error',
-        }
-      }))
-      callback('Username may contain alphanumeric, _, @, +, . and - characters, no blank space')
-    } else {
-      callback()
-    }
-  }
+
   usernameAsyncValidation = () => {
     const { dispatch, form } = this.props
     dispatch(validateUsername(form.getFieldValue('username'), username_status => {
@@ -82,38 +61,17 @@ class RegistrationForm extends React.Component {
           ...preState,
           validateStatus:{
             ...preState.validateStatus,
-            username: 'success',
+            username: undefined,
           },
           help:{
             ...preState.help,
-            username: '',
+            username: undefined,
           }
         }))
       }
     }))
   }
-  checkEmail = (rule, value, callback) => {
-    this.setState(preState => ({
-      ...preState,
-      validateStatus:{
-        ...preState.validateStatus,
-        email: 'validating',
-      }
-    }))
-    const form = this.props.form;
-    if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-      this.setState(preState => ({
-        ...preState,
-        validateStatus:{
-          ...preState.validateStatus,
-          email: 'error',
-        }
-      }))
-      callback('Invalid email address')
-    } else {
-      callback()
-    }
-  }
+
   emailAsyncValidation = () => {
     const { dispatch, form } = this.props
     dispatch(validateEmail(form.getFieldValue('email'), email_status => {
@@ -134,24 +92,17 @@ class RegistrationForm extends React.Component {
           ...preState,
           validateStatus:{
             ...preState.validateStatus,
-            email: 'success',
+            email: undefined,
           },
           help:{
             ...preState.help,
-            email: '',
+            email: undefined,
           }
         }))
       }
     }))
   }
-  checkPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && !/^[A-Za-z0-9@#$%^&+=]{8,}$/i.test(value)) {
-      callback('please enter a complex password')
-    } else {
-      callback()
-    }
-  }
+
   checkConfirmPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('password')) {
@@ -160,6 +111,7 @@ class RegistrationForm extends React.Component {
       callback();
     }
   }
+
   checkConfirm = (rule, value, callback) => {
     const form = this.props.form;
     if (value && this.state.confirmDirty) {
@@ -167,7 +119,6 @@ class RegistrationForm extends React.Component {
     }
     callback();
   }
-  
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -210,12 +161,12 @@ class RegistrationForm extends React.Component {
           help={this.state.help.username}
         >
           {getFieldDecorator('username', {
-            rules: [{ 
-              required: true, message: 'Please input your username!'
+            rules: [{
+              required: true, message: 'Please input your username!',
             },{
-              validator: this.checkUsername
+              pattern: /^[a-zA-Z0-9.+-_@]+$/i, message: 'Username may contain alphanumeric, _, @, +, . and - characters, no blank space',
             },{
-              max: 150, message: 'Username has to be 150 characters or less'
+              max: 50, message: 'Username has to be 50 characters or less'
             }],
           })(
             <Input onBlur={this.usernameAsyncValidation} />
@@ -229,11 +180,9 @@ class RegistrationForm extends React.Component {
         >
           {getFieldDecorator('email', {
             rules: [{
-              type: 'email', message: 'The input is not valid Email!',
+              required: true, message: 'Please input your email!',
             },{
-              validator: this.checkEmail
-            },{
-              required: true, message: 'Please input your Email!',
+              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address',
             }],
           })(
             <Input onBlur={this.emailAsyncValidation} />
@@ -253,8 +202,8 @@ class RegistrationForm extends React.Component {
           {getFieldDecorator('password', {
             rules: [{
               required: true, message: 'Please input your password!',
-            }, {
-              validator: this.checkPassword,
+            },{
+              pattern: /^[A-Za-z0-9@#$%^&+=]{8,}$/i, message: 'please enter a complex password',
             }],
           })(
             <Input type="password" />
@@ -277,7 +226,7 @@ class RegistrationForm extends React.Component {
         <div style={{marginTop: '70px'}}>
           <FormItem {...tailFormItemLayout}>
             {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
+              valuePropName: 'checked'
             })(
               <Checkbox>I agree to the <a href="#">terms and conditions</a></Checkbox>
             )}

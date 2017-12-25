@@ -8,6 +8,8 @@ export const REQUEST_USERNAME_VALIDATION ='REQUEST_USERNAME_VALIDATION'
 export const RESPONSE_USERNAME_VALIDATION = 'RESPONSE_USERNAME_VALIDATION'
 export const REQUEST_EMAIL_VALIDATION ='REQUEST_EMAIL_VALIDATION'
 export const RESPONSE_EMAIL_VALIDATION = 'RESPONSE_EMAIL_VALIDATION'
+export const REQUEST_SIGN_UP ='REQUEST_SIGN_UP'
+export const RESPONSE_SIGN_UP = 'RESPONSE_SIGN_UP'
 
 export const requestLoginStatusAction = () => ({
 	type: REQUEST_LOGIN_STATUS,
@@ -39,6 +41,28 @@ export const responseEmailValidationAction = (emailStatus) => ({
 	emailStatus
 })
 
+export const requestLoginAction = (username) => ({
+	type: REQUEST_LOGIN,
+	username
+})
+
+export const responseLoginAction = (status) => ({
+	type: RESPONSE_LOGIN,
+	status
+})
+
+export const requestSignUpAction = (username, email) => ({
+	type: REQUEST_SIGN_UP,
+	username,
+	email
+})
+
+export const responseSignUpAction = (status) => ({
+	type: RESPONSE_SIGN_UP,
+	status
+})
+
+
 export const checkLoginStatus = () => dispatch => {
 	dispatch(requestLoginStatusAction())
 	return fetch(`${URL}/user/`, {
@@ -50,16 +74,6 @@ export const checkLoginStatus = () => dispatch => {
 		dispatch(responseLoginStatusAction(json.status, json.profile))
 	})
 }
-
-export const requestLoginAction = (username) => ({
-	type: REQUEST_LOGIN,
-	username
-})
-
-export const responseLoginAction = (status) => ({
-	type: RESPONSE_LOGIN,
-	status
-})
 
 export const login = (username, password) => dispatch => {
 	dispatch(requestLoginAction(username))
@@ -84,7 +98,7 @@ export const login = (username, password) => dispatch => {
 
 export const validateUsername = (username, cb) => dispatch => {
 	dispatch(requestUsernameValidationAction)
-	
+
 	fetch(`${URL}/user/signup/validation`,{
 		method: 'POST',
 		headers: {
@@ -105,7 +119,7 @@ export const validateUsername = (username, cb) => dispatch => {
 
 export const validateEmail = (email, cb) => dispatch => {
 	dispatch(requestEmailValidationAction(email))
-	
+
 	fetch(`${URL}/user/signup/validation`,{
 		method: 'POST',
 		headers: {
@@ -121,5 +135,28 @@ export const validateEmail = (email, cb) => dispatch => {
 	.then(json => {
 		dispatch(responseEmailValidationAction(json.email_status))
 		cb(json.email_status)
+	})
+}
+
+export const signUp = (username, email, password, cb) => dispatch => {
+	dispatch(requestSignUpAction(username, email))
+	return fetch(`${URL}/user/signup`, {
+		method: 'POST',
+		headers: {
+	    'Content-Type': 'application/json'
+	  },
+		body: JSON.stringify({
+			username,
+			email,
+			password
+		}),
+		credentials: 'include'
+	})
+	.then(response => {
+		dispatch(responseSignUpAction(response.status))
+		if (response.status == 200){
+			cb(true)
+		}
+		cb(false)
 	})
 }

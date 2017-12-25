@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { connect } from 'react-redux'
 import { Steps, Row, Col, Icon } from 'antd'
+import { signUp } from '../actions'
 import LoginForm from '../components/LoginForm'
 import SignUpForm from '../components/SignUpForm'
 import SignUpActivation from '../components/SignUpActivation'
@@ -59,6 +61,19 @@ class Login extends React.Component {
     })
   }
 
+  handleSignUpSubmit = (e, values) => {
+    const { dispatch } = this.props
+    if (values){
+      dispatch(signUp(values.username, values.email, values.password, signUpStatus => {
+        if (signUpStatus){
+          this.setState({
+            step: 1
+          })
+        }
+      }))
+    }
+  }
+
   handleBack = (e) => {
     e.preventDefault()
     this.setState({
@@ -102,7 +117,7 @@ class Login extends React.Component {
             </Row>
             { this.state.step === 0 &&
               <div style={addMarginTop(70)}>
-                <SignUpForm />
+                <SignUpForm handleSignUpSubmit={this.handleSignUpSubmit}/>
               </div>
             }
             { this.state.step === 1 &&
@@ -127,4 +142,4 @@ class Login extends React.Component {
 
 }
 
-export default Login
+export default connect()(Login)
