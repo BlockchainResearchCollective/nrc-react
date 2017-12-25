@@ -41,7 +41,7 @@ class Login extends React.Component {
     super(props)
     this.state = {
       display: "loginPage",
-      step: 1
+      step: 0
     }
   }
 
