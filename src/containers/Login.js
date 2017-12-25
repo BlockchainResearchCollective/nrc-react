@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { Steps, Row, Col, Icon } from 'antd'
-import { signUp } from '../actions'
+import { signUp, checkLoginStatus } from '../actions'
 import LoginForm from '../components/LoginForm'
 import SignUpForm from '../components/SignUpForm'
 import SignUpActivation from '../components/SignUpActivation'
@@ -80,6 +80,8 @@ class Login extends React.Component {
       display: "loginPage",
       step: 0
     })
+    const { dispatch } = this.props
+    dispatch(checkLoginStatus())
   }
 
   render() {
