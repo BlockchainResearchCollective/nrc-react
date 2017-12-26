@@ -5,7 +5,7 @@ import { Steps, Row, Col, Icon } from 'antd'
 import HomeHeader from '../components/HomeHeader'
 import HomeStoreName from '../components/HomeStoreName'
 import HomeReviewList from '../components/HomeReviewList'
-import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl } from '../service/util'
+import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
 
 class Home extends React.Component {
 
@@ -14,6 +14,7 @@ class Home extends React.Component {
     this.state = {
       storeSelected: true,
       storeExist: true,
+      storeURL: "",
       storeName: "Nanyang Review Chain",
       storeId: "",
       storeOverallScore: 0,
@@ -22,6 +23,12 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    searchImage("NTU canteen 13", url => {
+      console.log(url)
+      this.setState({
+        storeURL: url
+      })
+    })
     const url = window.location.href
     if (checkUrlStatus(url)){
       console.log(true)
@@ -40,6 +47,7 @@ class Home extends React.Component {
         <HomeStoreName
           storeSelected={this.state.storeSelected}
           storeExist={this.state.storeExist}
+          storeURL={this.state.storeURL}
           storeName={this.state.storeName}
           reviewAmount={this.state.reviewAmount}
           storeOverallScore={this.state.storeOverallScore}

@@ -1,4 +1,15 @@
+const GoogleImages = require('google-images');
+
 var exports = module.exports = {};
+
+const client = new GoogleImages('013844413201672951539:mks7ril9cvg', 'AIzaSyDPKa7D_mCCplLNOXGn1I7D3Cxz9SQLRI8');
+
+exports.searchImage = function(input, callback){
+  client.search(input).then(images => {
+    callback(images[0].url);
+  })
+}
+
 
 exports.checkUrlStatus = function(url, cb){
 	if (url.match('https://www.google.com.sg/maps/place/')){

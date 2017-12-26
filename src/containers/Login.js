@@ -39,7 +39,7 @@ const titleStyle ={
 }
 
 class Login extends React.Component {
-  
+
   constructor(props) {
     super(props)
     this.state = {
@@ -131,7 +131,14 @@ class Login extends React.Component {
           </div>
         }
         { this.state.display === "forgetPasswordPage" &&
-          <h1>forget password page</h1>
+          <div>
+            <Row style={addMarginTop(20)}>
+              <Col offset={2}>
+                <a onClick={this.handleBack} href="#" style={{textDecoration: 'none'}}><Icon type="left" />Back</a>
+              </Col>
+            </Row>
+            <h1>forget password page</h1>
+          </div>
         }
       </div>
     )
