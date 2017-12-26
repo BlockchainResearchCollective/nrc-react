@@ -1,7 +1,5 @@
 import { URL } from '../constants'
 import { getBalance } from '../service/blockchain'
-import Web3 from 'web3'
-const web3 = new Web3( new Web3.providers.HttpProvider('https://kovan.infura.io'))
 
 export const REQUEST_LOGIN_STATUS = 'REQUEST_LOGIN_STATUS'
 export const RESPONSE_LOGIN_STATUS = 'RESPONSE_LOGIN_STATUS'

@@ -5,6 +5,7 @@ import { Steps, Row, Col, Icon } from 'antd'
 import HomeHeader from '../components/HomeHeader'
 import HomeStoreName from '../components/HomeStoreName'
 import HomeReviewList from '../components/HomeReviewList'
+import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl } from '../service/util'
 
 class Home extends React.Component {
 
@@ -21,8 +22,12 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    let url = window.location.href
-    console.log(url)
+    const url = window.location.href
+    if (checkUrlStatus(url)){
+      console.log(true)
+    } else {
+      console.log(false)
+    }
   }
 
   componentWillUnmount() {

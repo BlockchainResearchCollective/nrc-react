@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import HomeReviewListItem from './HomeReviewListItem'
 import { Pagination } from 'antd'
 
-const divStyle = {
-  overflow: 'scroll'
-}
-
 const hrStyle = {
   color: 'white',
   width: '95%'
@@ -51,11 +47,13 @@ class HomeReviewList extends React.Component {
 
   render(){
     return(
-      <div style={divStyle}>
-        {this.state.reviews.map((review) =>
-          <HomeReviewListItem
-            review={review}
-          />
+      <div>
+        {this.state.reviews.map((review, index) =>
+          <div key={index}>
+            <HomeReviewListItem
+              review={review}
+            />
+          </div>
         )}
         <hr style={hrStyle} />
         <div style={paginationStyle}>
