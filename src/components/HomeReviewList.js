@@ -38,6 +38,13 @@ class HomeReviewList extends React.Component {
         upvote: 10,
         downvote: 5,
         time: '26/12/2017'
+      },{
+        reviewer: 'zzy',
+        score: 4,
+        content: 'this is a sample review',
+        upvote: 10,
+        downvote: 5,
+        time: '26/12/2017'
       }]
     }
   }
@@ -59,7 +66,7 @@ class HomeReviewList extends React.Component {
         <div style={paginationStyle}>
           <Pagination
             defaultCurrent={this.state.pageNumber}
-            pageSize={3}
+            pageSize={4}
             total={this.props.reviewAmount}
             size='small'
           />

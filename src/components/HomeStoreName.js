@@ -5,10 +5,11 @@ import HomeAverageRating from './HomeAverageRating'
 
 const subDivStyle = {
   position: 'absolute',
-  top: '80px',
-  right: '130px',
+  top: '70px',
+  right: '100px',
   backgroundColor: '#4c475e',
-  opacity: "0.7"
+  opacity: "0.7",
+  padding: '10px'
 }
 
 const titleStyle = {

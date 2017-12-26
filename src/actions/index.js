@@ -5,6 +5,8 @@ export const REQUEST_LOGIN_STATUS = 'REQUEST_LOGIN_STATUS'
 export const RESPONSE_LOGIN_STATUS = 'RESPONSE_LOGIN_STATUS'
 export const REQUEST_LOGIN ='REQUEST_LOGIN'
 export const RESPONSE_LOGIN = 'RESPONSE_LOGIN'
+export const REQUEST_LOGOUT ='REQUEST_LOGOUT'
+export const RESPONSE_LOGOUT = 'RESPONSE_LOGOUT'
 export const REQUEST_USERNAME_VALIDATION ='REQUEST_USERNAME_VALIDATION'
 export const RESPONSE_USERNAME_VALIDATION = 'RESPONSE_USERNAME_VALIDATION'
 export const REQUEST_EMAIL_VALIDATION ='REQUEST_EMAIL_VALIDATION'
@@ -51,6 +53,15 @@ export const requestLoginAction = (username) => ({
 
 export const responseLoginAction = (status) => ({
 	type: RESPONSE_LOGIN,
+	status
+})
+
+export const requestLogoutAction = () => ({
+	type: REQUEST_LOGOUT,
+})
+
+export const responseLogoutAction = (status) => ({
+	type: RESPONSE_LOGOUT,
 	status
 })
 
@@ -103,6 +114,20 @@ export const login = (username, password) => dispatch => {
 	})
 	.then(response => {
 		dispatch(responseLoginAction(response.status))
+		if (response.status == 200 ){
+			dispatch(checkLoginStatus())
+		}
+	})
+}
+
+export const logout = () => dispatch => {
+	dispatch(requestLogoutAction())
+	return fetch(`${URL}/user/logout`, {
+		method: 'GET',
+		credentials: 'include'
+	})
+	.then(response => {
+		dispatch(responseLogoutAction(response.status))
 		if (response.status == 200 ){
 			dispatch(checkLoginStatus())
 		}

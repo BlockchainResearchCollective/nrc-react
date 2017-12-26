@@ -1,6 +1,6 @@
 import {
 	REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS, REQUEST_LOGIN, RESPONSE_LOGIN,
-	REQUEST_ETH_BALANCE, RESPONSE_ETH_BALANCE
+	REQUEST_ETH_BALANCE, RESPONSE_ETH_BALANCE, REQUEST_LOGOUT, RESPONSE_LOGOUT,
 } from '../actions/'
 
 const initialState = {
@@ -30,6 +30,16 @@ const userProfile = (state = {initialState}, action) => {
 				isFetching: true
 			}
 		case RESPONSE_LOGIN:
+			return {
+				...state,
+				isFetching: false
+			}
+		case REQUEST_LOGOUT:
+			return {
+				...state,
+				isFetching: true
+			}
+		case RESPONSE_LOGOUT:
 			return {
 				...state,
 				isFetching: false

@@ -2,24 +2,32 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { URL } from '../constants'
-import { Row, Col } from 'antd'
-import { updateEthBalance } from '../actions'
+import { Row, Col, Menu, Dropdown, Icon } from 'antd'
+import { updateEthBalance, logout } from '../actions'
 
-const logoStyle = {
-  height: '40px',
-  width: '40px',
-  marginRight: '10px',
-  float: 'right'
-}
-const logoutStyle ={
-	color: '#fff',
-	float: 'right',
-
+const divStyle = {
+  padding: '15px',
+  paddingLeft: '30px'
 }
 const greetingStyle ={
 	color: '#fff',
-	fontSize: '14px',	
+	fontSize: '22px',
 }
+const balanceStyle ={
+	color: '#fff',
+	fontSize: '12px',
+  fontFamily: 'Open Sans',
+}
+const logoStyle = {
+  height: '40px',
+  width: '40px',
+  marginRight: '10px'
+}
+const dropdownStyle = {
+  zIndex: '100000',
+  color: '#4c475e'
+}
+
 class HomeHeader extends React.Component{
 	constructor(props){
 		super(props)
@@ -28,31 +36,46 @@ class HomeHeader extends React.Component{
 		}
 	}
 
-	componentWillMount() {
+  handleLogout = () => {
+    const {profile, dispatch} = this.props
+		dispatch(logout())
+  }
+
+	componentWillMount(){
 		const {profile, dispatch} = this.props
 		dispatch(updateEthBalance(profile.ethAddress))
 	}
 
 	render(){
-		const { profile } = this.props
-
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <a rel="noopener noreferrer" href="#"><Icon type="wallet" /> Wallet</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a rel="noopener noreferrer" href="#"><Icon type="book" /> History</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a onClick={this.handleLogout} rel="noopener noreferrer" href="#"><Icon type="logout" /> Logout</a>
+        </Menu.Item>
+      </Menu>
+    )
 		return(
-			<div>
+			<div style={divStyle}>
 				<Row>
-					<Col offset={0} span={8}>
-						<span style={greetingStyle}>Hi, {profile.username}</span>
+					<Col offset={0} span={12}>
+						<div style={greetingStyle}>Hi, {this.props.profile.username}</div>
+            <div style={balanceStyle}>Balance: <span>{this.props.ethBalance}</span> Ether</div>
 					</Col>
-					<Col offset={8}>
-						<img src={`${URL}/images/Logo_vector.svg`} style={logoStyle} alt="logo" />
-						<a href='#' style={logoutStyle}>Log Out</a>
-					</Col>
-				</Row>
-				<Row>
-					<Col offset={0} span={8}>
-						<span style={greetingStyle}>Balance: {this.props.ethBalance}Ether</span>
-					</Col>
-					<Col offset={8}>
-						
+					<Col offset={19}>
+            <a className="ant-dropdown-link" href="#">
+              <Dropdown overlay={menu} overlayStyle={dropdownStyle}>
+                <div>
+                  <img src={`${URL}/images/Logo_vector.svg`} style={logoStyle} alt="logo" />
+                  <Icon type="menu-fold" />
+                </div>
+              </Dropdown>
+            </a>
 					</Col>
 				</Row>
 			</div>
@@ -63,7 +86,6 @@ class HomeHeader extends React.Component{
 const mapStateToProps = state => {
   return {
     profile: state.user.profile,
-    isFetching: state.user.isFetching,
     ethBalance: state.user.ethBalance
   }
 }
