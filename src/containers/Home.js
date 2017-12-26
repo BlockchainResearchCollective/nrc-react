@@ -4,19 +4,19 @@ import { connect } from 'react-redux'
 import { Steps, Row, Col, Icon } from 'antd'
 import HomeHeader from '../components/HomeHeader'
 import HomeStoreName from '../components/HomeStoreName'
+import HomeReviewList from '../components/HomeReviewList'
 
 class Home extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      storeSelected: false,
-      storeExist: false,
+      storeSelected: true,
+      storeExist: true,
       storeName: "Nanyang Review Chain",
       storeId: "",
       storeOverallScore: 0,
-      reviewAmount: 0,
-      reviewPageNumber: 1,
+      reviewAmount: 10
     }
   }
 
@@ -38,8 +38,13 @@ class Home extends React.Component {
           storeName={this.state.storeName}
           reviewAmount={this.state.reviewAmount}
           storeOverallScore={this.state.storeOverallScore}
+        />
+        { this.state.storeSelected && this.state.storeExist &&
+          <HomeReviewList
+            storeId={this.state.storeId}
+            reviewAmount={this.state.reviewAmount}
           />
-        <HomeReviewList />
+        }
       </div>
     )
   }
