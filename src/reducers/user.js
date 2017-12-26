@@ -1,4 +1,4 @@
-import { 
+import {
 	REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS, REQUEST_LOGIN, RESPONSE_LOGIN,
 	REQUEST_ETH_BALANCE, RESPONSE_ETH_BALANCE
 } from '../actions/'
@@ -42,6 +42,7 @@ const userProfile = (state = {initialState}, action) => {
 		case RESPONSE_ETH_BALANCE:
 			return {
 				...state,
+				isFetching: false,
 				ethBalance: action.ethBalance
 			}
 		default:

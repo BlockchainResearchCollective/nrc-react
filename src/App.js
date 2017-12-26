@@ -23,7 +23,7 @@ class App extends Component {
     const { dispatch } = this.props
     dispatch(checkLoginStatus())
   }
-  
+
   render() {
     return (
       <div style={divStyle}>
@@ -31,7 +31,7 @@ class App extends Component {
           <Login />
         }
         { this.props.loggedIn &&
-          <Home 
+          <Home
             profile={this.props.profile}
           />
         }
@@ -44,8 +44,7 @@ const mapStateToProps = state => {
   return {
     loggedIn: state.user.loggedIn,
     profile: state.user.profile,
-    isFetching: state.user.isFetching,
-    ethBalance: state.user.ethBalance
+    isFetching: state.user.isFetching
   }
 }
 
