@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import Banner from '../components/Banner'
 import { Row, Col, Icon, Form, Input, Button } from 'antd'
+import { resetPassword, verifyReset, changePassword, resetPasswordExpiredAction } from '../actions'
+
 const FormItem = Form.Item
 const centralFormItemLayout = {
   wrapperCol: {
@@ -29,15 +31,14 @@ class ResetPassword extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
-
+			
 		}
 	}
 	
 	render(){
-		
 		return (
 			<div>
-			{ this.props.resetSent == false &&
+			{ 
 				<div>
 					<div style={headerStyle}>
 						<Banner title='Reset Your Password' />
@@ -47,7 +48,12 @@ class ResetPassword extends React.Component {
 							<p style={helpTextStyle}>Enter your email address to reset your password. You may need to check your spam folder</p>
 						</Col>
 					</Row>
-					<WrappedResetPasswordForm />
+					<WrappedResetPasswordForm 
+						dispatch={this.props.dispatch}
+						resetSent={this.props.resetSent}
+						resetVerified={this.props.resetVerified}
+						passwordChanged={this.props.passwordChanged} 
+					/>
 				</div>
 			}
 			</div>
@@ -56,14 +62,46 @@ class ResetPassword extends React.Component {
 }
 
 class ResetPasswordForm extends React.Component{
+	constructor(props){
+		super(props)
+		this.state = {
+			countdown: 90
+		}
+	}
+
+	handleResetEmailSubmit = (e) => {
+		e.preventDefault()
+		this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        // console.log('Received values of form: ', values);
+        const { dispatch } = this.props
+        dispatch(resetPassword(values.email))
+
+        const clock = setInterval(()=>{
+        	this.setState({
+        		countdown: this.state.countdown-1
+        	})
+        	if (this.state.countdown === 0) {
+	        	clearInterval(clock)
+	        	this.setState({
+	        		countdown: 90
+	        	})
+	        	alert("Your reset code has expired, please re-send your request")
+	        	dispatch(resetPasswordExpiredAction(values.email))
+	        }
+        },1000)
+
+        
+      }
+    });
+	}
 	render(){
 		const { getFieldDecorator } = this.props.form
-		
 		return (
 			<div style={{marginTop:'30px'}}>
-				<Form layout='inline'>
+				<Form layout='inline' onSubmit={this.handleResetEmailSubmit}>
 					<FormItem
-						style={{marginLeft: '16.7%', width:'42.7%'}}
+						style={{marginLeft: '16.7%', width:'46%'}}
 	        >
 	          {getFieldDecorator('email', {
 	            rules: [{
@@ -76,7 +114,13 @@ class ResetPasswordForm extends React.Component{
 	          )}
 	        </FormItem>
 	        <FormItem>
-	          <Button type="primary">Submit</Button>
+	        	{ !this.props.resetSent &&
+	          	<Button type="primary" htmlType='submit'>Send</Button>
+	        	}
+	        	{
+	        		this.props.resetSent && 
+	        		<Button type="default" htmlType='button' style={{backgroundColor:'#FFCC66'}}>{this.state.countdown} s</Button>
+	        	}
 	        </FormItem>	
 				</Form>
 				<Form style={{marginTop:'20px'}}>
@@ -100,12 +144,14 @@ class ResetPasswordForm extends React.Component{
 	}
 }
 const mapStateToProps = state => {
+	console.log(state)
   return {
-    resetSent: state.user.initialState.resetPassword,
-    resetVerified: state.user.initialState.resetVerified,
-    passwordChanged: state.user.initialState.passwordChanged
+    resetSent: state.user.resetPassword===undefined ? state.user.initialState.resetPassword : state.user.resetPassword,
+    resetVerified: state.user.resetVerified===undefined ? state.user.initialState.resetVerified : state.user.resetVerified,
+    passwordChanged: state.user.passwordChanged===undefined ? state.user.initialState.passwordChanged : state.user.passwordChanged
   }
 }
 
 const WrappedResetPasswordForm = Form.create()(ResetPasswordForm)
+
 export default connect(mapStateToProps)(ResetPassword)

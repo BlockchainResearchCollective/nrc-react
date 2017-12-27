@@ -21,6 +21,7 @@ export const REQUEST_RESET_VERIFY = 'REQUEST_RESET_VERIFY'
 export const RESPONSE_RESET_VERIFY = 'RESPONSE_RESET_VERIFY'
 export const REQUEST_PASSWORD_CHANGE = 'REQUEST_PASSWORD_CHANGE'
 export const RESPONSE_PASSWORD_CHANGE = 'RESPONSE_PASSWORD_CHANGE'
+export const RESET_EXPIRED = 'RESET_EXPIRED'
 
 export const requestLoginStatusAction = () => ({
 	type: REQUEST_LOGIN_STATUS,
@@ -126,6 +127,12 @@ export const responsePasswordChangeAction = (email, status) => ({
 	email,
 	status
 })
+
+export const resetPasswordExpiredAction = email => ({
+	type: RESET_EXPIRED,
+	email
+})
+
 export const checkLoginStatus = () => dispatch => {
 	dispatch(requestLoginStatusAction())
 	return fetch(`${URL}/user/`, {

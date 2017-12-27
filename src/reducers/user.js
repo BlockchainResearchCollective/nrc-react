@@ -2,17 +2,14 @@ import reduceReducers from 'reduce-reducers'
 import {
 	REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS, REQUEST_LOGIN, RESPONSE_LOGIN,
 	REQUEST_ETH_BALANCE, RESPONSE_ETH_BALANCE, REQUEST_LOGOUT, RESPONSE_LOGOUT,
-	REQUEST_RESET_PASSWORD, RESPONSE_RESET_VERIFY, RESPONSE_PASSWORD_CHANGE
+	REQUEST_RESET_PASSWORD, RESPONSE_RESET_VERIFY, RESPONSE_PASSWORD_CHANGE, RESET_EXPIRED,
 } from '../actions/'
 
 const initialState = {
 	isFetching: false,
 	loggedIn: false,
  	profile: {},
- 	ethBalance: 0,
- 	resetPassword: false,
-	resetVerified: false,
-	passwordChanged: false
+ 	ethBalance: 0
 }
 
 const userProfileReducer = (state = {initialState}, action) => {
@@ -65,15 +62,16 @@ const userProfileReducer = (state = {initialState}, action) => {
 	}
 }
 
-const resetPasswordReducer = (state={initialState}, action) =>{
+const resetPasswordReducer = (state = {
+	resetPassword: false,
+	resetVerified: false,
+	passwordChanged: false
+}, action) =>{
 	switch(action.type){
 		case REQUEST_RESET_PASSWORD:
 			return {
-				// specifying all states because user could resend password reset request
-				// which requires all states to be restored to default
-				resetPassword: true,
-				resetVerified: false,
-				passwordChanged: false
+				...state,
+				resetPassword: true
 			}
 		case RESPONSE_RESET_VERIFY:
 			if (action.status === 200){
@@ -89,6 +87,13 @@ const resetPasswordReducer = (state={initialState}, action) =>{
 					passwordChanged: true,
 					resetPassword: false
 				}
+			}
+		case RESET_EXPIRED:
+			return {
+				...state,
+				resetPassword: false,
+				resetVerified: false,
+				passwordChanged: false
 			}
 		default:
 			return state
