@@ -5,34 +5,56 @@ import { Steps, Row, Col, Icon } from 'antd'
 import HomeHeader from '../components/HomeHeader'
 import HomeStoreName from '../components/HomeStoreName'
 import HomeReviewList from '../components/HomeReviewList'
+import CreateStore from '../components/CreateStore'
+import NoStoreSelected from '../components/NoStoreSelected'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
+import { storeExist } from '../service/blockchain'
 
 class Home extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      storeSelected: true,
-      storeExist: true,
+      storeSelected: false,
+      storeExist: false,
       storeURL: "",
       storeName: "Nanyang Review Chain",
       storeId: "",
       storeOverallScore: 0,
-      reviewAmount: 10
+      reviewAmount: 0
     }
   }
 
   componentDidMount() {
-    searchImage("NTU canteen B", url => {
-      this.setState({
-        storeURL: url
-      })
-    })
     const url = window.location.href
     if (checkUrlStatus(url)){
-      console.log(true)
+      this.setState({
+        storeSelected: true,
+        storeName: getStoreNameFromUrl(url),
+        storeId: getStoreIdFromUrl(url)
+      }, () => {
+        searchImage(this.state.storeName, url => {
+          this.setState({
+            storeURL: url
+          })
+        })
+        /* update storeExist */
+        /* update storeURL */
+        /* update storeOverallScore */
+        /* update reviewAmount */
+      })
     } else {
-      console.log(false)
+      this.setState({
+        storeSelected: true,
+        storeExist: true,
+        storeName: "NTU Canteen B",
+      }, () => {
+        searchImage(this.state.storeName, url => {
+          this.setState({
+            storeURL: url
+          })
+        })
+      })
     }
   }
 
@@ -56,6 +78,14 @@ class Home extends React.Component {
             storeId={this.state.storeId}
             reviewAmount={this.state.reviewAmount}
           />
+        }
+        { this.state.storeSelected && !this.state.storeExist &&
+          <CreateStore
+            storeId={this.state.storeId}
+          />
+        }
+        { !this.state.storeSelected &&
+          <NoStoreSelected/>
         }
       </div>
     )

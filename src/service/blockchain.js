@@ -67,7 +67,7 @@ exports.submitReview = function(storeId, content, score, cb){
 		.then(store_address => {
 			console.log("You are writing review to: " + store_address);
 			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.addReview(content, score, ethAccount.address).send({
+		    store_contract_instance.methods.addReview(content, score, ethAccountAddress).send({
 			    from: ethAccountAddress,
 			    gas: 400000,
 			    gasPrice: '10000000000'
@@ -80,8 +80,8 @@ exports.voteReview = function(storeId, reviewer, isUpvote, cb){
 	store_registry_instance.methods.getStoreAddress(storeId).call()
 		.then(store_address => {
 			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.voteReview(ethAccount.address, reviewer, isUpvote).send({
-			    from: ethAccount.address,
+		    store_contract_instance.methods.voteReview(ethAccountAddress, reviewer, isUpvote).send({
+			    from: ethAccountAddress,
 			    gas: 400000,
 			    gasPrice: '10000000000'
 			}, cb);
