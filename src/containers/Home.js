@@ -26,39 +26,47 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    const url = window.location.href
-    if (checkUrlStatus(url)){
-      this.setState({
-        storeSelected: true,
-        storeName: getStoreNameFromUrl(url),
-        storeId: getStoreIdFromUrl(url)
-      }, () => {
-        searchImage(this.state.storeName, url => {
+    var url
+    this.timer = setInterval( () => {
+      if (window.location.href != url){
+        url = window.location.href
+        if (checkUrlStatus(url)){
           this.setState({
-            storeURL: url
+            storeSelected: true,
+            storeName: getStoreNameFromUrl(url),
+            storeId: getStoreIdFromUrl(url)
+          }, () => {
+            searchImage(this.state.storeName, url => {
+              this.setState({
+                storeURL: url
+              })
+            })
+            /* update storeExist */
+            /* update storeURL */
+            /* update storeOverallScore */
+            /* update reviewAmount */
           })
-        })
-        /* update storeExist */
-        /* update storeURL */
-        /* update storeOverallScore */
-        /* update reviewAmount */
-      })
-    } else {
-      this.setState({
-        storeSelected: true,
-        storeExist: true,
-        storeName: "NTU Canteen B",
-      }, () => {
-        searchImage(this.state.storeName, url => {
+        } else {
           this.setState({
-            storeURL: url
+            storeSelected: true,
+            storeExist: true,
+            storeName: "NTU Canteen B",
+          }, () => {
+            searchImage(this.state.storeName, url => {
+              this.setState({
+                storeURL: url
+              })
+            })
           })
-        })
-      })
-    }
+        }
+      }
+    },
+      1000
+    )
   }
 
   componentWillUnmount() {
+    clearInterval(this.timer)
   }
 
   render() {
