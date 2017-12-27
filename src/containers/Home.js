@@ -23,8 +23,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    searchImage("NTU canteen 13", url => {
-      console.log(url)
+    searchImage("NTU canteen B", url => {
       this.setState({
         storeURL: url
       })

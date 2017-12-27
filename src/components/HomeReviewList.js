@@ -6,7 +6,6 @@ const hrStyle = {
   color: 'white',
   width: '95%'
 }
-
 const paginationStyle = {
   textAlign: 'center'
 }
@@ -18,6 +17,20 @@ class HomeReviewList extends React.Component {
     this.state = {
       pageNumber: 1,
       reviews: [{
+        reviewer: 'zzy',
+        score: 4,
+        content: 'this is a sample review',
+        upvote: 10,
+        downvote: 5,
+        time: '26/12/2017'
+      },{
+        reviewer: 'zzy',
+        score: 4,
+        content: 'this is a sample review',
+        upvote: 10,
+        downvote: 5,
+        time: '26/12/2017'
+      },{
         reviewer: 'zzy',
         score: 4,
         content: 'this is a sample review',

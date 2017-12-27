@@ -15,7 +15,7 @@ const greetingStyle ={
 }
 const balanceStyle ={
 	color: '#fff',
-	fontSize: '12px',
+	fontSize: '14px',
   fontFamily: 'Open Sans',
 }
 const logoStyle = {
@@ -36,7 +36,8 @@ class HomeHeader extends React.Component{
 		}
 	}
 
-  handleLogout = () => {
+  handleLogout = (e) => {
+    e.preventDefault()
     const {profile, dispatch} = this.props
 		dispatch(logout())
   }
