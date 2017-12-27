@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import Banner from '../components/Banner'
-import { Row, Col, Icon, Form, Input, Button } from 'antd'
+import { Row, Col, Icon, Form, Input, Button, Spin } from 'antd'
 import { resetPassword, verifyReset, changePassword, resetPasswordExpiredAction } from '../actions'
 
 const FormItem = Form.Item
@@ -27,18 +27,29 @@ const headerStyle = {
 const helpTextStyle = {
 	color: '#fff'
 }
+const loadingStyle = {
+	fontSize: '50px',
+	marginTop:"100px"
+}
 class ResetPassword extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			
+			resetVerifySent: false,
+			changePasswordSent: false
 		}
 	}
-	
+	handleVerify = (values) => {
+		const { dispatch } = this.props
+		dispatch(verifyReset(values.email, values.verificationCode))
+		this.setState({
+			resetVerifySent: true
+		})
+	}
 	render(){
 		return (
 			<div>
-			{ 
+			{ !this.state.resetVerifySent &&
 				<div>
 					<div style={headerStyle}>
 						<Banner title='Reset Your Password' />
@@ -52,8 +63,35 @@ class ResetPassword extends React.Component {
 						dispatch={this.props.dispatch}
 						resetSent={this.props.resetSent}
 						resetVerified={this.props.resetVerified}
-						passwordChanged={this.props.passwordChanged} 
+						passwordChanged={this.props.passwordChanged}
+						handleVerify={this.handleVerify} 
 					/>
+				</div>
+			}
+			{	this.state.resetVerifySent && !this.props.resetVerified &&
+				<div>
+					<Row>
+						<Col offset={10}>
+							<Spin indicator={<Icon type="loading" style={loadingStyle} spin />} />
+						</Col>
+					</Row>
+				</div>
+			}
+			{	this.props.resetVerified && !this.state.changePasswordSent &&
+				<div>
+				</div>
+			}
+			{	this.state.changePasswordSent && !this.props.passwordChanged &&
+				<div>
+					<Row>
+						<Col offset={10}>
+							<Spin indicator={<Icon type="loading" style={loadingStyle} spin />} />
+						</Col>
+					</Row>
+				</div>
+			}
+			{	this.props.passwordChanged &&
+				<div>
 				</div>
 			}
 			</div>
@@ -65,7 +103,8 @@ class ResetPasswordForm extends React.Component{
 	constructor(props){
 		super(props)
 		this.state = {
-			countdown: 90
+			countdown: 90,
+			resetVerifySent: false
 		}
 	}
 
@@ -81,7 +120,7 @@ class ResetPasswordForm extends React.Component{
         	this.setState({
         		countdown: this.state.countdown-1
         	})
-        	if (this.state.countdown === 0) {
+        	if (this.state.countdown === 0 || this.state.resetVerifySent) {
 	        	clearInterval(clock)
 	        	this.setState({
 	        		countdown: 90
@@ -89,12 +128,25 @@ class ResetPasswordForm extends React.Component{
 	        	alert("Your reset code has expired, please re-send your request")
 	        	dispatch(resetPasswordExpiredAction(values.email))
 	        }
-        },1000)
-
-        
+        },1000)    
       }
-    });
+    })
 	}
+
+	handleResetVerifySubmit = (e) => {
+		e.preventDefault()
+		this.props.form.validateFieldsAndScroll((err, values) => {
+			if(!err) {
+				const { dispatch } = this.props
+				this.setState({
+					resetVerifySent: true,
+					countdown: 90
+				})
+				this.props.handleVerify(values)
+			}
+		})
+	}
+
 	render(){
 		const { getFieldDecorator } = this.props.form
 		return (
@@ -123,7 +175,7 @@ class ResetPasswordForm extends React.Component{
 	        	}
 	        </FormItem>	
 				</Form>
-				<Form style={{marginTop:'20px'}}>
+				<Form style={{marginTop:'20px'}} onSubmit={this.handleResetVerifySubmit}>
 					<FormItem
 						{...centralFormItemLayout}
 	        >
@@ -136,7 +188,7 @@ class ResetPasswordForm extends React.Component{
 	        <FormItem
 	        	{...centralFormItemLayout}
 	        >
-	          <Button type="primary" className="login-form-button">Verify</Button>
+	          <Button type="primary" htmlType="submit" className="login-form-button">Verify</Button>
 	        </FormItem>	
 				</Form>
 			</div>
@@ -144,7 +196,6 @@ class ResetPasswordForm extends React.Component{
 	}
 }
 const mapStateToProps = state => {
-	console.log(state)
   return {
     resetSent: state.user.resetPassword===undefined ? state.user.initialState.resetPassword : state.user.resetPassword,
     resetVerified: state.user.resetVerified===undefined ? state.user.initialState.resetVerified : state.user.resetVerified,
