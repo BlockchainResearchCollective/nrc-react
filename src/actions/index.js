@@ -15,6 +15,12 @@ export const REQUEST_SIGN_UP ='REQUEST_SIGN_UP'
 export const RESPONSE_SIGN_UP = 'RESPONSE_SIGN_UP'
 export const REQUEST_ETH_BALANCE = 'REQUEST_ETH_BALANCE'
 export const RESPONSE_ETH_BALANCE = 'RESPONSE_ETH_BALANCE'
+export const REQUEST_RESET_PASSWORD = 'REQUEST_RESET_PASSWORD'
+export const RESPONSE_RESET_PASSWORD = 'RESPONSE_RESET_PASSWORD'
+export const REQUEST_RESET_VERIFY = 'REQUEST_RESET_VERIFY'
+export const RESPONSE_RESET_VERIFY = 'RESPONSE_RESET_VERIFY'
+export const REQUEST_PASSWORD_CHANGE = 'REQUEST_PASSWORD_CHANGE'
+export const RESPONSE_PASSWORD_CHANGE = 'RESPONSE_PASSWORD_CHANGE'
 
 export const requestLoginStatusAction = () => ({
 	type: REQUEST_LOGIN_STATUS,
@@ -87,6 +93,39 @@ export const responseEthBalance = (ethAddress, ethBalance) => ({
 	ethBalance
 })
 
+export const requestResetPasswordAction = (email) => ({
+	type: REQUEST_RESET_PASSWORD,
+	email
+})
+
+export const responseResetPasswordAction = (email, status) => ({
+	type: RESPONSE_RESET_PASSWORD,
+	email,
+	status
+})
+
+export const requestResetVerifyAction = (email, code) => ({
+	type: REQUEST_RESET_VERIFY,
+	email,
+	code
+})
+
+export const responseResetVerifyAction = (email, status) => ({
+	type: RESPONSE_RESET_VERIFY,
+	email,
+	status
+})
+
+export const requestPasswordChangeAction = (email) => ({
+	type: REQUEST_PASSWORD_CHANGE,
+	email
+})
+
+export const responsePasswordChangeAction = (email, status) => ({
+	type: RESPONSE_PASSWORD_CHANGE,
+	email,
+	status
+})
 export const checkLoginStatus = () => dispatch => {
 	dispatch(requestLoginStatusAction())
 	return fetch(`${URL}/user/`, {
@@ -204,4 +243,51 @@ export const updateEthBalance = (ethAddress) => dispatch => {
 	getBalance(ethAddress).then(balance =>{
 		dispatch(responseEthBalance(ethAddress, balance/(10**18)))
 	})
+}
+
+export const resetPassword = (email) => dispatch => {
+	dispatch(requestResetPasswordAction(email))
+	fetch(`${URL}/user/password-reset`, {
+		method: 'POST',
+		headers: {
+	    'Content-Type': 'application/json'
+	  },
+		body: JSON.stringify({
+			email
+		}),
+		credentials: 'include'
+	})
+	.then(response => dispatch(responseResetPasswordAction(email, response.status)))
+}
+
+export const verifyReset = (email, verificationCode) => dispatch => {
+	dispatch(requestResetVerifyAction(email, verificationCode))
+	fetch(`${URL}/user/password-reset/verify`, {
+		method: 'POST',
+		headers: {
+	    'Content-Type': 'application/json'
+	  },
+		body: JSON.stringify({
+			email,
+			verificationCode
+		}),
+		credentials: 'include'
+	})
+	.then(response => dispatch(responseResetVerifyAction(email, response.status)))
+}
+
+export const changePassword = (email, newPassword) => dispatch =>{
+	dispatch(requestPasswordChangeAction(email))
+	fetch(`${URL}/user/password-change/`, {
+		method: 'POST',
+		headers: {
+	    'Content-Type': 'application/json'
+	  },
+		body: JSON.stringify({
+			email,
+			newPassword
+		}),
+		credentials: 'include'
+	})
+	.then(response => dispatch(responsePasswordChangeAction(email, response.status)))
 }

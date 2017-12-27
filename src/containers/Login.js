@@ -6,6 +6,7 @@ import { signUp, checkLoginStatus } from '../actions'
 import LoginForm from '../components/LoginForm'
 import SignUpForm from '../components/SignUpForm'
 import SignUpActivation from '../components/SignUpActivation'
+import ResetPassword from '../components/ResetPassword'
 import Banner from '../components/Banner'
 import { URL } from '../constants'
 
@@ -137,7 +138,7 @@ class Login extends React.Component {
                 <a onClick={this.handleBack} href="#" style={{textDecoration: 'none'}}><Icon type="left" />Back</a>
               </Col>
             </Row>
-            <h1>forget password page</h1>
+            <ResetPassword />
           </div>
         }
       </div>
