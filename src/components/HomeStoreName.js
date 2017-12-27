@@ -6,7 +6,7 @@ import HomeAverageRating from './HomeAverageRating'
 const subDivStyle = {
   position: 'absolute',
   top: '70px',
-  right: '100px',
+  right: '110px',
   backgroundColor: '#4c475e',
   opacity: "0.7",
   padding: '10px'
@@ -47,7 +47,7 @@ const HomeStoreName = (props) => {
   return (
     <div style={divStyle}>
       { props.storeSelected && props.storeExist &&
-        <Button style={buttonStyle} type="primary">Write Review</Button>
+        <Button onClick={props.handleWriteReview} style={buttonStyle} type="primary">Write Review</Button>
       }
       <div style={subDivStyle}>
         <div style={titleStyle} >{props.storeName}</div>

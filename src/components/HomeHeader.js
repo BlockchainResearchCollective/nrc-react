@@ -15,7 +15,7 @@ const greetingStyle ={
 }
 const balanceStyle ={
 	color: '#fff',
-	fontSize: '12px',
+	fontSize: '14px',
   fontFamily: 'Open Sans',
 }
 const logoStyle = {
@@ -36,7 +36,8 @@ class HomeHeader extends React.Component{
 		}
 	}
 
-  handleLogout = () => {
+  handleLogout = (e) => {
+    e.preventDefault()
     const {profile, dispatch} = this.props
 		dispatch(logout())
   }
@@ -50,10 +51,13 @@ class HomeHeader extends React.Component{
     const menu = (
       <Menu>
         <Menu.Item>
-          <a rel="noopener noreferrer" href="#"><Icon type="wallet" /> Wallet</a>
+          <a onClick={this.props.handleHome} rel="noopener noreferrer" href="#"><Icon type="home" /> Home</a>
         </Menu.Item>
         <Menu.Item>
-          <a rel="noopener noreferrer" href="#"><Icon type="book" /> History</a>
+          <a onClick={this.props.handleWallet} rel="noopener noreferrer" href="#"><Icon type="wallet" /> Wallet</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a onClick={this.props.handleActionHistory} rel="noopener noreferrer" href="#"><Icon type="book" /> History</a>
         </Menu.Item>
         <Menu.Item>
           <a onClick={this.handleLogout} rel="noopener noreferrer" href="#"><Icon type="logout" /> Logout</a>

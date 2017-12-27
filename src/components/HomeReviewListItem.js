@@ -8,8 +8,10 @@ const divStyle = {
 }
 
 const hrStyle = {
-  color: 'white',
-  width: '95%'
+  backgroundColor: 'grey',
+  width: '95%',
+  height: '1px',
+  border: 'none'
 }
 
 const titleStyle = {
@@ -49,7 +51,7 @@ const HomeReviewListItem = (props) => {
       <div style={divStyle}>
         <div style={titleStyle}>
           <span>{props.review.reviewer}: </span>
-          <Rate disabled defaultValue={parseInt(props.review.score)} />
+          <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled defaultValue={parseInt(props.review.score)} />
         </div>
         <div style={timeStyle}>
           {props.review.time}

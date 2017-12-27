@@ -12,12 +12,12 @@
     "antd": "^3.0.2",
     "classnames": "^2.2.5",
     "glamor": "^2.20.25",
-    "google-images": "^2.1.0",
     "prop-types": "^15.6.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.6",
     "react-scripts": "^1.0.17",
+    "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "web3": "^1.0.0-beta.24"

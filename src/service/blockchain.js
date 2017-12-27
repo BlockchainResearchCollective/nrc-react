@@ -2,7 +2,7 @@ const Web3 = require('web3');
 
 var exports = module.exports = {};
 
-var ethAccount = {};
+var ethAccountAddress;
 var isConnected;
 var web3 = new Web3(new Web3.providers.HttpProvider('https://kovan.infura.io'));
 if (web3){
@@ -14,31 +14,31 @@ else{
 	isConnected = false;
 }
 
-const store_abi = [{"constant":true,"inputs":[],"name":"totalReviewAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"placeID","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"},{"name":"_uploader","type":"address"}],"name":"addReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalScore","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_voter","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_is_upvote","type":"bool"}],"name":"voteReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"allReviews","outputs":[{"name":"comment","type":"string"},{"name":"score","type":"uint256"},{"name":"uploader","type":"address"},{"name":"upvote","type":"uint256"},{"name":"downvote","type":"uint256"},{"name":"creation_blockstamp","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_placeID","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"voter","type":"address"},{"indexed":true,"name":"reviewer","type":"address"},{"indexed":false,"name":"is_upvote","type":"bool"}],"name":"LogVoteAdded","type":"event"}];
-const store_registry_abi = [{"constant":false,"inputs":[{"name":"_placeID","type":"string"}],"name":"addStore","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"registry","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_placeID","type":"string"}],"name":"getStoreAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_placeID","type":"string"}],"name":"storeExist","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"store_address","type":"address"}],"name":"LogStoreCreated","type":"event"}];
-const store_registry_address = "0x72a7063B83b9C13Defb3d4D129dFe678E23904ab";
+const store_registry_abi =
+[{"constant":true,"inputs":[],"name":"escrowAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_placeID","type":"string"}],"name":"addStore","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"registry","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_placeID","type":"string"}],"name":"getStoreAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_placeID","type":"string"}],"name":"storeExist","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"store_address","type":"address"}],"name":"LogStoreCreated","type":"event"}]
+const escrow_abi =
+[{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"activeVettingIndexListByUser","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_claimer","type":"address"}],"name":"claim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"credibility","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_reviewer","type":"address"}],"name":"settle","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"storeRegistry","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"}],"name":"noVettingReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_reviewer","type":"address"}],"name":"noMaturedVetting","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_voter","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_is_upvote","type":"bool"}],"name":"vote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"vettingIndex","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"settlements","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"}],"name":"review","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"vettings","outputs":[{"name":"store","type":"address"},{"name":"reviewer","type":"address"},{"name":"deposit","type":"uint256"},{"name":"last_update","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_registry","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"}]
+const store_abi =
+[{"constant":true,"inputs":[],"name":"totalReviewAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"escrowAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"reviewIndexPlusOneByReviewer","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"placeID","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_voter","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_is_upvote","type":"bool"},{"name":"_credibility","type":"uint256"}],"name":"voteReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"voted","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"},{"name":"_uploader","type":"address"}],"name":"addReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalScore","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_reviewer","type":"address"}],"name":"getImpact","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"allReviews","outputs":[{"name":"comment","type":"string"},{"name":"score","type":"uint256"},{"name":"uploader","type":"address"},{"name":"upvote","type":"uint256"},{"name":"downvote","type":"uint256"},{"name":"last_update","type":"uint256"},{"name":"positive_impact","type":"uint256"},{"name":"negative_impact","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_placeID","type":"string"},{"name":"_escrowAddress","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"voter","type":"address"},{"indexed":true,"name":"reviewer","type":"address"},{"indexed":false,"name":"is_upvote","type":"bool"}],"name":"LogVoteAdded","type":"event"}]
 
-var store_registry_instance = new web3.eth.Contract(store_registry_abi, store_registry_address);
+const store_registry_address = "0xe49e57bF010d4C1E591e292854bB57020c07506F";
+const escrow_address = "0xaeade1dc5fb3b39e7a95e1ad631fcc63a309c9ff";
+
+const store_registry_instance = new web3.eth.Contract(store_registry_abi, store_registry_address);
+const escrow_instance = new web3.eth.Contract(escrow_abi, escrow_address);
 
 exports.web3IsConnected = function(){
 	return isConnected;
 }
 
-exports.getEthAccount = function(){
-	return ethAccount;
+exports.decryptPrivateKey = function(encrypted, password){
+	return web3.eth.accounts.decrypt(encrypted, password).privateKey;
 }
 
-exports.storeEthAccount = function(account){
-	ethAccount = account;
-}
-
-exports.decrypt = function(encrypted, password){
-	return web3.eth.accounts.decrypt(encrypted, password);
-}
-
-exports.validPrivateKey = function(address, privateKey){
+exports.addPrivateKey = function(address, privateKey){
 	if (web3.eth.accounts.privateKeyToAccount(privateKey).address == address){
 		web3.eth.accounts.wallet.add(privateKey);
+		ethAccountAddress = address;
 		return true;
 	} else {
 		return false;
@@ -55,7 +55,7 @@ exports.getBalance = (address) => {
 
 exports.createStore = function(storeId, cb){
 	store_registry_instance.methods.addStore(storeId).send({
-	    from: ethAccount.address,
+	    from: ethAccountAddress,
 	    gas: 4000000,
 	    gasPrice: '10000000000'
 	}, cb);
@@ -67,8 +67,8 @@ exports.submitReview = function(storeId, content, score, cb){
 		.then(store_address => {
 			console.log("You are writing review to: " + store_address);
 			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.addReview(content, score, ethAccount.address).send({
-			    from: ethAccount.address,
+		    store_contract_instance.methods.addReview(content, score, ethAccountAddress).send({
+			    from: ethAccountAddress,
 			    gas: 400000,
 			    gasPrice: '10000000000'
 			}, cb);
@@ -80,8 +80,8 @@ exports.voteReview = function(storeId, reviewer, isUpvote, cb){
 	store_registry_instance.methods.getStoreAddress(storeId).call()
 		.then(store_address => {
 			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.voteReview(ethAccount.address, reviewer, isUpvote).send({
-			    from: ethAccount.address,
+		    store_contract_instance.methods.voteReview(ethAccountAddress, reviewer, isUpvote).send({
+			    from: ethAccountAddress,
 			    gas: 400000,
 			    gasPrice: '10000000000'
 			}, cb);

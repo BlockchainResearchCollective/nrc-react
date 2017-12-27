@@ -1,17 +1,17 @@
-const GoogleImages = require('google-images');
-
 var exports = module.exports = {};
 
-const client = new GoogleImages('013844413201672951539:mks7ril9cvg', 'AIzaSyDPKa7D_mCCplLNOXGn1I7D3Cxz9SQLRI8');
-
-exports.searchImage = function(input, callback){
-  client.search(input).then(images => {
-    callback(images[0].url);
-  })
+exports.searchImage = function(keyword, callback){
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			callback(JSON.parse(xhttp.responseText).url)
+		}
+	}
+	xhttp.open('GET', 'http://188.166.190.168:3001/image/search/' + keyword, true);
+  xhttp.send();
 }
 
-
-exports.checkUrlStatus = function(url, cb){
+exports.checkUrlStatus = function(url){
 	if (url.match('https://www.google.com.sg/maps/place/')){
 		return true;
 	} else {
