@@ -9,10 +9,13 @@ const initialState = {
 	isFetching: false,
 	loggedIn: false,
  	profile: {},
- 	ethBalance: 0
+ 	ethBalance: 0,
+ 	resetPassword: false,
+	resetVerified: false,
+	passwordChanged: false
 }
 
-const userProfile = (state = {initialState}, action) => {
+const userProfileReducer = (state = {initialState}, action) => {
 	switch(action.type){
 		case REQUEST_LOGIN_STATUS:
 			return {
@@ -62,11 +65,7 @@ const userProfile = (state = {initialState}, action) => {
 	}
 }
 
-const resetPassword = (state={
-	resetPassword: false,
-	resetVerified: false,
-	passwordChanged: false
-}, action) =>{
+const resetPasswordReducer = (state={initialState}, action) =>{
 	switch(action.type){
 		case REQUEST_RESET_PASSWORD:
 			return {
@@ -96,5 +95,5 @@ const resetPassword = (state={
 	}
 }
 
-const userReducer = reduceReducers(userProfile, resetPassword)
+const userReducer = reduceReducers(userProfileReducer, resetPasswordReducer)
 export default userReducer

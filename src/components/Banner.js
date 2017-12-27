@@ -10,8 +10,7 @@ const logoStyle = {
 const titleStyle = {
   fontSize: '16px',
   fontFamily: 'Open Sans',
-  color: '#fff',
-  textTransform: 'uppercase'
+  color: '#fff'
 }
 
 const Banner = (props) => {
