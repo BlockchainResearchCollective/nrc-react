@@ -115,18 +115,19 @@ class ResetPasswordForm extends React.Component{
         // console.log('Received values of form: ', values);
         const { dispatch } = this.props
         dispatch(resetPassword(values.email))
-
-        const clock = setInterval(()=>{
+        
+        // use this.timer so that in handleResetVerifySubmit, timer could be cleared.
+        this.timer = setInterval(()=>{
         	this.setState({
         		countdown: this.state.countdown-1
         	})
-        	if (this.state.countdown === 0 || this.state.resetVerifySent) {
-	        	clearInterval(clock)
+        	if (this.state.countdown === 0) {
 	        	this.setState({
 	        		countdown: 90
 	        	})
 	        	alert("Your reset code has expired, please re-send your request")
 	        	dispatch(resetPasswordExpiredAction(values.email))
+	        	clearInterval(this.timer)
 	        }
         },1000)    
       }
@@ -138,6 +139,7 @@ class ResetPasswordForm extends React.Component{
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if(!err) {
 				const { dispatch } = this.props
+				clearInterval(this.timer)
 				this.setState({
 					resetVerifySent: true,
 					countdown: 90
