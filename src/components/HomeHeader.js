@@ -68,7 +68,7 @@ class HomeHeader extends React.Component{
 			<div style={divStyle}>
 				<Row>
 					<Col offset={0} span={12}>
-						<div style={greetingStyle}>Hi, {this.props.profile.username}</div>
+						<div style={greetingStyle}><a onClick={this.props.handleHome} href="#"><Icon type="home" /></a> Hi, {this.props.profile.username}</div>
             <div style={balanceStyle}>Balance: <span>{this.props.ethBalance}</span> Ether</div>
 					</Col>
 					<Col offset={19}>
