@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd'
+import { Button, Icon } from 'antd'
 import { URL } from '../constants'
 import HomeAverageRating from './HomeAverageRating'
 
@@ -46,8 +46,11 @@ const HomeStoreName = (props) => {
   }
   return (
     <div style={divStyle}>
-      { props.storeSelected && props.storeExist &&
-        <Button onClick={props.handleWriteReview} style={buttonStyle} type="primary">Write Review</Button>
+      { props.storeSelected && props.storeExist && props.button==="Write Review" &&
+        <Button onClick={props.handleWriteReview} style={buttonStyle} type="primary"><Icon type="arrow-right" />Write Review</Button>
+      }
+      { props.storeSelected && props.storeExist && props.button==="Back" &&
+        <Button onClick={props.handleBack} style={buttonStyle} type="primary"><Icon type="arrow-left" />All Reviews</Button>
       }
       <div style={subDivStyle}>
         <div style={titleStyle} >{props.storeName}</div>

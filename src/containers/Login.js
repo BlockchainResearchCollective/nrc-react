@@ -107,7 +107,7 @@ class Login extends React.Component {
               </Col>
             </Row>
             <Row style={addMarginTop(30)}>
-              <Col span={16} offset={4}>
+              <Col span={14} offset={6}>
                 <Banner title="Nanyang Review Chain"/>
               </Col>
             </Row>

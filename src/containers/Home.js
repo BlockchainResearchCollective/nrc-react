@@ -8,6 +8,8 @@ import HomeReviewList from '../components/HomeReviewList'
 import CreateStore from '../components/CreateStore'
 import NoStoreSelected from '../components/NoStoreSelected'
 import WriteReview from '../components/WriteReview'
+import Wallet from '../components/Wallet'
+import ActionHistory from '../components/ActionHistory'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
 import { storeExist } from '../service/blockchain'
 
@@ -98,6 +100,12 @@ class Home extends React.Component {
       display: "writeReviewPage"
     })
   }
+  handleBack = (e) => {
+    e.preventDefault()
+    this.setState({
+      display: "homePage"
+    })
+  }
   handleWallet = (e) => {
     e.preventDefault()
     this.setState({
@@ -123,12 +131,14 @@ class Home extends React.Component {
             <div>
               <HomeStoreName
                 handleWriteReview = {this.handleWriteReview}
+                handleBack = {this.handleBack}
                 storeSelected={this.state.storeSelected}
                 storeExist={this.state.storeExist}
                 storeURL={this.state.storeURL}
                 storeName={this.state.storeName}
                 reviewAmount={this.state.reviewAmount}
                 storeOverallScore={this.state.storeOverallScore}
+                button='Write Review'
               />
               { this.state.storeSelected && this.state.storeExist &&
                 <HomeReviewList
@@ -147,16 +157,30 @@ class Home extends React.Component {
             </div>
         }
         { this.state.display === "writeReviewPage" &&
-          <div style={writeReviewStyle}>
-            <WriteReview
+          <div>
+            <HomeStoreName
+              handleWriteReview = {this.handleWriteReview}
+              handleBack = {this.handleBack}
+              storeSelected={this.state.storeSelected}
+              storeExist={this.state.storeExist}
+              storeURL={this.state.storeURL}
+              storeName={this.state.storeName}
+              reviewAmount={this.state.reviewAmount}
+              storeOverallScore={this.state.storeOverallScore}
+              button='Back'
             />
+            <div style={writeReviewStyle} >
+              <WriteReview />
+            </div>
           </div>
         }
         { this.state.display === "walletPage" &&
-          <h1>wallet page</h1>
+          <Wallet
+            address={this.props.profile.ethAddress}
+          />
         }
         { this.state.display === "actionHistoryPage" &&
-          <h1>action history page</h1>
+          <ActionHistory />
         }
         {
           this.state.display === "loadingPage" &&
