@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { Steps, Row, Col, Icon } from 'antd'
+import { Steps, Row, Col, Icon, Spin } from 'antd'
 import HomeHeader from '../components/HomeHeader'
 import HomeStoreName from '../components/HomeStoreName'
 import HomeReviewList from '../components/HomeReviewList'
@@ -15,12 +15,21 @@ const addMarginTop = (offset) => ({
   marginTop: offset + 'px'
 })
 
+const writeReviewStyle = {
+  margin: '30px'
+}
+
+const loadingStyle = {
+  margin: '50px',
+  textAlign: 'center'
+}
+
 class Home extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      display: 'homePage',
+      display: 'loadingPage',
       storeSelected: false,
       storeExist: false,
       storeURL: "",
@@ -44,7 +53,8 @@ class Home extends React.Component {
           }, () => {
             searchImage(this.state.storeName, url => {
               this.setState({
-                storeURL: url
+                storeURL: url,
+                display: 'homePage'
               })
             })
             /* update storeExist */
@@ -60,7 +70,8 @@ class Home extends React.Component {
           }, () => {
             searchImage(this.state.storeName, url => {
               this.setState({
-                storeURL: url
+                storeURL: url,
+                display: 'homePage'
               })
             })
           })
@@ -136,14 +147,22 @@ class Home extends React.Component {
             </div>
         }
         { this.state.display === "writeReviewPage" &&
+          <div style={writeReviewStyle}>
             <WriteReview
             />
+          </div>
         }
         { this.state.display === "walletPage" &&
           <h1>wallet page</h1>
         }
         { this.state.display === "actionHistoryPage" &&
           <h1>action history page</h1>
+        }
+        {
+          this.state.display === "loadingPage" &&
+          <div style={loadingStyle}>
+            <Spin size="large" />
+          </div>
         }
       </div>
     )
