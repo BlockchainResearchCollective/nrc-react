@@ -47,9 +47,6 @@ class App extends Component {
           <Home
             profile={this.props.profile}
             inProcess={this.props.inProcess}
-            storeExist={this.props.storeExist}
-            storeOverallScore={this.props.storeOverallScore}
-            reviewAmount={this.props.reviewAmount}
           />
         }
       </div>
@@ -63,10 +60,7 @@ const mapStateToProps = state => {
     profile: state.user.profile,
     userIsFetching: state.user.isFetching,
     message: state.system.message,
-    inProcess: state.transaction.inProcess,
-    storeExist: state.transaction.storeExist,
-    storeOverallScore: state.transaction.storeOverallScore,
-    reviewAmount: state.transaction.reviewAmount
+    inProcess: state.transaction.inProcess
   }
 }
 

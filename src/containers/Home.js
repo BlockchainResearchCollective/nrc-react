@@ -11,7 +11,7 @@ import WriteReview from '../components/WriteReview'
 import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
-import { storeExist } from '../service/blockchain'
+import { storeExist, readOverallScore } from '../service/blockchain'
 
 const addMarginTop = (offset) => ({
   marginTop: offset + 'px'
@@ -33,9 +33,13 @@ class Home extends React.Component {
     this.state = {
       display: 'loadingPage',
       storeSelected: false,
+      storeExist: false,
       storeURL: "",
       storeName: "Nanyang Review Chain",
-      storeId: ""
+      storeId: "",
+      storeOverallScore: 0,
+      reviewAmount: 0,
+      reviews:[]
     }
   }
 
@@ -50,28 +54,68 @@ class Home extends React.Component {
             storeName: getStoreNameFromUrl(url),
             storeId: getStoreIdFromUrl(url)
           }, () => {
-            searchImage(this.state.storeName, url => {
+            searchImage(this.state.storeName, storeURL => {
               this.setState({
-                storeURL: url,
+                storeURL
               })
               /* update storeExist */
-              /* update storeOverallScore */
-              /* update reviewAmount */
+              storeExist(this.state.storeId, storeExist => {
+                this.setState({
+                  storeExist
+                })
+                if (storeExist){
+                  /* update storeOverallScore */
+                  /* update reviewAmount */
+                  readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
+                    this.setState({
+                      storeOverallScore,
+                      reviewAmount,
+                      display: 'homePage'
+                    })
+                  })
+                } else {
+                  this.setState({
+                    display: 'homePage'
+                  })
+                }
+              })
+              /* update reviews */
               /* display: 'homePage' */
             })
           })
         } else {
           this.setState({
             storeSelected: true,
-            storeExist: true,
             storeName: "Koufu @ the South Spine",
             storeId: "Koufu@theSouthSpine--1.342--103.682"
           }, () => {
-            searchImage(this.state.storeName, url => {
+            searchImage(this.state.storeName, storeURL => {
               this.setState({
-                storeURL: url,
-                display: 'homePage'
+                storeURL
               })
+              /* update storeExist */
+              storeExist(this.state.storeId, storeExist => {
+                this.setState({
+                  storeExist
+                })
+                if (storeExist){
+                  /* update storeOverallScore */
+                  /* update reviewAmount */
+                  readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
+                    this.setState({
+                      storeOverallScore,
+                      reviewAmount,
+                      display: 'homePage'
+                    })
+                  })
+                } else {
+                  this.setState({
+                    display: 'homePage'
+                  })
+                }
+              })
+              /* update reviews */
+              /* display: 'homePage' */
             })
           })
         }
@@ -133,18 +177,18 @@ class Home extends React.Component {
                 storeSelected={this.state.storeSelected}
                 storeURL={this.state.storeURL}
                 storeName={this.state.storeName}
-                storeExist={this.props.storeExist}
-                reviewAmount={this.props.reviewAmount}
-                storeOverallScore={this.props.storeOverallScore}
+                storeExist={this.state.storeExist}
+                reviewAmount={this.state.reviewAmount}
+                storeOverallScore={this.state.storeOverallScore}
                 button='Write Review'
               />
-              { this.state.storeSelected && this.props.storeExist &&
+              { this.state.storeSelected && this.state.storeExist &&
                 <HomeReviewList
                   storeId={this.state.storeId}
-                  reviewAmount={this.props.reviewAmount}
+                  reviewAmount={this.state.reviewAmount}
                 />
               }
-              { this.state.storeSelected && !this.props.storeExist &&
+              { this.state.storeSelected && !this.state.storeExist &&
                 <CreateStore
                   storeId={this.state.storeId}
                 />
@@ -162,9 +206,9 @@ class Home extends React.Component {
               storeSelected={this.state.storeSelected}
               storeURL={this.state.storeURL}
               storeName={this.state.storeName}
-              storeExist={this.props.storeExist}
-              reviewAmount={this.props.reviewAmount}
-              storeOverallScore={this.props.storeOverallScore}
+              storeExist={this.state.storeExist}
+              reviewAmount={this.state.reviewAmount}
+              storeOverallScore={this.state.storeOverallScore}
               button='Back'
             />
             <div style={writeReviewStyle} >

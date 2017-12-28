@@ -3,10 +3,7 @@ import {
 } from '../actions/'
 
 const initialState = {
-	inProcess: false,
-  storeExist: false,
-  storeOverallScore: 0,
-  reviewAmount: 0
+	inProcess: false
 }
 
 const transactionReducer = (state = initialState, action) => {
