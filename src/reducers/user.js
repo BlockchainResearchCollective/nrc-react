@@ -11,7 +11,10 @@ const initialState = {
 	loggedIn: false,
  	profile: {},
  	ethBalance: 0,
-	message: ""
+	message: "",
+	resetPassword: false,
+	resetVerified: false,
+	passwordChanged: false
 }
 
 const userProfileReducer = (state = initialState, action) => {
@@ -74,11 +77,7 @@ const userProfileReducer = (state = initialState, action) => {
 	}
 }
 
-const resetPasswordReducer = (state = {
-	resetPassword: false,
-	resetVerified: false,
-	passwordChanged: false
-}, action) =>{
+const resetPasswordReducer = (state, action) =>{
 	switch(action.type){
 		case REQUEST_RESET_PASSWORD:
 			return {

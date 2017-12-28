@@ -64,18 +64,18 @@ class ResetPassword extends React.Component {
 				<div>
 					<div style={headerStyle}>
 						<Banner title='Reset Your Password' />
-					</div>	
+					</div>
 					<Row style={{marginTop:'30px'}}>
 						<Col offset={4} span={16}>
 							<p style={helpTextStyle}>Enter your email address to reset your password. You may need to check your spam folder</p>
 						</Col>
 					</Row>
-					<WrappedResetPasswordForm 
+					<WrappedResetPasswordForm
 						dispatch={this.props.dispatch}
 						resetSent={this.props.resetSent}
 						resetVerified={this.props.resetVerified}
 						passwordChanged={this.props.passwordChanged}
-						handleVerify={this.handleVerify} 
+						handleVerify={this.handleVerify}
 					/>
 				</div>
 			}
@@ -92,13 +92,13 @@ class ResetPassword extends React.Component {
 				<div>
 					<div style={headerStyle}>
 						<Banner title='Reset Your Password' />
-					</div>	
+					</div>
 					<Row style={{marginTop:'30px'}}>
 						<Col offset={4} span={16}>
 							<p style={helpTextStyle}>Please enter a new password for your email account</p>
 						</Col>
 					</Row>
-					<WrappedNewPasswordForm 
+					<WrappedNewPasswordForm
 						dispatch={this.props.dispatch}
 						handleNewPasswordSubmit={this.handleNewPasswordSubmit}
 					/>
@@ -117,7 +117,7 @@ class ResetPassword extends React.Component {
 				<div>
 					<div style={headerStyle}>
 						<Banner title='Reset Your Password' />
-					</div>	
+					</div>
 					<Icon type='check-circle-o' style={iconStyle} />
 		      <Row>
 		        <Col span={12} offset={6}>
@@ -132,9 +132,9 @@ class ResetPassword extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    resetSent: state.user.resetPassword===undefined ? state.user.initialState.resetPassword : state.user.resetPassword,
-    resetVerified: state.user.resetVerified===undefined ? state.user.initialState.resetVerified : state.user.resetVerified,
-    passwordChanged: state.user.passwordChanged===undefined ? state.user.initialState.passwordChanged : state.user.passwordChanged
+    resetSent: state.user.resetPassword,
+    resetVerified: state.user.resetVerified,
+    passwordChanged: state.user.passwordChanged
   }
 }
 
