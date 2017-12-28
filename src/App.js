@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import ReactDOM, { render } from 'react-dom'
 import { Provider, connect } from 'react-redux'
+import { message } from 'antd'
 import Login from './containers/Login'
 import Home from './containers/Home'
 import './App.css'
-import { checkLoginStatus } from './actions'
+import { checkLoginStatus, clearMessage } from './actions'
 
 const divStyle = {
   overflowY: 'scroll',
@@ -19,9 +20,21 @@ class App extends Component {
     }
   }
 
+  info = (msg) => {
+    if (msg){
+      message.info(msg)
+      const { dispatch } = this.props
+      dispatch(clearMessage())
+    }
+  }
+
   componentWillMount() {
     const { dispatch } = this.props
     dispatch(checkLoginStatus())
+  }
+
+  componentDidUpdate() {
+    this.info(this.props.message)
   }
 
   render() {
@@ -44,7 +57,8 @@ const mapStateToProps = state => {
   return {
     loggedIn: state.user.loggedIn,
     profile: state.user.profile,
-    isFetching: state.user.isFetching
+    isFetching: state.user.isFetching,
+    message: state.user.message
   }
 }
 

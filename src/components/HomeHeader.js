@@ -18,6 +18,11 @@ const balanceStyle ={
 	fontSize: '14px',
   fontFamily: 'Open Sans',
 }
+const warningStyle ={
+	color: 'red',
+	fontSize: '16px',
+  fontFamily: 'Open Sans',
+}
 const logoStyle = {
   height: '40px',
   width: '40px',
@@ -67,9 +72,17 @@ class HomeHeader extends React.Component{
 		return(
 			<div style={divStyle}>
 				<Row>
-					<Col offset={0} span={12}>
+					<Col offset={0} span={19}>
 						<div style={greetingStyle}><a onClick={this.props.handleHome} href="#"><Icon type="home" /></a> Hi, {this.props.profile.username}</div>
-            <div style={balanceStyle}>Balance: <span>{this.props.ethBalance}</span> Ether</div>
+            { this.props.email && this.props.ethBalance >= 0.05 &&
+              <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether</div>
+            }
+            { this.props.email && this.props.ethBalance < 0.05 &&
+              <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether <span style={warningStyle}>(Insufficient Balance)</span></div>
+            }
+            { !this.props.email &&
+              <div style={warningStyle}>Unverified Account</div>
+            }
 					</Col>
 					<Col offset={19}>
             <a className="ant-dropdown-link" href="#">

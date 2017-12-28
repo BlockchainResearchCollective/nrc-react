@@ -56,19 +56,19 @@ class Home extends React.Component {
             searchImage(this.state.storeName, url => {
               this.setState({
                 storeURL: url,
-                display: 'homePage'
               })
+              /* update storeExist */
+              /* update storeOverallScore */
+              /* update reviewAmount */
+              /* display: 'homePage' */
             })
-            /* update storeExist */
-            /* update storeURL */
-            /* update storeOverallScore */
-            /* update reviewAmount */
           })
         } else {
           this.setState({
             storeSelected: true,
             storeExist: true,
-            storeName: "NTU Canteen B",
+            storeName: "Koufu @ the South Spine",
+            storeId: "Koufu@theSouthSpine--1.342--103.682"
           }, () => {
             searchImage(this.state.storeName, url => {
               this.setState({
@@ -123,6 +123,7 @@ class Home extends React.Component {
     return (
       <div>
         <HomeHeader
+          email = {this.props.profile.email}
           handleHome = {this.handleHome}
           handleWallet = {this.handleWallet}
           handleActionHistory = {this.handleActionHistory}

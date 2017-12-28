@@ -3,16 +3,18 @@ import {
 	REQUEST_LOGIN_STATUS, RESPONSE_LOGIN_STATUS, REQUEST_LOGIN, RESPONSE_LOGIN,
 	REQUEST_ETH_BALANCE, RESPONSE_ETH_BALANCE, REQUEST_LOGOUT, RESPONSE_LOGOUT,
 	REQUEST_RESET_PASSWORD, RESPONSE_RESET_VERIFY, RESPONSE_PASSWORD_CHANGE, RESET_EXPIRED,
+	ALERT_MESSAGE, CLEAR_MESSAGE
 } from '../actions/'
 
 const initialState = {
 	isFetching: false,
 	loggedIn: false,
  	profile: {},
- 	ethBalance: 0
+ 	ethBalance: 0,
+	message: ""
 }
 
-const userProfileReducer = (state = {initialState}, action) => {
+const userProfileReducer = (state = initialState, action) => {
 	switch(action.type){
 		case REQUEST_LOGIN_STATUS:
 			return {
@@ -56,6 +58,16 @@ const userProfileReducer = (state = {initialState}, action) => {
 				...state,
 				isFetching: false,
 				ethBalance: action.ethBalance
+			}
+		case ALERT_MESSAGE:
+			return {
+				...state,
+				message: action.message
+			}
+		case CLEAR_MESSAGE:
+			return {
+				...state,
+				message: ""
 			}
 		default:
 			return state

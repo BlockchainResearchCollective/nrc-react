@@ -22,6 +22,8 @@ export const RESPONSE_RESET_VERIFY = 'RESPONSE_RESET_VERIFY'
 export const REQUEST_PASSWORD_CHANGE = 'REQUEST_PASSWORD_CHANGE'
 export const RESPONSE_PASSWORD_CHANGE = 'RESPONSE_PASSWORD_CHANGE'
 export const RESET_EXPIRED = 'RESET_EXPIRED'
+export const ALERT_MESSAGE = 'ALERT_MESSAGE'
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
 
 export const requestLoginStatusAction = () => ({
 	type: REQUEST_LOGIN_STATUS,
@@ -128,9 +130,18 @@ export const responsePasswordChangeAction = (email, status) => ({
 	status
 })
 
-export const resetPasswordExpiredAction = email => ({
+export const resetPasswordExpiredAction = (email) => ({
 	type: RESET_EXPIRED,
 	email
+})
+
+export const alertMessage = (message) => ({
+	type: ALERT_MESSAGE,
+	message
+})
+
+export const clearMessage = () => ({
+	type: CLEAR_MESSAGE
 })
 
 export const checkLoginStatus = () => dispatch => {
@@ -162,6 +173,8 @@ export const login = (username, password) => dispatch => {
 		dispatch(responseLoginAction(response.status))
 		if (response.status == 200 ){
 			dispatch(checkLoginStatus())
+		} else {
+			dispatch(alertMessage("Incorrect username or password!"))
 		}
 	})
 }
