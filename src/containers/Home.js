@@ -33,12 +33,9 @@ class Home extends React.Component {
     this.state = {
       display: 'loadingPage',
       storeSelected: false,
-      storeExist: false,
       storeURL: "",
       storeName: "Nanyang Review Chain",
-      storeId: "",
-      storeOverallScore: 0,
-      reviewAmount: 0
+      storeId: ""
     }
   }
 
@@ -134,20 +131,20 @@ class Home extends React.Component {
                 handleWriteReview = {this.handleWriteReview}
                 handleBack = {this.handleBack}
                 storeSelected={this.state.storeSelected}
-                storeExist={this.state.storeExist}
                 storeURL={this.state.storeURL}
                 storeName={this.state.storeName}
-                reviewAmount={this.state.reviewAmount}
-                storeOverallScore={this.state.storeOverallScore}
+                storeExist={this.props.storeExist}
+                reviewAmount={this.props.reviewAmount}
+                storeOverallScore={this.props.storeOverallScore}
                 button='Write Review'
               />
-              { this.state.storeSelected && this.state.storeExist &&
+              { this.state.storeSelected && this.props.storeExist &&
                 <HomeReviewList
                   storeId={this.state.storeId}
-                  reviewAmount={this.state.reviewAmount}
+                  reviewAmount={this.props.reviewAmount}
                 />
               }
-              { this.state.storeSelected && !this.state.storeExist &&
+              { this.state.storeSelected && !this.props.storeExist &&
                 <CreateStore
                   storeId={this.state.storeId}
                 />
@@ -163,11 +160,11 @@ class Home extends React.Component {
               handleWriteReview = {this.handleWriteReview}
               handleBack = {this.handleBack}
               storeSelected={this.state.storeSelected}
-              storeExist={this.state.storeExist}
               storeURL={this.state.storeURL}
               storeName={this.state.storeName}
-              reviewAmount={this.state.reviewAmount}
-              storeOverallScore={this.state.storeOverallScore}
+              storeExist={this.props.storeExist}
+              reviewAmount={this.props.reviewAmount}
+              storeOverallScore={this.props.storeOverallScore}
               button='Back'
             />
             <div style={writeReviewStyle} >

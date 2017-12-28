@@ -1,6 +1,7 @@
 import { URL } from '../constants'
 import { getBalance } from '../service/blockchain'
 
+/* User Actions */
 export const REQUEST_LOGIN_STATUS = 'REQUEST_LOGIN_STATUS'
 export const RESPONSE_LOGIN_STATUS = 'RESPONSE_LOGIN_STATUS'
 export const REQUEST_LOGIN ='REQUEST_LOGIN'
@@ -22,126 +23,100 @@ export const RESPONSE_RESET_VERIFY = 'RESPONSE_RESET_VERIFY'
 export const REQUEST_PASSWORD_CHANGE = 'REQUEST_PASSWORD_CHANGE'
 export const RESPONSE_PASSWORD_CHANGE = 'RESPONSE_PASSWORD_CHANGE'
 export const RESET_EXPIRED = 'RESET_EXPIRED'
+/* System Actions */
 export const ALERT_MESSAGE = 'ALERT_MESSAGE'
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
+/* Transaction Actions */
 
+/* User Action Creators*/
 export const requestLoginStatusAction = () => ({
 	type: REQUEST_LOGIN_STATUS,
 })
-
 export const responseLoginStatusAction = (status, profile) =>({
 	type: RESPONSE_LOGIN_STATUS,
 	status,
 	profile
 })
-
 export const requestUsernameValidationAction = (username) => ({
 	type: REQUEST_USERNAME_VALIDATION,
 	username
 })
-
 export const responseUsernameValidationAction = (usernameStatus) => ({
 	type: RESPONSE_USERNAME_VALIDATION,
 	usernameStatus
 })
-
 export const requestEmailValidationAction = (email) => ({
 	type: REQUEST_EMAIL_VALIDATION,
 	email
 })
-
 export const responseEmailValidationAction = (emailStatus) => ({
 	type: RESPONSE_EMAIL_VALIDATION,
 	emailStatus
 })
-
 export const requestLoginAction = (username) => ({
 	type: REQUEST_LOGIN,
 	username
 })
-
 export const responseLoginAction = (status) => ({
 	type: RESPONSE_LOGIN,
 	status
 })
-
 export const requestLogoutAction = () => ({
 	type: REQUEST_LOGOUT,
 })
-
 export const responseLogoutAction = (status) => ({
 	type: RESPONSE_LOGOUT,
 	status
 })
-
 export const requestSignUpAction = (username, email) => ({
 	type: REQUEST_SIGN_UP,
 	username,
 	email
 })
-
 export const responseSignUpAction = (status) => ({
 	type: RESPONSE_SIGN_UP,
 	status
 })
-
 export const requestEthBalance = (ethAddress) => ({
 	type: REQUEST_ETH_BALANCE,
 	ethAddress
 })
-
 export const responseEthBalance = (ethAddress, ethBalance) => ({
 	type: RESPONSE_ETH_BALANCE,
 	ethAddress,
 	ethBalance
 })
-
 export const requestResetPasswordAction = (email) => ({
 	type: REQUEST_RESET_PASSWORD,
 	email
 })
-
 export const responseResetPasswordAction = (email, status) => ({
 	type: RESPONSE_RESET_PASSWORD,
 	email,
 	status
 })
-
 export const requestResetVerifyAction = (email, code) => ({
 	type: REQUEST_RESET_VERIFY,
 	email,
 	code
 })
-
 export const responseResetVerifyAction = (email, status) => ({
 	type: RESPONSE_RESET_VERIFY,
 	email,
 	status
 })
-
 export const requestPasswordChangeAction = (email) => ({
 	type: REQUEST_PASSWORD_CHANGE,
 	email
 })
-
 export const responsePasswordChangeAction = (email, status) => ({
 	type: RESPONSE_PASSWORD_CHANGE,
 	email,
 	status
 })
-
 export const resetPasswordExpiredAction = (email) => ({
 	type: RESET_EXPIRED,
 	email
-})
-
-export const alertMessage = (message) => ({
-	type: ALERT_MESSAGE,
-	message
-})
-
-export const clearMessage = () => ({
-	type: CLEAR_MESSAGE
 })
 
 export const checkLoginStatus = () => dispatch => {
@@ -311,3 +286,15 @@ export const changePassword = (email, newPassword) => dispatch =>{
 	})
 	.then(response => dispatch(responsePasswordChangeAction(email, response.status)))
 }
+
+/* System Action Creators */
+
+export const alertMessage = (message) => ({
+	type: ALERT_MESSAGE,
+	message
+})
+export const clearMessage = () => ({
+	type: CLEAR_MESSAGE
+})
+
+/* Transaction Action Creators */

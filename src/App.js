@@ -46,6 +46,10 @@ class App extends Component {
         { this.props.loggedIn &&
           <Home
             profile={this.props.profile}
+            inProcess={this.props.inProcess}
+            storeExist={this.props.storeExist}
+            storeOverallScore={this.props.storeOverallScore}
+            reviewAmount={this.props.reviewAmount}
           />
         }
       </div>
@@ -57,8 +61,12 @@ const mapStateToProps = state => {
   return {
     loggedIn: state.user.loggedIn,
     profile: state.user.profile,
-    isFetching: state.user.isFetching,
-    message: state.user.message
+    userIsFetching: state.user.isFetching,
+    message: state.system.message,
+    inProcess: state.transaction.inProcess,
+    storeExist: state.transaction.storeExist,
+    storeOverallScore: state.transaction.storeOverallScore,
+    reviewAmount: state.transaction.reviewAmount
   }
 }
 
