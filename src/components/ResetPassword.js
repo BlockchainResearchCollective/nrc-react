@@ -21,24 +21,38 @@ const loadingStyle = {
 	fontSize: '50px',
 	marginTop:"100px"
 }
+const textStyle1 = {
+  color: '#fff',
+  textAlign: 'center'
+}
+const iconStyle = {
+  margin:'auto 0',
+  marginBottom:'30px',
+  marginTop: '50px',
+  width:'100%',
+  fontSize: 100,
+  color: '#fff'
+}
 class ResetPassword extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
 			resetVerifySent: false,
-			changePasswordSent: false
+			changePasswordSent: false,
+			email:''
 		}
 	}
 	handleVerify = (values) => {
 		const { dispatch } = this.props
 		dispatch(verifyReset(values.email, values.verificationCode))
 		this.setState({
-			resetVerifySent: true
+			resetVerifySent: true,
+			email: values.email
 		})
 	}
 	handleNewPasswordSubmit = (values) => {
 		const { dispatch } = this.props
-		dispatch(changePassword(values.password))
+		dispatch(changePassword(this.state.email, values.password))
 		this.setState({
 			changePasswordSent:true
 		})
@@ -101,6 +115,15 @@ class ResetPassword extends React.Component {
 			}
 			{	this.props.passwordChanged &&
 				<div>
+					<div style={headerStyle}>
+						<Banner title='Reset Your Password' />
+					</div>	
+					<Icon type='check-circle-o' style={iconStyle} />
+		      <Row>
+		        <Col span={12} offset={6}>
+		          <p style={textStyle1}> Your password has been successfully reseted! </p>
+		        </Col>
+		      </Row>
 				</div>
 			}
 			</div>
