@@ -11,7 +11,7 @@ import WriteReview from '../components/WriteReview'
 import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
-import { storeExist, readOverallScore } from '../service/blockchain'
+import { storeExist, readOverallScore, readCredibility } from '../service/blockchain'
 
 const addMarginTop = (offset) => ({
   marginTop: offset + 'px'
@@ -39,7 +39,8 @@ class Home extends React.Component {
       storeId: "",
       storeOverallScore: 0,
       reviewAmount: 0,
-      reviews:[]
+      reviews: [],
+      credibility: 0
     }
   }
 
@@ -58,26 +59,32 @@ class Home extends React.Component {
               this.setState({
                 storeURL
               })
-              /* update storeExist */
-              storeExist(this.state.storeId, storeExist => {
+              /* update credibility */
+              readCredibility(this.props.profile.ethAddress, rawCredibility => {
                 this.setState({
-                  storeExist
+                  credibility: rawCredibility/200
                 })
-                if (storeExist){
-                  /* update storeOverallScore */
-                  /* update reviewAmount */
-                  readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
+                /* update storeExist */
+                storeExist(this.state.storeId, storeExist => {
+                  this.setState({
+                    storeExist
+                  })
+                  if (storeExist){
+                    /* update storeOverallScore */
+                    /* update reviewAmount */
+                    readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
+                      this.setState({
+                        storeOverallScore,
+                        reviewAmount,
+                        display: 'homePage'
+                      })
+                    })
+                  } else {
                     this.setState({
-                      storeOverallScore,
-                      reviewAmount,
                       display: 'homePage'
                     })
-                  })
-                } else {
-                  this.setState({
-                    display: 'homePage'
-                  })
-                }
+                  }
+                })
               })
               /* update reviews */
               /* display: 'homePage' */
@@ -93,29 +100,33 @@ class Home extends React.Component {
               this.setState({
                 storeURL
               })
-              /* update storeExist */
-              storeExist(this.state.storeId, storeExist => {
+              /* update credibility */
+              readCredibility(this.props.profile.ethAddress, credibility => {
                 this.setState({
-                  storeExist
+                  credibility
                 })
-                if (storeExist){
-                  /* update storeOverallScore */
-                  /* update reviewAmount */
-                  readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
+                /* update storeExist */
+                storeExist(this.state.storeId, storeExist => {
+                  this.setState({
+                    storeExist
+                  })
+                  if (storeExist){
+                    /* update storeOverallScore */
+                    /* update reviewAmount */
+                    readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
+                      this.setState({
+                        storeOverallScore,
+                        reviewAmount,
+                        display: 'homePage'
+                      })
+                    })
+                  } else {
                     this.setState({
-                      storeOverallScore,
-                      reviewAmount,
                       display: 'homePage'
                     })
-                  })
-                } else {
-                  this.setState({
-                    display: 'homePage'
-                  })
-                }
+                  }
+                })
               })
-              /* update reviews */
-              /* display: 'homePage' */
             })
           })
         }
@@ -223,7 +234,7 @@ class Home extends React.Component {
         }
         { this.state.display === "actionHistoryPage" &&
           <ActionHistory
-            credibility={4}
+            credibility={this.state.credibility}
           />
         }
         {

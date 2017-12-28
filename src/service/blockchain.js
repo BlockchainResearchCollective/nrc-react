@@ -112,6 +112,15 @@ exports.storeExist = function(storeId, cb){
 }
 //End of storeExist function
 
+exports.readCredibility = function(address, cb){
+	escrow_instance.methods.credibility(address).call()
+		.then(credibility => {
+			console.log('raw credibility: ' + credibility);
+			cb(credibility);
+		});
+}
+//End of readCredibility function
+
 exports.readReviewAmount = function(storeId, cb){
 	store_registry_instance.methods.getStoreAddress(storeId).call()
 		.then(store_address => {
