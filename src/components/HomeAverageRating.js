@@ -14,12 +14,13 @@ const reviewNumberStyle = {
 
 const scaleConverter = (averageRating) => {
   let i = 0;
-  while (averageRating - 0.5 > 0){
+  while (averageRating - 0.5 >= 0){
     i += 0.5;
     averageRating -= 0.5;
   }
   return i;
 }
+
 const HomeAverageRating = (props) => {
   return (
     <div>

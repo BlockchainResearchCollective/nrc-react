@@ -180,7 +180,9 @@ class Home extends React.Component {
           />
         }
         { this.state.display === "actionHistoryPage" &&
-          <ActionHistory />
+          <ActionHistory
+            credibility={4}
+          />
         }
         {
           this.state.display === "loadingPage" &&

@@ -3,8 +3,8 @@ import { Icon, Pagination } from 'antd'
 import WalletRecord from './WalletRecord'
 
 const divStyle = {
-  marginLeft: '30px',
-  marginRight: '30px'
+  marginLeft: '20px',
+  marginRight: '20px'
 }
 const headStyle = {
   backgroundColor: 'white',
@@ -40,25 +40,29 @@ class Wallet extends React.Component {
       pageNumber: 0,
       recordAmount: 1,
       records: [{
-        action: 'Submit review',
+        storeName: 'Koufu',
+        action: 'Submit Review',
         positive: false,
         amount: '0.01',
         transactionHash: 'dafajdkasf',
         date: '28/12/2017'
       },{
-        action: 'Submit review',
+        storeName: 'Koufu',
+        action: 'Submit Review',
         positive: true,
         amount: '0.01',
         transactionHash: 'dafajdkasf',
         date: '28/12/2017'
       },{
-        action: 'Submit review',
+        storeName: 'Koufu',
+        action: 'Submit Review',
         positive: false,
         amount: '0.01',
         transactionHash: 'dafajdkasf',
         date: '28/12/2017'
       },{
-        action: 'Submit review',
+        storeName: 'Koufu',
+        action: 'Submit Review',
         positive: true,
         amount: '0.01',
         transactionHash: 'dafajdkasf',
