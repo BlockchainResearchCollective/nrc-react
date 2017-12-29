@@ -52,8 +52,10 @@ export const updateReviewAmount = (reviewAmount) => ({
 })
 
 export const initialize = (url, ethAddress) => dispatch => {
-  dispatch(initializeStart())
   if (checkUrlStatus(url)){
+    console.log(url)
+    console.log(getStoreIdFromUrl(url))
+    console.log(getStoreNameFromUrl(url))
     /* update storeSelected, storeName, storeURL */
     var storeName = getStoreNameFromUrl(url)
     var storeId = getStoreIdFromUrl(url)
@@ -83,18 +85,18 @@ export const initialize = (url, ethAddress) => dispatch => {
     })
   } else {
     /* update storeSelected, storeName, storeURL */
-    dispatch(checkURL(true, "Koufu @ the South Spine", "Koufu@theSouthSpine--1.342--103.682"))
-    searchImage("Koufu @ the South Spine", storeURL => {
+    dispatch(checkURL(true, "The Quad Cafe", "TheQuadCafe--1.344--103.679"))
+    searchImage("The Quad Cafe", storeURL => {
       /* update storeURL */
       dispatch(updateImage(storeURL))
       readCredibility(ethAddress, rawCredibility => {
         /* update credibility */
         dispatch(updateCredibility(rawCredibility/200))
-        storeExist("Koufu@theSouthSpine--1.342--103.682", storeExist => {
+        storeExist("TheQuadCafe--1.344--103.679", storeExist => {
           if (storeExist){
             /* update storeExist */
             dispatch(updateStoreExist(storeExist))
-            readOverallScore("Koufu@theSouthSpine--1.342--103.682", (storeOverallScore, reviewAmount) => {
+            readOverallScore("TheQuadCafe--1.344--103.679", (storeOverallScore, reviewAmount) => {
               /* update storeOverallScore */
               dispatch(updateOverallScore(storeOverallScore))
               /* update reviewAmount */

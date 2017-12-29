@@ -32,17 +32,25 @@ exports.web3IsConnected = function(){
 }
 
 exports.decryptPrivateKey = function(encrypted, password){
-	return web3.eth.accounts.decrypt(encrypted, password).privateKey;
+	try {
+		return web3.eth.accounts.decrypt(encrypted, password).privateKey;
+	}
+	catch(err) {
+		return "";
+	}
 }
 
 exports.addPrivateKey = function(address, privateKey){
-	if (web3.eth.accounts.privateKeyToAccount(privateKey).address == address){
-		web3.eth.accounts.wallet.add(privateKey);
-		ethAccountAddress = address;
-		return true;
-	} else {
-		return false;
+	if (privateKey){
+		if (web3.eth.accounts.privateKeyToAccount(privateKey).address == address){
+			web3.eth.accounts.wallet.add(privateKey);
+			ethAccountAddress = address;
+			return true;
+		} else {
+			return false;
+		}
 	}
+	return false;
 }
 
 exports.getBalance = (address) => {
@@ -54,6 +62,9 @@ exports.getBalance = (address) => {
 */
 
 exports.createStore = function(storeId, cb){
+	console.log(web3.eth.accounts.wallet)
+	console.log(ethAccountAddress)
+	console.log(storeId)
 	store_registry_instance.methods.addStore(storeId).send({
 	    from: ethAccountAddress,
 	    gas: 4000000,

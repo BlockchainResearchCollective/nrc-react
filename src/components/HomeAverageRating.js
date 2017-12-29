@@ -24,7 +24,7 @@ const scaleConverter = (averageRating) => {
 const HomeAverageRating = (props) => {
   return (
     <div>
-      <span style={ratingStyle} >{props.storeOverallScore.toFixed(1)}</span>
+      <span style={ratingStyle} >{(parseFloat(props.storeOverallScore)/20).toFixed(1)}</span>
       <Rate allowHalf disabled defaultValue={scaleConverter(parseFloat(props.storeOverallScore))} />
       <span style={reviewNumberStyle} >| {props.reviewAmount} Reviews</span>
     </div>

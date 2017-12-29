@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { URL } from '../constants'
 import { Row, Col, Menu, Dropdown, Icon } from 'antd'
-import { updateEthBalance, logout } from '../actions'
+import { logout, updateEthBalance } from '../actions'
 
 const divStyle = {
   padding: '15px',
@@ -43,14 +43,16 @@ class HomeHeader extends React.Component{
 
   handleLogout = (e) => {
     e.preventDefault()
-    const {profile, dispatch} = this.props
-		dispatch(logout())
+		this.props.dispatch(logout())
   }
 
-	componentWillMount(){
-		const {profile, dispatch} = this.props
-		dispatch(updateEthBalance(profile.ethAddress))
-	}
+  componentWillMount(){
+    this.props.dispatch(updateEthBalance(this.props.ethAddress))
+  }
+
+  componentDidUpdate(){
+    this.props.dispatch(updateEthBalance(this.props.ethAddress))
+  }
 
 	render(){
     const menu = (
@@ -73,7 +75,7 @@ class HomeHeader extends React.Component{
 			<div style={divStyle}>
 				<Row>
 					<Col offset={0} span={19}>
-						<div style={greetingStyle}><a onClick={this.props.handleHome} href="#"><Icon type="home" /></a> Hi, {this.props.profile.username}</div>
+						<div style={greetingStyle}><a onClick={this.props.handleHome} href="#"><Icon type="home" /></a> Hi, {this.props.username}</div>
             { this.props.email && this.props.ethBalance >= 0.05 &&
               <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether</div>
             }
@@ -102,7 +104,8 @@ class HomeHeader extends React.Component{
 
 const mapStateToProps = state => {
   return {
-    profile: state.user.profile,
+    username: state.user.profile.username,
+    ethAddress: state.user.profile.ethAddress,
     ethBalance: state.user.ethBalance
   }
 }

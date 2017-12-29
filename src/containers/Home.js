@@ -10,7 +10,7 @@ import NoStoreSelected from '../components/NoStoreSelected'
 import WriteReview from '../components/WriteReview'
 import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
-import { initialize } from '../actions/transaction'
+import { initialize, decryptKey } from '../actions'
 
 const addMarginTop = (offset) => ({
   marginTop: offset + 'px'
@@ -44,6 +44,7 @@ class Home extends React.Component {
     },
       1000
     )
+    decryptKey(this.props.profile.ethAddress, this.props.profile.encryptedAccount, this.props.profile.hashedPassword)
   }
 
   componentWillUnmount() {
@@ -84,12 +85,14 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <HomeHeader
-          email = {this.props.profile.email}
-          handleHome = {this.handleHome}
-          handleWallet = {this.handleWallet}
-          handleActionHistory = {this.handleActionHistory}
-        />
+        { this.props.isReady &&
+          <HomeHeader
+            email = {this.props.profile.email}
+            handleHome = {this.handleHome}
+            handleWallet = {this.handleWallet}
+            handleActionHistory = {this.handleActionHistory}
+          />
+        }
         { this.props.isReady && this.state.display === "homePage" &&
             <div>
               <HomeStoreName
