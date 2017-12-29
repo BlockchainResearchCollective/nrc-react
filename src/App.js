@@ -5,7 +5,8 @@ import { message } from 'antd'
 import Login from './containers/Login'
 import Home from './containers/Home'
 import './App.css'
-import { checkLoginStatus, clearMessage } from './actions'
+import { checkLoginStatus } from './actions/user'
+import { clearMessage } from './actions/system'
 
 const divStyle = {
   overflowY: 'scroll',
@@ -23,14 +24,12 @@ class App extends Component {
   info = (msg) => {
     if (msg){
       message.info(msg)
-      const { dispatch } = this.props
-      dispatch(clearMessage())
+      this.props.dispatch(clearMessage())
     }
   }
 
   componentWillMount() {
-    const { dispatch } = this.props
-    dispatch(checkLoginStatus())
+    this.props.dispatch(checkLoginStatus())
   }
 
   componentDidUpdate() {
@@ -44,10 +43,7 @@ class App extends Component {
           <Login />
         }
         { this.props.loggedIn &&
-          <Home
-            profile={this.props.profile}
-            inProcess={this.props.inProcess}
-          />
+          <Home />
         }
       </div>
     )
@@ -57,10 +53,8 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     loggedIn: state.user.loggedIn,
-    profile: state.user.profile,
     userIsFetching: state.user.isFetching,
-    message: state.system.message,
-    inProcess: state.transaction.inProcess
+    message: state.system.message
   }
 }
 

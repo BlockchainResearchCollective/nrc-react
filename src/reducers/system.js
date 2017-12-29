@@ -1,6 +1,6 @@
 import {
 	ALERT_MESSAGE, CLEAR_MESSAGE
-} from '../actions/'
+} from '../actions/ActionTypes'
 
 const initialState = {
 	message: ""

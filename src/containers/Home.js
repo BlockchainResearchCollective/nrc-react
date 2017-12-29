@@ -10,8 +10,7 @@ import NoStoreSelected from '../components/NoStoreSelected'
 import WriteReview from '../components/WriteReview'
 import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
-import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
-import { storeExist, readOverallScore, readCredibility } from '../service/blockchain'
+import { initialize } from '../actions/transaction'
 
 const addMarginTop = (offset) => ({
   marginTop: offset + 'px'
@@ -31,16 +30,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      display: 'loadingPage',
-      storeSelected: false,
-      storeExist: false,
-      storeURL: "",
-      storeName: "Nanyang Review Chain",
-      storeId: "",
-      storeOverallScore: 0,
-      reviewAmount: 0,
-      reviews: [],
-      credibility: 0
+      display: 'homePage'
     }
   }
 
@@ -49,87 +39,7 @@ class Home extends React.Component {
     this.timer = setInterval( () => {
       if (window.location.href != url){
         url = window.location.href
-        if (checkUrlStatus(url)){
-          this.setState({
-            storeSelected: true,
-            storeName: getStoreNameFromUrl(url),
-            storeId: getStoreIdFromUrl(url)
-          }, () => {
-            searchImage(this.state.storeName, storeURL => {
-              this.setState({
-                storeURL
-              })
-              /* update credibility */
-              readCredibility(this.props.profile.ethAddress, rawCredibility => {
-                this.setState({
-                  credibility: rawCredibility/200
-                })
-                /* update storeExist */
-                storeExist(this.state.storeId, storeExist => {
-                  this.setState({
-                    storeExist
-                  })
-                  if (storeExist){
-                    /* update storeOverallScore */
-                    /* update reviewAmount */
-                    readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
-                      this.setState({
-                        storeOverallScore,
-                        reviewAmount,
-                        display: 'homePage'
-                      })
-                    })
-                  } else {
-                    this.setState({
-                      display: 'homePage'
-                    })
-                  }
-                })
-              })
-              /* update reviews */
-              /* display: 'homePage' */
-            })
-          })
-        } else {
-          this.setState({
-            storeSelected: true,
-            storeName: "Koufu @ the South Spine",
-            storeId: "Koufu@theSouthSpine--1.342--103.682"
-          }, () => {
-            searchImage(this.state.storeName, storeURL => {
-              this.setState({
-                storeURL
-              })
-              /* update credibility */
-              readCredibility(this.props.profile.ethAddress, credibility => {
-                this.setState({
-                  credibility
-                })
-                /* update storeExist */
-                storeExist(this.state.storeId, storeExist => {
-                  this.setState({
-                    storeExist
-                  })
-                  if (storeExist){
-                    /* update storeOverallScore */
-                    /* update reviewAmount */
-                    readOverallScore(this.state.storeId, (storeOverallScore, reviewAmount) => {
-                      this.setState({
-                        storeOverallScore,
-                        reviewAmount,
-                        display: 'homePage'
-                      })
-                    })
-                  } else {
-                    this.setState({
-                      display: 'homePage'
-                    })
-                  }
-                })
-              })
-            })
-          })
-        }
+        this.props.dispatch(initialize(url, this.props.profile.ethAddress))
       }
     },
       1000
@@ -180,46 +90,46 @@ class Home extends React.Component {
           handleWallet = {this.handleWallet}
           handleActionHistory = {this.handleActionHistory}
         />
-        { this.state.display === "homePage" &&
+        { this.props.isReady && this.state.display === "homePage" &&
             <div>
               <HomeStoreName
                 handleWriteReview = {this.handleWriteReview}
                 handleBack = {this.handleBack}
-                storeSelected={this.state.storeSelected}
-                storeURL={this.state.storeURL}
-                storeName={this.state.storeName}
-                storeExist={this.state.storeExist}
-                reviewAmount={this.state.reviewAmount}
-                storeOverallScore={this.state.storeOverallScore}
+                storeSelected={this.props.storeSelected}
+                storeURL={this.props.storeURL}
+                storeName={this.props.storeName}
+                storeExist={this.props.storeExist}
+                reviewAmount={this.props.reviewAmount}
+                storeOverallScore={this.props.storeOverallScore}
                 button='Write Review'
               />
-              { this.state.storeSelected && this.state.storeExist &&
+              { this.props.storeSelected && this.props.storeExist &&
                 <HomeReviewList
-                  storeId={this.state.storeId}
-                  reviewAmount={this.state.reviewAmount}
+                  storeId={this.props.storeId}
+                  reviewAmount={this.props.reviewAmount}
                 />
               }
-              { this.state.storeSelected && !this.state.storeExist &&
+              { this.props.storeSelected && !this.props.storeExist &&
                 <CreateStore
-                  storeId={this.state.storeId}
+                  storeId={this.props.storeId}
                 />
               }
-              { !this.state.storeSelected &&
+              { !this.props.storeSelected &&
                 <NoStoreSelected/>
               }
             </div>
         }
-        { this.state.display === "writeReviewPage" &&
+        { this.props.isReady && this.state.display === "writeReviewPage" &&
           <div>
             <HomeStoreName
               handleWriteReview = {this.handleWriteReview}
               handleBack = {this.handleBack}
-              storeSelected={this.state.storeSelected}
-              storeURL={this.state.storeURL}
-              storeName={this.state.storeName}
-              storeExist={this.state.storeExist}
-              reviewAmount={this.state.reviewAmount}
-              storeOverallScore={this.state.storeOverallScore}
+              storeSelected={this.props.storeSelected}
+              storeURL={this.props.storeURL}
+              storeName={this.props.storeName}
+              storeExist={this.props.storeExist}
+              reviewAmount={this.props.reviewAmount}
+              storeOverallScore={this.props.storeOverallScore}
               button='Back'
             />
             <div style={writeReviewStyle} >
@@ -227,18 +137,18 @@ class Home extends React.Component {
             </div>
           </div>
         }
-        { this.state.display === "walletPage" &&
+        { this.props.isReady && this.state.display === "walletPage" &&
           <Wallet
             address={this.props.profile.ethAddress}
           />
         }
-        { this.state.display === "actionHistoryPage" &&
+        { this.props.isReady && this.state.display === "actionHistoryPage" &&
           <ActionHistory
-            credibility={this.state.credibility}
+            credibility={this.props.credibility}
           />
         }
         {
-          this.state.display === "loadingPage" &&
+          !this.props.isReady &&
           <div style={loadingStyle}>
             <Spin size="large" />
           </div>
@@ -248,4 +158,19 @@ class Home extends React.Component {
   }
 }
 
-export default connect()(Home)
+const mapStateToProps = state => {
+  return {
+    profile: state.user.profile,
+    isReady: state.transaction.isReady,
+    storeSelected: state.transaction.storeSelected,
+    storeExist: state.transaction.storeExist,
+    storeURL: state.transaction.storeURL,
+    storeName: state.transaction.storeName,
+    storeId: state.transaction.storeId,
+    storeOverallScore: state.transaction.storeOverallScore,
+    reviewAmount: state.transaction.reviewAmount,
+    credibility: state.transaction.credibility
+  }
+}
+
+export default connect(mapStateToProps)(Home)
