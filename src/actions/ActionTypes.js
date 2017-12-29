@@ -26,6 +26,8 @@ export const ALERT_MESSAGE = 'ALERT_MESSAGE'
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
 
 /* Transaction Actions */
+export const INITIALIZE_START = 'INITIALIZE_START'
+export const INITIALIZE_END = 'INITIALIZE_END'
 export const PROCESS_START = 'PROCESS_START'
 export const PROCESS_END = 'PROCESS_END'
 export const CHECK_URL = 'CHECK_URL'

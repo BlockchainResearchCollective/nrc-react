@@ -1,9 +1,14 @@
 import {
-  PROCESS_START, PROCESS_END, CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
+  PROCESS_START, PROCESS_END, INITIALIZE_START, INITIALIZE_END,
+  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
   UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT
 } from './ActionTypes'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
-import { storeExist, readOverallScore, readCredibility } from '../service/blockchain'
+import {
+  storeExist, readOverallScore, readCredibility, createStore
+} from '../service/blockchain'
+import { writeHistory } from '../service/backend'
+import { alertMessage } from './system'
 
 /* Transaction Action Creators */
 
@@ -12,6 +17,12 @@ export const processStart = () => ({
 })
 export const processEnd = () => ({
 	type: PROCESS_END
+})
+export const initializeStart = () => ({
+	type: INITIALIZE_START
+})
+export const initializeEnd = () => ({
+	type: INITIALIZE_END
 })
 export const checkURL = (storeSelected, storeName, storeId) => ({
 	type: CHECK_URL,
@@ -41,7 +52,7 @@ export const updateReviewAmount = (reviewAmount) => ({
 })
 
 export const initialize = (url, ethAddress) => dispatch => {
-  dispatch(processStart())
+  dispatch(initializeStart())
   if (checkUrlStatus(url)){
     /* update storeSelected, storeName, storeURL */
     var storeName = getStoreNameFromUrl(url)
@@ -62,10 +73,10 @@ export const initialize = (url, ethAddress) => dispatch => {
               dispatch(updateOverallScore(storeOverallScore))
               /* update reviewAmount */
               dispatch(updateReviewAmount(reviewAmount))
-              dispatch(processEnd())
+              dispatch(initializeEnd())
             })
           } else {
-            dispatch(processEnd())
+            dispatch(initializeEnd())
           }
         })
       })
@@ -88,13 +99,51 @@ export const initialize = (url, ethAddress) => dispatch => {
               dispatch(updateOverallScore(storeOverallScore))
               /* update reviewAmount */
               dispatch(updateReviewAmount(reviewAmount))
-              dispatch(processEnd())
+              dispatch(initializeEnd())
             })
           } else {
-            dispatch(processEnd())
+            dispatch(initializeEnd())
           }
         })
       })
     })
   }
+}
+
+export const newStoreCreatedAction = (storeId, callback) => dispatch => {
+  dispatch(updateStoreExist(true))
+  readOverallScore(storeId, (storeOverallScore, reviewAmount) => {
+    /* update storeOverallScore */
+    dispatch(updateOverallScore(storeOverallScore))
+    /* update reviewAmount */
+    dispatch(updateReviewAmount(reviewAmount))
+    callback()
+  })
+}
+
+export const createStoreAction = (storeId) => dispatch => {
+  dispatch(processStart())
+  createStore(storeId, (error, transactionHash) => {
+    if (error){
+      console.log(error)
+      dispatch(alertMessage("Create store failed!"))
+      dispatch(processEnd())
+    } else {
+      /* write history */
+      var refreshCheck = setInterval( () => {
+				storeExist(storeId, function(is_exist){
+  				if (is_exist){
+            dispatch(alertMessage("Create store success!"))
+  					clearInterval(refreshCheck);
+            dispatch(newStoreCreatedAction(
+              storeId,
+              () => {
+                dispatch(processEnd())
+              }
+            ))
+  				}
+  			})
+			}, 1000)
+    }
+  })
 }

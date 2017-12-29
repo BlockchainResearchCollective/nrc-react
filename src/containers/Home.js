@@ -37,7 +37,7 @@ class Home extends React.Component {
   componentDidMount() {
     var url
     this.timer = setInterval( () => {
-      if (window.location.href != url){
+      if (window.location.href != url && window.location.href != url+'#'){
         url = window.location.href
         this.props.dispatch(initialize(url, this.props.profile.ethAddress))
       }
@@ -103,18 +103,18 @@ class Home extends React.Component {
                 storeOverallScore={this.props.storeOverallScore}
                 button='Write Review'
               />
-              { this.props.storeSelected && this.props.storeExist &&
+              { !this.props.isProcessing && this.props.storeSelected && this.props.storeExist &&
                 <HomeReviewList
                   storeId={this.props.storeId}
                   reviewAmount={this.props.reviewAmount}
                 />
               }
-              { this.props.storeSelected && !this.props.storeExist &&
+              { !this.props.isProcessing && this.props.storeSelected && !this.props.storeExist &&
                 <CreateStore
                   storeId={this.props.storeId}
                 />
               }
-              { !this.props.storeSelected &&
+              { !this.props.isProcessing && !this.props.storeSelected &&
                 <NoStoreSelected/>
               }
             </div>
@@ -132,9 +132,11 @@ class Home extends React.Component {
               storeOverallScore={this.props.storeOverallScore}
               button='Back'
             />
-            <div style={writeReviewStyle} >
-              <WriteReview />
-            </div>
+            { !this.props.isProcessing &&
+              <div style={writeReviewStyle} >
+                <WriteReview />
+              </div>
+            }
           </div>
         }
         { this.props.isReady && this.state.display === "walletPage" &&
@@ -153,6 +155,12 @@ class Home extends React.Component {
             <Spin size="large" />
           </div>
         }
+        {
+          this.props.isProcessing &&
+          <div style={loadingStyle}>
+            <Spin size="large" />
+          </div>
+        }
       </div>
     )
   }
@@ -162,6 +170,7 @@ const mapStateToProps = state => {
   return {
     profile: state.user.profile,
     isReady: state.transaction.isReady,
+    isProcessing: state.transaction.isProcessing,
     storeSelected: state.transaction.storeSelected,
     storeExist: state.transaction.storeExist,
     storeURL: state.transaction.storeURL,

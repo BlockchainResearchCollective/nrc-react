@@ -1,10 +1,12 @@
 import {
-  PROCESS_START, PROCESS_END, CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
+  PROCESS_START, PROCESS_END, INITIALIZE_START, INITIALIZE_END,
+  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
   UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT
 } from '../actions/ActionTypes'
 
 const initialState = {
 	isReady: false,
+  isProcessing: false,
   storeSelected: false,
   storeExist: false,
   storeURL: "",
@@ -17,15 +19,25 @@ const initialState = {
 
 const transactionReducer = (state = initialState, action) => {
 	switch(action.type){
-    case PROCESS_START:
+    case INITIALIZE_START:
 			return {
 				...state,
 				isReady: false
 			}
-    case PROCESS_END:
+    case INITIALIZE_END:
 			return {
 				...state,
 				isReady: true
+			}
+    case PROCESS_START:
+			return {
+				...state,
+				isProcessing: true
+			}
+    case PROCESS_END:
+			return {
+				...state,
+				isProcessing: false
 			}
     case CHECK_URL:
 			return {
