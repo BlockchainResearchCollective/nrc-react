@@ -53,7 +53,7 @@ const HomeStoreName = (props) => {
         <Button onClick={props.handleBack} style={buttonStyle} type="primary"><Icon type="arrow-left" />All Reviews</Button>
       }
       <div style={subDivStyle}>
-        <div style={titleStyle} >{props.storeName}</div>
+        <div style={titleStyle} >{props.storeName.split(' ').slice(0,4).join(' ')}</div>
         <div>
           <HomeAverageRating
             reviewAmount={props.reviewAmount}

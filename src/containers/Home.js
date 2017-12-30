@@ -109,7 +109,7 @@ class Home extends React.Component {
               { !this.props.isProcessing && this.props.storeSelected && this.props.storeExist &&
                 <HomeReviewList
                   storeId={this.props.storeId}
-                  reviewAmount={this.props.reviewAmount}
+                  reviewAmount={parseInt(this.props.reviewAmount)}
                 />
               }
               { !this.props.isProcessing && this.props.storeSelected && !this.props.storeExist &&

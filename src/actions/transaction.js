@@ -78,6 +78,7 @@ export const initialize = (url, ethAddress) => dispatch => {
               dispatch(initializeEnd())
             })
           } else {
+            dispatch(updateStoreExist(false))
             dispatch(initializeEnd())
           }
         })
@@ -85,18 +86,18 @@ export const initialize = (url, ethAddress) => dispatch => {
     })
   } else {
     /* update storeSelected, storeName, storeURL */
-    dispatch(checkURL(true, "The Quad Cafe", "TheQuadCafe--1.344--103.679"))
-    searchImage("The Quad Cafe", storeURL => {
+    dispatch(checkURL(true, "Sushi Express @ Jurong Point 2", "SushiExpress@JurongPoint2--1.339--103.705"))
+    searchImage("Sushi Express @ Jurong Point 2", storeURL => {
       /* update storeURL */
       dispatch(updateImage(storeURL))
       readCredibility(ethAddress, rawCredibility => {
         /* update credibility */
         dispatch(updateCredibility(rawCredibility/200))
-        storeExist("TheQuadCafe--1.344--103.679", storeExist => {
+        storeExist("SushiExpress@JurongPoint2--1.339--103.705", storeExist => {
           if (storeExist){
             /* update storeExist */
             dispatch(updateStoreExist(storeExist))
-            readOverallScore("TheQuadCafe--1.344--103.679", (storeOverallScore, reviewAmount) => {
+            readOverallScore("SushiExpress@JurongPoint2--1.339--103.705", (storeOverallScore, reviewAmount) => {
               /* update storeOverallScore */
               dispatch(updateOverallScore(storeOverallScore))
               /* update reviewAmount */

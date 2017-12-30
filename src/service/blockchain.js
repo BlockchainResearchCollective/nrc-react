@@ -151,11 +151,12 @@ exports.readReview = function(storeId, index, cb){
 		    store_contract_instance.methods.allReviews(index).call()
 				.then(review => {
 					cb({
-						'comment': review[0],
+						'content': review[0],
 						'score': review[1],
-						'reviewer': review[2],
+						'reviewerAddress': review[2],
 						'upvote': review[3],
-						'downvote': review[4]
+						'downvote': review[4],
+						'timestamp': review[5]
 					});
 				});
 		});
