@@ -18,6 +18,7 @@ exports.writeHistory = function(record, callback){
 		}
 	}
 	xhttp.open('POST', 'http://188.166.190.168:3001/history/user/' + userId, true);
+  xhttp.withCredentials = true;
   xhttp.setRequestHeader("Content-Type", "application/json");
   xhttp.send(JSON.stringify(record));
 }
@@ -34,5 +35,6 @@ exports.readHistory = function(pageNum, callback){
 		}
 	}
 	xhttp.open('GET', 'http://188.166.190.168:3001/history/user/' + userId + '/' + pageNum, true);
+  xhttp.withCredentials = true;
   xhttp.send();
 }

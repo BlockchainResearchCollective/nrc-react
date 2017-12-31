@@ -1,4 +1,5 @@
 import React from 'react'
+import { timeConverter } from 'util'
 
 const divStyle = {
   border: '1px solid',
@@ -51,10 +52,10 @@ const ActionRecord = (props) => {
         <h3>{props.record.storeName}</h3>
       </div>
       <div style={dateStyle}>
-        <p>{props.record.date}</p>
+        <p>{timeConverter(props.record.timestamp)}</p>
       </div>
       <div style={hashStyle}>
-        <p>{props.record.transactionHash}</p>
+        <p>{props.record.txHash.slice(0,20) + '...'}</p>
       </div>
     </div>
   )

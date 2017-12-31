@@ -1,6 +1,7 @@
 import React from 'react'
 import { Pagination, Rate } from 'antd'
 import ActionRecord from './ActionRecord'
+import { readHistory } from '../service/backend'
 
 const divStyle = {
   marginLeft: '20px',
@@ -40,43 +41,24 @@ const scaleConverter = (averageRating) => {
   return i;
 }
 
-class Wallet extends React.Component {
+class ActionHistory extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      pageNumber: 0,
-      recordAmount: 1,
-      records: [{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: false,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      },{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: true,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      },{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: false,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      },{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: true,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      }]
+      pageNumber: 1,
+      recordAmount: 0,
+      records: []
     }
+  }
+
+  componentDidMount() {
+    readHistory(this.state.pageNumber, (response) => {
+      this.setState({
+        records: response.txHistory,
+        recordAmount: response.total
+      })
+    })
   }
 
   render() {
@@ -101,8 +83,8 @@ class Wallet extends React.Component {
           <div style={paginationStyle}>
             <Pagination
               defaultCurrent={this.state.pageNumber}
-              pageSize={4}
-              total={this.props.recordAmount}
+              pageSize={5}
+              total={this.state.recordAmount}
               size='small'
             />
           </div>
@@ -112,4 +94,4 @@ class Wallet extends React.Component {
   }
 }
 
-export default Wallet
+export default ActionHistory
