@@ -3,7 +3,7 @@ var exports = module.exports = {};
 exports.searchImage = function(keyword, callback){
   var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
+		if (this.readyState === 4 && this.status === 200) {
 			callback(JSON.parse(xhttp.responseText).url)
 		}
 	}

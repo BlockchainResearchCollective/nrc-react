@@ -23,6 +23,17 @@ const buttonStyle = {
   marginLeft: '30px',
 }
 
+const displayName = (storeName) => {
+  let storeNameList = storeName.split(' ')
+  let i = 1
+  let display = storeNameList[0]
+  while (i < storeNameList.length && display.length + storeNameList[i].length < 23){
+    display = display + " " + storeNameList[i]
+    i++
+  }
+  return display
+}
+
 const HomeStoreName = (props) => {
   let divStyle;
   if (props.storeSelected){
@@ -53,7 +64,7 @@ const HomeStoreName = (props) => {
         <Button onClick={props.handleBack} style={buttonStyle} type="primary"><Icon type="arrow-left" />All Reviews</Button>
       }
       <div style={subDivStyle}>
-        <div style={titleStyle} >{props.storeName.split(' ').slice(0,4).join(' ')}</div>
+        <div style={titleStyle} >{displayName(props.storeName)}</div>
         <div>
           <HomeAverageRating
             reviewAmount={props.reviewAmount}

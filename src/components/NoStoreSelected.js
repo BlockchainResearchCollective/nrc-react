@@ -1,5 +1,4 @@
 import React from 'react'
-import { URL } from '../constants'
 
 const textStyle = {
   textAlign: 'center',

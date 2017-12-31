@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { Provider, connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { message } from 'antd'
 import Login from './containers/Login'
 import Home from './containers/Home'

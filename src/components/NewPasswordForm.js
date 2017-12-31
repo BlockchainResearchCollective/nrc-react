@@ -1,9 +1,6 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
-import Banner from '../components/Banner'
-import { Row, Col, Icon, Form, Input, Button, Spin } from 'antd'
-import { changePassword, resetPasswordExpiredAction } from '../actions'
+import React from 'react'
+import { Icon, Form, Input, Button } from 'antd'
+
 const FormItem = Form.Item
 const centralFormItemLayout = {
   wrapperCol: {
@@ -21,7 +18,7 @@ class NewPasswordForm extends React.Component{
 	constructor(props){
 		super(props)
 		this.state = {
-			
+
 		}
 	}
 
@@ -42,7 +39,7 @@ class NewPasswordForm extends React.Component{
   	e.preventDefault()
   	this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-      	this.props.handleNewPasswordSubmit(values) 
+      	this.props.handleNewPasswordSubmit(values)
       }
     })
   }
@@ -81,7 +78,7 @@ class NewPasswordForm extends React.Component{
 	        	{...centralFormItemLayout}
 	        >
 	          <Button type="primary" htmlType="submit" className="login-form-button">Submit</Button>
-	        </FormItem>	
+	        </FormItem>
 				</Form>
 			</div>
 		)

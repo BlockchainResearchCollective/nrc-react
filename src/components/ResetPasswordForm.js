@@ -1,9 +1,6 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
-import Banner from '../components/Banner'
-import { Row, Col, Icon, Form, Input, Button, Spin } from 'antd'
-import { resetPassword, verifyReset, changePassword, resetPasswordExpiredAction } from '../actions'
+import React from 'react'
+import { Icon, Form, Input, Button } from 'antd'
+import { resetPassword, resetPasswordExpiredAction } from '../actions'
 const FormItem = Form.Item
 const centralFormItemLayout = {
   wrapperCol: {
@@ -47,7 +44,7 @@ class ResetPasswordForm extends React.Component{
 	        	dispatch(resetPasswordExpiredAction(values.email))
 	        	clearInterval(this.timer)
 	        }
-        },1000)    
+        },1000)
       }
     })
 	}
@@ -56,7 +53,6 @@ class ResetPasswordForm extends React.Component{
 		e.preventDefault()
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if(!err) {
-				const { dispatch } = this.props
 				clearInterval(this.timer)
 				this.setState({
 					resetVerifySent: true,
@@ -90,17 +86,17 @@ class ResetPasswordForm extends React.Component{
 	          	<Button type="primary" htmlType='submit'>Send</Button>
 	        	}
 	        	{
-	        		this.props.resetSent && 
+	        		this.props.resetSent &&
 	        		<Button type="default" htmlType='button' style={{backgroundColor:'#FFCC66'}}>{this.state.countdown} s</Button>
 	        	}
-	        </FormItem>	
+	        </FormItem>
 				</Form>
 				<Form style={{marginTop:'20px'}} onSubmit={this.handleResetVerifySubmit}>
 					<FormItem
 						{...centralFormItemLayout}
 	        >
 	          {getFieldDecorator('verificationCode', {
-	            
+
 	          })(
 	            <Input prefix={<Icon type="safety" style={{ color: 'rgba(0,0,0,.25)'}} />} placeholder="Verification Code" />
 	          )}
@@ -109,7 +105,7 @@ class ResetPasswordForm extends React.Component{
 	        	{...centralFormItemLayout}
 	        >
 	          <Button type="primary" htmlType="submit" className="login-form-button">Verify</Button>
-	        </FormItem>	
+	        </FormItem>
 				</Form>
 			</div>
 		)

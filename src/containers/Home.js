@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import { connect } from 'react-redux'
-import { Steps, Row, Col, Icon, Spin } from 'antd'
+import { Spin } from 'antd'
 import HomeHeader from '../components/HomeHeader'
 import HomeStoreName from '../components/HomeStoreName'
 import HomeReviewList from '../components/HomeReviewList'
@@ -11,10 +10,6 @@ import WriteReview from '../components/WriteReview'
 import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
 import { initialize, decryptKey } from '../actions'
-
-const addMarginTop = (offset) => ({
-  marginTop: offset + 'px'
-})
 
 const writeReviewStyle = {
   margin: '30px'
@@ -37,7 +32,7 @@ class Home extends React.Component {
   componentDidMount() {
     var url
     this.timer = setInterval( () => {
-      if (window.location.href != url && window.location.href != url+'#'){
+      if (window.location.href !== url && window.location.href !== url+'#'){
         url = window.location.href
         this.props.dispatch(initialize(url, this.props.profile.ethAddress))
       }
@@ -85,14 +80,13 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        { this.props.isReady &&
-          <HomeHeader
-            email = {this.props.profile.email}
-            handleHome = {this.handleHome}
-            handleWallet = {this.handleWallet}
-            handleActionHistory = {this.handleActionHistory}
-          />
-        }
+        <HomeHeader
+          email = {this.props.profile.email}
+          handleHome = {this.handleHome}
+          handleWallet = {this.handleWallet}
+          handleActionHistory = {this.handleActionHistory}
+          isReady = {this.props.isReady}
+        />
         { this.props.isReady && this.state.display === "homePage" &&
             <div>
               <HomeStoreName
@@ -109,12 +103,15 @@ class Home extends React.Component {
               { !this.props.isProcessing && this.props.storeSelected && this.props.storeExist &&
                 <HomeReviewList
                   storeId={this.props.storeId}
-                  reviewAmount={parseInt(this.props.reviewAmount)}
+                  reviewAmount={parseInt(this.props.reviewAmount, 10)}
                 />
               }
               { !this.props.isProcessing && this.props.storeSelected && !this.props.storeExist &&
                 <CreateStore
                   storeId={this.props.storeId}
+                  storeName={this.props.storeName}
+                  ethAddress={this.props.profile.ethAddress}
+                  ethBalance={this.props.ethBalance}
                 />
               }
               { !this.props.isProcessing && !this.props.storeSelected &&
@@ -181,7 +178,8 @@ const mapStateToProps = state => {
     storeId: state.transaction.storeId,
     storeOverallScore: state.transaction.storeOverallScore,
     reviewAmount: state.transaction.reviewAmount,
-    credibility: state.transaction.credibility
+    credibility: state.transaction.credibility,
+    ethBalance: state.user.ethBalance
   }
 }
 

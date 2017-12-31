@@ -1,13 +1,11 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import { connect } from 'react-redux'
 import Banner from '../components/Banner'
 import WrappedResetPasswordForm from './ResetPasswordForm'
 import WrappedNewPasswordForm from './NewPasswordForm'
-import { Row, Col, Icon, Form, Input, Button, Spin } from 'antd'
-import { resetPassword, verifyReset, changePassword, resetPasswordExpiredAction } from '../actions'
+import { Row, Col, Icon, Spin } from 'antd'
+import { verifyReset, changePassword } from '../actions'
 
-const FormItem = Form.Item
 const headerStyle = {
   width: '50%',
   margin: '0 auto',

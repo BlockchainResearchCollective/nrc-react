@@ -42,7 +42,7 @@ exports.decryptPrivateKey = function(encrypted, password){
 
 exports.addPrivateKey = function(address, privateKey){
 	if (privateKey){
-		if (web3.eth.accounts.privateKeyToAccount(privateKey).address == address){
+		if (web3.eth.accounts.privateKeyToAccount(privateKey).address === address){
 			web3.eth.accounts.wallet.add(privateKey);
 			ethAccountAddress = address;
 			return true;
@@ -109,7 +109,7 @@ exports.storeExist = function(storeId, cb){
 		.then(result => {
 			console.log('store address: '+result)
 			var is_exist;
-			if (result == 0x0){
+			if (result === 0x0){
 				console.log('Store doesn\'t exist.');
 				is_exist = false;
 				cb(is_exist);
@@ -166,14 +166,16 @@ exports.readReview = function(storeId, index, cb){
 exports.readOverallScore = function(storeId, cb){
 	store_registry_instance.methods.getStoreAddress(storeId).call()
 		.then(store_address => {
-			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.totalScore().call()
-				.then(totalScore => {
-					store_contract_instance.methods.totalReviewAmount().call()
-						.then(totalReviewAmount => {
-							cb(totalScore, totalReviewAmount);
-						});
-				});
+			if (store_address){
+				var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
+			    store_contract_instance.methods.totalScore().call()
+					.then(totalScore => {
+						store_contract_instance.methods.totalReviewAmount().call()
+							.then(totalReviewAmount => {
+								cb(totalScore, totalReviewAmount);
+							});
+					});
+			}
 		});
 }
 // End of readOverallScore function

@@ -52,6 +52,7 @@ export const updateReviewAmount = (reviewAmount) => ({
 })
 
 export const initialize = (url, ethAddress) => dispatch => {
+  console.log("address: " + ethAddress)
   if (checkUrlStatus(url)){
     console.log(url)
     console.log(getStoreIdFromUrl(url))
@@ -124,7 +125,7 @@ export const newStoreCreatedAction = (storeId, callback) => dispatch => {
   })
 }
 
-export const createStoreAction = (storeId) => dispatch => {
+export const createStoreAction = (storeId, record) => dispatch => {
   dispatch(processStart())
   createStore(storeId, (error, transactionHash) => {
     if (error){
@@ -133,6 +134,12 @@ export const createStoreAction = (storeId) => dispatch => {
       dispatch(processEnd())
     } else {
       /* write history */
+      record.txHash = transactionHash
+      writeHistory(record, (flag) => {
+        if (flag){
+          console.log("history logged")
+        }
+      })
       var refreshCheck = setInterval( () => {
 				storeExist(storeId, function(is_exist){
   				if (is_exist){

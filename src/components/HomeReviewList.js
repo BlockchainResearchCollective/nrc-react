@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import HomeReviewListItem from './HomeReviewListItem'
 import { Pagination, Spin } from 'antd'
 import { readReview } from '../service/blockchain'
@@ -72,7 +72,7 @@ class HomeReviewList extends React.Component {
             </div>
           </div>
         }
-        { !this.state.isProcessing && this.props.reviewAmount==0 &&
+        { !this.state.isProcessing && this.props.reviewAmount===0 &&
           <div>
             <hr style={hrStyle} />
             <p style={noReviewStyle}>== No Review ==</p>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Pagination, Rate } from 'antd'
 import ActionRecord from './ActionRecord'
 

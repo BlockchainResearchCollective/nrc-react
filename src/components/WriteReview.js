@@ -1,14 +1,10 @@
-import React, { Component } from 'react'
-import { Form, Icon, Input, Button, Rate } from 'antd'
+import React from 'react'
+import { Form, Input, Button, Rate } from 'antd'
 import { connect } from 'react-redux'
 
 const FormItem = Form.Item
 
 const { TextArea } = Input
-
-const rateStyle = {
-  marginBottom: '20px'
-}
 
 class WriteReviewForm extends React.Component {
 
@@ -28,7 +24,7 @@ class WriteReviewForm extends React.Component {
   }
 
   handleRate = (rule, value, callback) => {
-    if (value == 0){
+    if (value === 0){
       callback("Please rate!")
     }
     callback()

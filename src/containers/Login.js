@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Steps, Row, Col, Icon } from 'antd'
 import { signUp, checkLoginStatus } from '../actions'
@@ -22,7 +21,6 @@ const addMarginTop = (offset) => ({
 })
 
 const logoStyle = {
-  width: '80px',
   height: '80px',
   width: '100%',
   margin: 'auto',

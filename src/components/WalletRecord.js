@@ -1,10 +1,8 @@
 import React from 'react'
-import { Icon } from 'antd'
 
 const divStyle = {
   border: '1px solid',
   borderRadius: '5px',
-  position: 'relative',
   backgroundColor: 'white',
   boxShadow: '1px 1px 1px black',
   height: '70px',

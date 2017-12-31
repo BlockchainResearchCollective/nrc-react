@@ -16,7 +16,13 @@ const buttonStyle = {
 const CreateStore = (props) => {
 
   const handleClick = () => {
-    props.dispatch(createStoreAction(props.storeId))
+    let record = {
+      storeName: props.storeName,
+      balance: props.ethBalance,
+      originalReviewer: props.ethAddress,
+      action: "Create Store"
+    }
+    props.dispatch(createStoreAction(props.storeId, record))
   }
 
   return (

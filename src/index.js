@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import cx from 'classnames'
 import { css } from 'glamor'
-import { node, object, string, number, func } from 'prop-types'
+import { object, string, number, func } from 'prop-types'
 import App from './App'
 import store from './store'
 
@@ -66,7 +66,6 @@ class Frame extends Component {
   render() {
     const { isVisible, isMinimized } = this.state
     const {
-      className,
       maskClassName,
       maskStyle,
       containerClassName,
@@ -208,7 +207,7 @@ if (Frame.isReady()) {
   ReactDOM.render(
     <Provider store={store}>
       <Frame />
-    </Provider>, 
+    </Provider>,
     root
   )
 }

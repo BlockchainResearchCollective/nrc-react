@@ -51,7 +51,7 @@ const HomeReviewListItem = (props) => {
       <div style={divStyle}>
         <div style={titleStyle}>
           <span>{props.review.reviewer}: </span>
-          <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled defaultValue={parseInt(props.review.score)} />
+          <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled defaultValue={parseInt(props.review.score, 10)} />
         </div>
         <div style={timeStyle}>
           {props.review.time}

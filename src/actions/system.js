@@ -15,6 +15,7 @@ export const clearMessage = () => ({
 
 export const decryptKey = (ethAddress, encryptedAccount, hashedPassword) => {
   if (addPrivateKey(ethAddress, decryptPrivateKey(encryptedAccount, hashedPassword))){
+    console.log("ethAddress: " + ethAddress)
     console.log("Account is decrypted!")
   } else {
     console.log("Account is not decrypted!")

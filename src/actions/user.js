@@ -10,6 +10,7 @@ import { URL } from '../constants'
 import { getBalance } from '../service/blockchain'
 import { alertMessage } from './system'
 import { initializeStart } from './transaction'
+import { setUserId } from '../service/backend'
 
 /* User Action Creators*/
 
@@ -111,6 +112,7 @@ export const checkLoginStatus = () => dispatch => {
 	})
 	.then(response => response.json())
 	.then(json => {
+		setUserId(json.profile._id)
 		dispatch(responseLoginStatusAction(json.status, json.profile))
 	})
 }
@@ -130,7 +132,7 @@ export const login = (username, password) => dispatch => {
 	})
 	.then(response => {
 		dispatch(responseLoginAction(response.status))
-		if (response.status == 200 ){
+		if (response.status === 200 ){
 			dispatch(checkLoginStatus())
 		} else {
 			dispatch(alertMessage("Incorrect username or password!"))
@@ -146,7 +148,7 @@ export const logout = () => dispatch => {
 	})
 	.then(response => {
 		dispatch(responseLogoutAction(response.status))
-		if (response.status == 200 ){
+		if (response.status === 200 ){
       dispatch(initializeStart())
 			dispatch(checkLoginStatus())
 		}
@@ -209,7 +211,7 @@ export const signUp = (username, email, password, cb) => dispatch => {
 	})
 	.then(response => {
 		dispatch(responseSignUpAction(response.status))
-		if (response.status == 200){
+		if (response.status === 200){
 			cb(true)
 		}
 		cb(false)

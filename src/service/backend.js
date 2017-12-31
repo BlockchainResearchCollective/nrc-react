@@ -1,10 +1,16 @@
 var exports = module.exports = {};
 
-exports.writeHistory = function(userId, record, callback){
+var userId;
+
+exports.setUserId = function(id){
+  userId = id
+}
+
+exports.writeHistory = function(record, callback){
   var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-		if (this.readyState == 4) {
-      if (this.status == 200){
+		if (this.readyState === 4) {
+      if (this.status === 200){
         callback(true);
       } else {
         callback(false);
@@ -16,11 +22,11 @@ exports.writeHistory = function(userId, record, callback){
   xhttp.send(JSON.stringify(record));
 }
 
-exports.readHistory = function(userId, pageNum, callback){
+exports.readHistory = function(pageNum, callback){
   var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-		if (this.readyState == 4) {
-      if (this.status == 200) {
+		if (this.readyState === 4) {
+      if (this.status === 200) {
         callback(JSON.parse(xhttp.responseText));
       } else {
         callback({"currentPage":pageNum,"txHistory":[]});

@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import { connect } from 'react-redux'
 import { validateUsername, validateEmail } from '../actions'
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import { Form, Input, Tooltip, Icon, Checkbox, Button } from 'antd';
 const FormItem = Form.Item;
 
 const tooltipStyle = {

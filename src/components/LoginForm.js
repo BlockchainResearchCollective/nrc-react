@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import { connect } from 'react-redux'
-import { Form, Icon, Input, Button, Checkbox } from 'antd'
+import { Form, Icon, Input, Button } from 'antd'
 import { login } from '../actions'
 
 const FormItem = Form.Item;

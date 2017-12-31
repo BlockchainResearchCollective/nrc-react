@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import { connect } from 'react-redux'
 import { URL } from '../constants'
 import { Row, Col, Menu, Dropdown, Icon } from 'antd'
@@ -50,10 +49,6 @@ class HomeHeader extends React.Component{
     this.props.dispatch(updateEthBalance(this.props.ethAddress))
   }
 
-  componentDidUpdate(){
-    this.props.dispatch(updateEthBalance(this.props.ethAddress))
-  }
-
 	render(){
     const menu = (
       <Menu>
@@ -76,11 +71,11 @@ class HomeHeader extends React.Component{
 				<Row>
 					<Col offset={0} span={19}>
 						<div style={greetingStyle}><a onClick={this.props.handleHome} href="#"><Icon type="home" /></a> Hi, {this.props.username}</div>
-            { this.props.email && this.props.ethBalance >= 0.05 &&
+            { this.props.email && this.props.isReady && this.props.ethBalance >= 0.05 &&
               <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether</div>
             }
-            { this.props.email && this.props.ethBalance < 0.05 &&
-              <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether <span style={warningStyle}>(Insufficient Balance)</span></div>
+            { this.props.email && this.props.isReady && this.props.ethBalance < 0.05 &&
+              <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether <span style={warningStyle}>(Insufficient)</span></div>
             }
             { !this.props.email &&
               <div style={warningStyle}>Unverified Account</div>

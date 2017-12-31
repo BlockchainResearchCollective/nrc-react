@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Icon, Pagination } from 'antd'
 import WalletRecord from './WalletRecord'
 
