@@ -47,7 +47,7 @@ class ActionHistory extends React.Component {
     super(props)
     this.state = {
       pageNumber: 1,
-      recordAmount: 0,
+      recordAmount: 1,
       records: []
     }
   }

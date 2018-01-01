@@ -1,5 +1,6 @@
 import React from 'react'
-import { timeConverter } from 'util'
+import { Icon } from 'antd'
+import { timeConverter } from '../service/util'
 
 const divStyle = {
   border: '1px solid',
@@ -32,6 +33,7 @@ const hashStyle = {
   fontSize: '12px',
   position: 'absolute',
   top: '30px',
+  textDecoration: 'none'
 }
 
 const ActionRecord = (props) => {
@@ -39,13 +41,13 @@ const ActionRecord = (props) => {
     <div style={divStyle}>
       <div style={amountStyle}>
         { props.record.action==='Submit Review' &&
-          <p style={{color: 'blue'}}>Submit Review</p>
+          <p style={{color: 'red'}}>Submit Review</p>
         }
         { props.record.action==='Vote Review' &&
-          <p style={{color: 'green'}}>Vote Review</p>
+          <p style={{color: 'yello'}}>Vote Review</p>
         }
         { props.record.action==='Create Store' &&
-          <p style={{color: 'red'}}>Create Store</p>
+          <p style={{color: 'green'}}>Create Store</p>
         }
       </div>
       <div style={titleStyle}>
@@ -55,7 +57,7 @@ const ActionRecord = (props) => {
         <p>{timeConverter(props.record.timestamp)}</p>
       </div>
       <div style={hashStyle}>
-        <p>{props.record.txHash.slice(0,20) + '...'}</p>
+        <a href={'https://kovan.etherscan.io/tx/'+props.record.txHash} target='_blank'>{props.record.txHash.slice(0,20) + '...'}<Icon type="link" /></a>
       </div>
     </div>
   )
