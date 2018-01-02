@@ -81,11 +81,9 @@ class Home extends React.Component {
     return (
       <div>
         <HomeHeader
-          email = {this.props.profile.email}
           handleHome = {this.handleHome}
           handleWallet = {this.handleWallet}
           handleActionHistory = {this.handleActionHistory}
-          isReady = {this.props.isReady}
         />
         { this.props.isReady && this.state.display === "homePage" &&
             <div>

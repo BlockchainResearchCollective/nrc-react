@@ -71,10 +71,10 @@ class HomeHeader extends React.Component{
 				<Row>
 					<Col offset={0} span={19}>
 						<div style={greetingStyle}><a onClick={this.props.handleHome} href="#"><Icon type="home" /></a> Hi, {this.props.username}</div>
-            { this.props.email && this.props.isReady && this.props.ethBalance >= 0.05 &&
+            { this.props.email && this.props.ethBalance >= 0.05 &&
               <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether</div>
             }
-            { this.props.email && this.props.isReady && this.props.ethBalance < 0.05 &&
+            { this.props.email && this.props.ethBalance < 0.05 &&
               <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether <span style={warningStyle}>(Insufficient)</span></div>
             }
             { !this.props.email &&
@@ -99,6 +99,7 @@ class HomeHeader extends React.Component{
 
 const mapStateToProps = state => {
   return {
+    email: state.user.profile.email,
     username: state.user.profile.username,
     ethAddress: state.user.profile.ethAddress,
     ethBalance: state.user.ethBalance
