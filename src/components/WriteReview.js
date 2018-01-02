@@ -16,6 +16,7 @@ class WriteReviewForm extends React.Component {
   }
 
   handleSubmit = (e) => {
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
@@ -27,7 +28,6 @@ class WriteReviewForm extends React.Component {
         }
         this.props.dispatch(writeReviewAction(this.props.storeId, values.content, parseInt(values.rate)*20, record))
       }
-      this.props.handleBack(e)
     })
   }
 

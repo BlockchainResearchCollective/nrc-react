@@ -1,9 +1,9 @@
 import {
   PROCESS_START, PROCESS_END, INITIALIZE_START, INITIALIZE_END,
-  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
+  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY, REVIEW_AMOUNT_PLUS_ONE,
   UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT,
   UPDATE_ALL_REVIEWS, UPDATE_MY_REVIEW_INDEX,
-  READ_REVIEWS_START, READ_REVIEWS_END
+  READ_REVIEWS_START, READ_REVIEWS_END, ADD_NEW_REVIEW
 } from './ActionTypes'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
 import {
@@ -52,6 +52,9 @@ export const updateReviewAmount = (reviewAmount) => ({
 	type: UPDATE_REVIEW_AMOUNT,
   reviewAmount
 })
+export const reviewAmountPlusOne = () => ({
+  type: REVIEW_AMOUNT_PLUS_ONE
+})
 export const updateAllReviews = (reviews) => ({
   type: UPDATE_ALL_REVIEWS,
   reviews
@@ -65,6 +68,10 @@ export const readReviewStart = () => ({
 })
 export const readReviewEnd = () => ({
   type: READ_REVIEWS_END
+})
+export const addNewReview = (review) => ({
+  type: ADD_NEW_REVIEW,
+  review
 })
 
 export const initialize = (url, ethAddress) => dispatch => {
@@ -105,24 +112,24 @@ export const initialize = (url, ethAddress) => dispatch => {
     })
   } else {
     /* update storeSelected, storeName, storeId */
-    dispatch(checkURL(true, "Sushi Express @ Jurong Point 2", "SushiExpress@JurongPoint2--1.339--103.705"))
-    searchImage("Sushi Express @ Jurong Point 2", storeURL => {
+    dispatch(checkURL(true, "North Spine Food Court", "NorthSpineFoodCourt--1.347--103.680"))
+    searchImage("North Spine Food Court", storeURL => {
       /* update storeURL */
       dispatch(updateImage(storeURL))
       readCredibility(ethAddress, rawCredibility => {
         /* update credibility */
         dispatch(updateCredibility(rawCredibility/200))
-        storeExist("SushiExpress@JurongPoint2--1.339--103.705", storeExist => {
+        storeExist("NorthSpineFoodCourt--1.347--103.680", storeExist => {
           if (storeExist){
             /* update storeExist */
             dispatch(updateStoreExist(storeExist))
-            readOverallScore("SushiExpress@JurongPoint2--1.339--103.705", (storeOverallScore, reviewAmount) => {
+            readOverallScore("NorthSpineFoodCourt--1.347--103.680", (storeOverallScore, reviewAmount) => {
               /* update storeOverallScore */
               dispatch(updateOverallScore(storeOverallScore))
               /* update reviewAmount */
               dispatch(updateReviewAmount(reviewAmount))
               dispatch(initializeEnd())
-              dispatch(readAllReviewsAction("SushiExpress@JurongPoint2--1.339--103.705", reviewAmount, ethAddress))
+              dispatch(readAllReviewsAction("NorthSpineFoodCourt--1.347--103.680", reviewAmount, ethAddress))
             })
           } else {
             dispatch(initializeEnd())
@@ -180,6 +187,7 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
       dispatch(alertMessage("Write review failed!"))
       dispatch(processEnd())
     } else {
+      dispatch(addNewReviewAction(commment, score, record.originalReviewer))
       /* write history */
       record.txHash = transactionHash
       writeHistory(record, (flag) => {
@@ -193,29 +201,46 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
 }
 
 export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => dispatch => {
-  dispatch(readReviewStart())
-  let reviews = []
-  let counter = totalReviewAmount
-  for (let i=0; i<totalReviewAmount; i++){
-    readReview(storeId, i, (review) => {
-      if (ethAddress == review.reviewerAddress){
-        dispatch(updateMyReviewIndex(i))
-      }
-      review.time = timeConverter(parseInt(review.timestamp) * 1000)
-      review.score = parseInt(review.score)/20
-      addressToUsername(review.reviewerAddress, (reviewer) => {
-        review.reviewer = reviewer
-        reviews.push(review)
-        counter--
-        if (counter==0){
-          dispatch(updateAllReviews(reviews))
-          dispatch(readReviewEnd())
+  if (totalReviewAmount == 0){
+    dispatch(readReviewEnd())
+  } else {
+    dispatch(readReviewStart())
+    dispatch(updateMyReviewIndex(-1))
+    let reviews = []
+    let counter = totalReviewAmount
+    for (let i=0; i<totalReviewAmount; i++){
+      readReview(storeId, i, (review) => {
+        if (ethAddress == review.reviewerAddress){
+          dispatch(updateMyReviewIndex(i))
         }
+        review.time = timeConverter(parseInt(review.timestamp) * 1000)
+        review.score = parseInt(review.score)/20
+        addressToUsername(review.reviewerAddress, (reviewer) => {
+          review.reviewer = reviewer
+          reviews.push(review)
+          counter--
+          if (counter==0){
+            dispatch(updateAllReviews(reviews))
+            dispatch(readReviewEnd())
+          }
+        })
       })
-    })
+    }
   }
 }
 
-export const addNewReview = (content, score) => dispatch => {
-
+export const addNewReviewAction = (content, score, reviewer) => dispatch => {
+  let review = {
+    reviewer,
+    content,
+    score,
+    upvote: 0,
+    downvote: 0,
+    time: 'pending...'
+  }
+  addressToUsername(reviewer, (reviewer) => {
+    review.reviewer = reviewer
+    dispatch(reviewAmountPlusOne())
+    dispatch(addNewReview(review))
+  })
 }
