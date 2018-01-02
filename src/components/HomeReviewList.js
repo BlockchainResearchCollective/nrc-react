@@ -29,13 +29,12 @@ class HomeReviewList extends React.Component {
     super(props)
     this.state = {
       isProcessing: true,
-      pageNumber: 1,
       reviews: []
     }
   }
 
-  componentDidMount() {
-    var index = (this.state.pageNumber - 1) * 5
+  handleChange = (page) => {
+    var index = (page - 1) * 5
     var counter = this.props.reviewAmount - index
     if (counter == 0){
       this.setState({
@@ -107,6 +106,10 @@ class HomeReviewList extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.handleChange(1)
+  }
+
   render(){
     return(
       <div>
@@ -122,10 +125,10 @@ class HomeReviewList extends React.Component {
             <hr style={hrStyle} />
             <div style={paginationStyle}>
               <Pagination
-                defaultCurrent={this.state.pageNumber}
                 pageSize={3}
                 total={this.props.reviewAmount}
                 size='small'
+                onChange={this.handleChange}
               />
             </div>
           </div>
