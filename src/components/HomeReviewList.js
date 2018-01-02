@@ -63,7 +63,7 @@ class HomeReviewList extends React.Component {
     }
     /* second */
     if (this.props.reviewAmount > index + 1){
-      readReview(this.props.storeId, index, (review) => {
+      readReview(this.props.storeId, index + 1, (review) => {
         review.time = timeConverter(parseInt(review.timestamp) * 1000)
         review.score = parseInt(review.score)/20
         addressToUsername(review.reviewerAddress, (reviewer) => {
@@ -84,7 +84,7 @@ class HomeReviewList extends React.Component {
     }
     /* third */
     if (this.props.reviewAmount > index + 2){
-      readReview(this.props.storeId, index, (review) => {
+      readReview(this.props.storeId, index + 2, (review) => {
         review.time = timeConverter(parseInt(review.timestamp) * 1000)
         review.score = parseInt(review.score)/20
         addressToUsername(review.reviewerAddress, (reviewer) => {

@@ -37,8 +37,16 @@ exports.timeConverter = function(UNIX_timestamp){
   var month = months[a.getMonth()];
   var date = a.getDate();
   var hour = a.getHours();
-  var min = a.getMinutes();
-  var sec = a.getSeconds();
+  if (a.getMinutes() < 10){
+    var min = '0' + a.getMinutes();
+  } else {
+    var min = a.getMinutes();
+  }
+  if (a.getSeconds() < 10){
+    var sec = '0' + a.getSeconds();
+  } else {
+    var sec = a.getSeconds();
+  }
   var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec ;
   return time;
 }

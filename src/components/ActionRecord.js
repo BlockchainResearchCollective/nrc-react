@@ -40,8 +40,8 @@ const ActionRecord = (props) => {
   return (
     <div style={divStyle}>
       <div style={amountStyle}>
-        { props.record.action==='Submit Review' &&
-          <p style={{color: 'red'}}>Submit Review</p>
+        { props.record.action==='Write Review' &&
+          <p style={{color: 'red'}}>Write Review</p>
         }
         { props.record.action==='Vote Review' &&
           <p style={{color: 'yello'}}>Vote Review</p>

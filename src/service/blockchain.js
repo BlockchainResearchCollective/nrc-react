@@ -83,7 +83,13 @@ const writeReview = (storeId, content, score, cb) => {
 	    gasPrice: '10000000000',
 			value: 10000000000000000
 		}, cb);
-	});
+	}).catch(
+    // Log the rejection reason
+   (reason) => {
+      console.log('Handle rejected promise ('+reason+') here.');
+      writeReview(storeId, content, score, cb);
+    }
+  )
 }
 exports.writeReview = writeReview;
 //End of writeReview function
@@ -181,7 +187,7 @@ const readOverallScore = (storeId, cb) => {
 			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
 	    store_contract_instance.methods.totalScore().call().then(totalScore => {
 				store_contract_instance.methods.totalReviewAmount().call().then(totalReviewAmount => {
-					cb(totalScore, totalReviewAmount);
+					cb(parseFloat(totalScore)/parseFloat(totalReviewAmount), totalReviewAmount);
 				}).catch(
 					// Log the rejection reason
 				 (reason) => {
