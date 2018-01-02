@@ -30,11 +30,27 @@ exports.readHistory = function(pageNum, callback){
       if (this.status === 200) {
         callback(JSON.parse(xhttp.responseText));
       } else {
-        callback({"currentPage":pageNum,"txHistory":[]});
+        callback({"currentPage":pageNum,"txHistory":[],"total":0});
       }
 		}
 	}
 	xhttp.open('GET', 'http://188.166.190.168:3001/history/user/' + userId + '/' + pageNum, true);
+  xhttp.withCredentials = true;
+  xhttp.send();
+}
+
+exports.addressToUsername = function(address, callback){
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+		if (this.readyState === 4) {
+      if (this.status === 200) {
+        callback(JSON.parse(xhttp.responseText).username);
+      } else {
+        callback(address.slice(0,7) + '... ');
+      }
+		}
+	}
+	xhttp.open('GET', 'http://188.166.190.168:3001/utility/address-to-username/' + address, true);
   xhttp.withCredentials = true;
   xhttp.send();
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon, Pagination } from 'antd'
 import WalletRecord from './WalletRecord'
+import { readHistory } from '../service/backend'
 
 const divStyle = {
   marginLeft: '20px',
@@ -37,38 +38,19 @@ class Wallet extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pageNumber: 0,
+      pageNumber: 1,
       recordAmount: 1,
-      records: [{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: false,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      },{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: true,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      },{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: false,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      },{
-        storeName: 'Koufu',
-        action: 'Submit Review',
-        positive: true,
-        amount: '0.01',
-        transactionHash: 'dafajdkasf',
-        date: '28/12/2017'
-      }]
+      records: []
     }
+  }
+
+  componentDidMount() {
+    readHistory(this.state.pageNumber, (response) => {
+      this.setState({
+        records: response.txHistory,
+        recordAmount: response.total
+      })
+    })
   }
 
   render() {

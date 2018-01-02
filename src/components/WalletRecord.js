@@ -1,4 +1,6 @@
 import React from 'react'
+import { Icon } from 'antd'
+import { timeConverter } from '../service/util'
 
 const divStyle = {
   border: '1px solid',
@@ -31,27 +33,23 @@ const hashStyle = {
   fontSize: '12px',
   position: 'absolute',
   top: '30px',
+  textDecoration: 'none'
 }
 
 const WalletRecord = (props) => {
   return (
     <div style={divStyle}>
       <div style={amountStyle}>
-        { props.record.positive &&
-          <p style={{color: 'red'}}>+ {props.record.amount} Ether</p>
-        }
-        { !props.record.positive &&
-          <p style={{color: 'green'}}>- {props.record.amount} Ether</p>
-        }
+        <p style={{color: 'red'}}>{props.record.balance.toFixed(5)} Ether</p>
       </div>
       <div style={titleStyle}>
         <h3>{props.record.action}</h3>
       </div>
       <div style={dateStyle}>
-        <p>{props.record.date}</p>
+        <p>{timeConverter(props.record.timestamp)}</p>
       </div>
       <div style={hashStyle}>
-        <p>{props.record.transactionHash}</p>
+        <a href={'https://kovan.etherscan.io/tx/'+props.record.txHash} target='_blank'>{props.record.txHash.slice(0,20) + '...'}<Icon type="link" /></a>
       </div>
     </div>
   )

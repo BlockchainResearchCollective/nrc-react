@@ -132,7 +132,12 @@ class Home extends React.Component {
             />
             { !this.props.isProcessing &&
               <div style={writeReviewStyle} >
-                <WriteReview />
+                <WriteReview
+                  storeId={this.props.storeId}
+                  storeName={this.props.storeName}
+                  ethAddress={this.props.profile.ethAddress}
+                  ethBalance={this.props.ethBalance}
+                />
               </div>
             }
           </div>
