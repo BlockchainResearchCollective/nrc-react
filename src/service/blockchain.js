@@ -73,19 +73,20 @@ exports.createStore = function(storeId, cb){
 }
 //End of createStore function
 
-exports.submitReview = function(storeId, content, score, cb){
+exports.writeReview = function(storeId, content, score, cb){
 	store_registry_instance.methods.getStoreAddress(storeId).call()
 		.then(store_address => {
 			console.log("You are writing review to: " + store_address);
-			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.addReview(content, score, ethAccountAddress).send({
-			    from: ethAccountAddress,
-			    gas: 400000,
-			    gasPrice: '10000000000'
+			console.log(ethAccountAddress);
+	    escrow_instance.methods.review(store_address, ethAccountAddress, content, score).send({
+		    from: ethAccountAddress,
+		    gas: 4000000,
+		    gasPrice: '10000000000',
+				value: 10000000000000000
 			}, cb);
 		});
 }
-//End of submitReview function
+//End of writeReview function
 
 exports.voteReview = function(storeId, reviewer, isUpvote, cb){
 	store_registry_instance.methods.getStoreAddress(storeId).call()
@@ -93,7 +94,7 @@ exports.voteReview = function(storeId, reviewer, isUpvote, cb){
 			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
 		    store_contract_instance.methods.voteReview(ethAccountAddress, reviewer, isUpvote).send({
 			    from: ethAccountAddress,
-			    gas: 400000,
+			    gas: 4000000,
 			    gasPrice: '10000000000'
 			}, cb);
 		});
@@ -144,35 +145,34 @@ const readCredibility = (address, cb) => {
 exports.readCredibility = readCredibility;
 //End of readCredibility function
 
-exports.readReviewAmount = function(storeId, cb){
-	store_registry_instance.methods.getStoreAddress(storeId).call()
-		.then(store_address => {
-			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.totalReviewAmount().call()
-				.then(totalReviewAmount => {
-					cb(totalReviewAmount);
-				});
-		});
+const readReview = (storeId, index, cb) => {
+	store_registry_instance.methods.getStoreAddress(storeId).call().then(store_address => {
+		var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
+    store_contract_instance.methods.allReviews(index).call().then(review => {
+			cb({
+				'content': review[0],
+				'score': review[1],
+				'reviewerAddress': review[2],
+				'upvote': review[3],
+				'downvote': review[4],
+				'timestamp': review[5]
+			});
+		}).catch(
+			// Log the rejection reason
+		 (reason) => {
+				console.log('Handle rejected promise ('+reason+') here.');
+				readReview(storeId, index, cb);
+			}
+		);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readReview(storeId, index, cb);
+		}
+	);
 }
-//End of readReview function
-
-exports.readReview = function(storeId, index, cb){
-	store_registry_instance.methods.getStoreAddress(storeId).call()
-		.then(store_address => {
-			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.allReviews(index).call()
-				.then(review => {
-					cb({
-						'content': review[0],
-						'score': review[1],
-						'reviewerAddress': review[2],
-						'upvote': review[3],
-						'downvote': review[4],
-						'timestamp': review[5]
-					});
-				});
-		});
-}
+exports.readReview = readReview;
 //End of readReview function
 
 const readOverallScore = (storeId, cb) => {

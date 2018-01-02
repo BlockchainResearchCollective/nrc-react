@@ -2,6 +2,7 @@ import React from 'react'
 import HomeReviewListItem from './HomeReviewListItem'
 import { Pagination, Spin } from 'antd'
 import { readReview } from '../service/blockchain'
+import { addressToUsername } from '../service/backend'
 import { timeConverter } from '../service/util'
 
 const hrStyle = {
@@ -32,19 +33,66 @@ class HomeReviewList extends React.Component {
   }
 
   componentDidMount() {
-    var index = this.state.pageNumber
-    if (this.props.reviewAmount >= index){
+    var index = (this.state.pageNumber - 1) * 5
+    var counter = this.props.reviewAmount - index
+    /* first */
+    if (this.props.reviewAmount > index){
       readReview(this.props.storeId, index, (review) => {
-        review.time = timeConverter(review.time)
-        review.reviewer = review.reviewerAddress
-        this.state.reviews.push(review)
-        this.setState({
-          isProcessing: false
+        review.time = timeConverter(parseInt(review.timestamp) * 1000)
+        addressToUsername(review.reviewerAddress, (reviewer) => {
+          review.reviewer = reviewer
+          var reviews = this.state.reviews
+          reviews.push(review)
+          this.setState({
+            reviews
+          })
+          counter--
+          if (counter == 0){
+            this.setState({
+              isProcessing: false
+            })
+          }
         })
       })
-    } else {
-      this.setState({
-        isProcessing: false
+    }
+    /* second */
+    if (this.props.reviewAmount > index + 1){
+      readReview(this.props.storeId, index, (review) => {
+        review.time = timeConverter(parseInt(review.timestamp) * 1000)
+        addressToUsername(review.reviewerAddress, (reviewer) => {
+          review.reviewer = reviewer
+          var reviews = this.state.reviews
+          reviews.push(review)
+          this.setState({
+            reviews
+          })
+          counter--
+          if (counter == 0){
+            this.setState({
+              isProcessing: false
+            })
+          }
+        })
+      })
+    }
+    /* third */
+    if (this.props.reviewAmount > index + 2){
+      readReview(this.props.storeId, index, (review) => {
+        review.time = timeConverter(parseInt(review.timestamp) * 1000)
+        addressToUsername(review.reviewerAddress, (reviewer) => {
+          review.reviewer = reviewer
+          var reviews = this.state.reviews
+          reviews.push(review)
+          this.setState({
+            reviews
+          })
+          counter--
+          if (counter == 0){
+            this.setState({
+              isProcessing: false
+            })
+          }
+        })
       })
     }
   }
@@ -65,7 +113,7 @@ class HomeReviewList extends React.Component {
             <div style={paginationStyle}>
               <Pagination
                 defaultCurrent={this.state.pageNumber}
-                pageSize={1}
+                pageSize={3}
                 total={this.props.reviewAmount}
                 size='small'
               />

@@ -38,3 +38,19 @@ exports.readHistory = function(pageNum, callback){
   xhttp.withCredentials = true;
   xhttp.send();
 }
+
+exports.addressToUsername = function(address, callback){
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+		if (this.readyState === 4) {
+      if (this.status === 200) {
+        callback(JSON.parse(xhttp.responseText).username);
+      } else {
+        callback(address.slice(0,7) + '... ');
+      }
+		}
+	}
+	xhttp.open('GET', 'http://188.166.190.168:3001/utility/address-to-username/' + address, true);
+  xhttp.withCredentials = true;
+  xhttp.send();
+}

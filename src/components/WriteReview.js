@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Input, Button, Rate } from 'antd'
 import { connect } from 'react-redux'
+import { writeReviewAction } from '../actions/transaction'
 
 const FormItem = Form.Item
 
@@ -19,6 +20,13 @@ class WriteReviewForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
+        let record = {
+          storeName: this.props.storeName,
+          balance: this.props.ethBalance,
+          originalReviewer: this.props.ethAddress,
+          action: "Write Review"
+        }
+        this.props.dispatch(writeReviewAction(this.props.storeId, values.content, values.rate*100, record))
       }
     })
   }

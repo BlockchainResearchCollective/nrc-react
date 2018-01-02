@@ -5,7 +5,7 @@ import {
 } from './ActionTypes'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
 import {
-  storeExist, readOverallScore, readCredibility, createStore
+  storeExist, readOverallScore, readCredibility, createStore, writeReview
 } from '../service/blockchain'
 import { writeHistory } from '../service/backend'
 import { alertMessage } from './system'
@@ -127,7 +127,7 @@ export const newStoreCreatedAction = (storeId, callback) => dispatch => {
 
 export const createStoreAction = (storeId, record) => dispatch => {
   dispatch(processStart())
-  createStore(storeId, (error, transactionHash) => {
+  writeReview(storeId, (error, transactionHash) => {
     if (error){
       console.log(error)
       dispatch(alertMessage("Create store failed!"))
@@ -154,6 +154,26 @@ export const createStoreAction = (storeId, record) => dispatch => {
   				}
   			})
 			}, 1000)
+    }
+  })
+}
+
+export const writeReviewAction = (storeId, commment, score, record) => dispatch => {
+  dispatch(processStart())
+  writeReview(storeId, commment, score, (error, transactionHash) => {
+    if (error){
+      console.log(error)
+      dispatch(alertMessage("Write review failed!"))
+      dispatch(processEnd())
+    } else {
+      /* write history */
+      record.txHash = transactionHash
+      writeHistory(record, (flag) => {
+        if (flag){
+          console.log("history logged")
+        }
+      })
+      dispatch(processEnd())
     }
   })
 }
