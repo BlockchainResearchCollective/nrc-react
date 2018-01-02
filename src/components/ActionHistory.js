@@ -32,6 +32,10 @@ const hrStyle = {
 const paginationStyle = {
   textAlign: 'center'
 }
+const noRecordStyle = {
+  textAlign: 'center',
+  color: 'white'
+}
 const scaleConverter = (averageRating) => {
   let i = 0;
   while (averageRating - 0.5 >= 0){
@@ -80,6 +84,11 @@ class ActionHistory extends React.Component {
               />
             </div>
           )}
+          { this.state.recordAmount==0 &&
+            <div>
+              <p style={noRecordStyle}>== No Record ==</p>
+            </div>
+          }
           <div style={paginationStyle}>
             <Pagination
               defaultCurrent={this.state.pageNumber}

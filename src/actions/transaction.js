@@ -87,18 +87,18 @@ export const initialize = (url, ethAddress) => dispatch => {
     })
   } else {
     /* update storeSelected, storeName, storeId */
-    dispatch(checkURL(true, "Sushi Express @ Jurong Point 2", "SushiExpress@JurongPoint2--1.339--103.705"))
-    searchImage("Sushi Express @ Jurong Point 2", storeURL => {
+    dispatch(checkURL(true, "NIE Canteen", "NIECanteen--1.348--103.677"))
+    searchImage("NIE Canteen", storeURL => {
       /* update storeURL */
       dispatch(updateImage(storeURL))
       readCredibility(ethAddress, rawCredibility => {
         /* update credibility */
         dispatch(updateCredibility(rawCredibility/200))
-        storeExist("SushiExpress@JurongPoint2--1.339--103.705", storeExist => {
+        storeExist("NIECanteen--1.348--103.677", storeExist => {
           if (storeExist){
             /* update storeExist */
             dispatch(updateStoreExist(storeExist))
-            readOverallScore("SushiExpress@JurongPoint2--1.339--103.705", (storeOverallScore, reviewAmount) => {
+            readOverallScore("NIECanteen--1.348--103.677", (storeOverallScore, reviewAmount) => {
               /* update storeOverallScore */
               dispatch(updateOverallScore(storeOverallScore))
               /* update reviewAmount */
@@ -114,20 +114,20 @@ export const initialize = (url, ethAddress) => dispatch => {
   }
 }
 
-export const newStoreCreatedAction = (storeId, callback) => dispatch => {
+export const newStoreCreatedAction = (storeId) => dispatch => {
   dispatch(updateStoreExist(true))
   readOverallScore(storeId, (storeOverallScore, reviewAmount) => {
     /* update storeOverallScore */
     dispatch(updateOverallScore(storeOverallScore))
     /* update reviewAmount */
     dispatch(updateReviewAmount(reviewAmount))
-    callback()
+    dispatch(processEnd())
   })
 }
 
 export const createStoreAction = (storeId, record) => dispatch => {
   dispatch(processStart())
-  writeReview(storeId, (error, transactionHash) => {
+  createStore(storeId, (error, transactionHash) => {
     if (error){
       console.log(error)
       dispatch(alertMessage("Create store failed!"))
@@ -145,12 +145,7 @@ export const createStoreAction = (storeId, record) => dispatch => {
   				if (is_exist){
             dispatch(alertMessage("Create store success!"))
   					clearInterval(refreshCheck);
-            dispatch(newStoreCreatedAction(
-              storeId,
-              () => {
-                dispatch(processEnd())
-              }
-            ))
+            dispatch(newStoreCreatedAction(storeId))
   				}
   			})
 			}, 1000)

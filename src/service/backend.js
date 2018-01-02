@@ -30,7 +30,7 @@ exports.readHistory = function(pageNum, callback){
       if (this.status === 200) {
         callback(JSON.parse(xhttp.responseText));
       } else {
-        callback({"currentPage":pageNum,"txHistory":[]});
+        callback({"currentPage":pageNum,"txHistory":[],"total":0});
       }
 		}
 	}

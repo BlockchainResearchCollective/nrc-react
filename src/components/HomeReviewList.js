@@ -35,6 +35,11 @@ class HomeReviewList extends React.Component {
   componentDidMount() {
     var index = (this.state.pageNumber - 1) * 5
     var counter = this.props.reviewAmount - index
+    if (counter == 0){
+      this.setState({
+        isProcessing: false
+      })
+    }
     /* first */
     if (this.props.reviewAmount > index){
       readReview(this.props.storeId, index, (review) => {
