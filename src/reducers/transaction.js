@@ -1,7 +1,9 @@
 import {
   PROCESS_START, PROCESS_END, INITIALIZE_START, INITIALIZE_END,
   CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
-  UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT
+  UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT,
+  UPDATE_ALL_REVIEWS, UPDATE_MY_REVIEW_INDEX,
+  READ_REVIEWS_START, READ_REVIEWS_END
 } from '../actions/ActionTypes'
 
 const initialState = {
@@ -14,7 +16,10 @@ const initialState = {
   storeId: "",
   storeOverallScore: 0,
   reviewAmount: 0,
-  credibility: 0
+  credibility: 0,
+  reviews: [],
+  myReviewIndex: -1,
+  reviewReady: false
 }
 
 const transactionReducer = (state = initialState, action) => {
@@ -70,6 +75,26 @@ const transactionReducer = (state = initialState, action) => {
       return {
         ...state,
         reviewAmount: action.reviewAmount
+      }
+    case READ_REVIEWS_START:
+     return {
+       ...state,
+       reviewReady: false
+     }
+    case READ_REVIEWS_END:
+      return {
+        ...state,
+        reviewReady: true
+      }
+    case UPDATE_ALL_REVIEWS:
+      return {
+        ...state,
+        reviews: action.reviews
+      }
+    case UPDATE_MY_REVIEW_INDEX:
+      return {
+        ...state,
+        myReviewIndex: action.index
       }
     default:
 			return state
