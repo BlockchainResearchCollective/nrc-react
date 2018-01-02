@@ -52,6 +52,7 @@ export const updateReviewAmount = (reviewAmount) => ({
 })
 
 export const initialize = (url, ethAddress) => dispatch => {
+  dispatch(initializeStart())
   console.log("address: " + ethAddress)
   if (checkUrlStatus(url)){
     console.log(url)

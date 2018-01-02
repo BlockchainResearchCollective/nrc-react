@@ -6,8 +6,10 @@ import { addressToUsername } from '../service/backend'
 import { timeConverter } from '../service/util'
 
 const hrStyle = {
-  color: 'white',
-  width: '95%'
+  backgroundColor: 'white',
+  width: '95%',
+  height: '1px',
+  border: 'none'
 }
 const paginationStyle = {
   textAlign: 'center'

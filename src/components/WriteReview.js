@@ -26,7 +26,7 @@ class WriteReviewForm extends React.Component {
           originalReviewer: this.props.ethAddress,
           action: "Write Review"
         }
-        this.props.dispatch(writeReviewAction(this.props.storeId, values.content, values.rate*100, record))
+        this.props.dispatch(writeReviewAction(this.props.storeId, values.content, parseInt(values.rate)*20, record))
       }
     })
   }

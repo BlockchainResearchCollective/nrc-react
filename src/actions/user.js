@@ -9,7 +9,6 @@ import {
 import { URL } from '../constants'
 import { getBalance } from '../service/blockchain'
 import { alertMessage } from './system'
-import { initializeStart } from './transaction'
 import { setUserId } from '../service/backend'
 
 /* User Action Creators*/
@@ -149,7 +148,6 @@ export const logout = () => dispatch => {
 	.then(response => {
 		dispatch(responseLogoutAction(response.status))
 		if (response.status === 200 ){
-      dispatch(initializeStart())
 			dispatch(checkLoginStatus())
 		}
 	})
