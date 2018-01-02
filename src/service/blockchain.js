@@ -104,32 +104,44 @@ exports.voteReview = function(storeId, reviewer, isUpvote, cb){
 	Blockchain Read
 */
 
-exports.storeExist = function(storeId, cb){
-	store_registry_instance.methods.getStoreAddress(storeId).call()
-		.then(result => {
-			console.log('store address: '+result)
-			var is_exist;
-			if (result === 0x0){
-				console.log('Store doesn\'t exist.');
-				is_exist = false;
-				cb(is_exist);
-			}
-			else{
-				console.log('Store does exist.');
-				is_exist = true;
-				cb(is_exist);
-			}
-		});
+const storeExist = (storeId, cb) => {
+  store_registry_instance.methods.getStoreAddress(storeId).call().then(result => {
+    console.log('store address: '+result);
+    var is_exist;
+    if (result == 0x0){
+      console.log('Store doesn\'t exist.');
+      is_exist = false;
+			cb(false);
+    }
+    else{
+      console.log('Store does exist.');
+      is_exist = true;
+			cb(true);
+    }
+  }).catch(
+    // Log the rejection reason
+   (reason) => {
+      console.log('Handle rejected promise ('+reason+') here.');
+      storeExist(storeId, cb);
+    }
+  )
 }
+exports.storeExist = storeExist;
 //End of storeExist function
 
-exports.readCredibility = function(address, cb){
-	escrow_instance.methods.credibility(address).call()
-		.then(credibility => {
-			console.log('raw credibility: ' + credibility);
-			cb(credibility);
-		});
+const readCredibility = (address, cb) => {
+	escrow_instance.methods.credibility(address).call().then(credibility => {
+		console.log('raw credibility: ' + credibility);
+		cb(credibility);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readCredibility(address, cb);
+		}
+	);
 }
+exports.readCredibility = readCredibility;
 //End of readCredibility function
 
 exports.readReviewAmount = function(storeId, cb){
@@ -163,19 +175,35 @@ exports.readReview = function(storeId, index, cb){
 }
 //End of readReview function
 
-exports.readOverallScore = function(storeId, cb){
-	store_registry_instance.methods.getStoreAddress(storeId).call()
-		.then(store_address => {
-			if (store_address){
-				var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-			    store_contract_instance.methods.totalScore().call()
-					.then(totalScore => {
-						store_contract_instance.methods.totalReviewAmount().call()
-							.then(totalReviewAmount => {
-								cb(totalScore, totalReviewAmount);
-							});
-					});
-			}
-		});
+const readOverallScore = (storeId, cb) => {
+	store_registry_instance.methods.getStoreAddress(storeId).call().then(store_address => {
+		if (store_address){
+			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
+	    store_contract_instance.methods.totalScore().call().then(totalScore => {
+				store_contract_instance.methods.totalReviewAmount().call().then(totalReviewAmount => {
+					cb(totalScore, totalReviewAmount);
+				}).catch(
+					// Log the rejection reason
+				 (reason) => {
+						console.log('Handle rejected promise ('+reason+') here.');
+						readOverallScore(storeId, cb);
+					}
+				);
+			}).catch(
+				// Log the rejection reason
+			 (reason) => {
+					console.log('Handle rejected promise ('+reason+') here.');
+					readOverallScore(storeId, cb);
+				}
+			);
+		}
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readOverallScore(storeId, cb);
+		}
+	);
 }
+exports.readOverallScore = readOverallScore;
 // End of readOverallScore function

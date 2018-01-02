@@ -57,7 +57,7 @@ export const initialize = (url, ethAddress) => dispatch => {
     console.log(url)
     console.log(getStoreIdFromUrl(url))
     console.log(getStoreNameFromUrl(url))
-    /* update storeSelected, storeName, storeURL */
+    /* update storeSelected, storeName, storeId */
     var storeName = getStoreNameFromUrl(url)
     var storeId = getStoreIdFromUrl(url)
     dispatch(checkURL(true, storeName, storeId))
@@ -86,7 +86,7 @@ export const initialize = (url, ethAddress) => dispatch => {
       })
     })
   } else {
-    /* update storeSelected, storeName, storeURL */
+    /* update storeSelected, storeName, storeId */
     dispatch(checkURL(true, "Sushi Express @ Jurong Point 2", "SushiExpress@JurongPoint2--1.339--103.705"))
     searchImage("Sushi Express @ Jurong Point 2", storeURL => {
       /* update storeURL */

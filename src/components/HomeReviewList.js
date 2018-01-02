@@ -72,7 +72,7 @@ class HomeReviewList extends React.Component {
             </div>
           </div>
         }
-        { !this.state.isProcessing && this.props.reviewAmount===0 &&
+        { !this.state.isProcessing && this.props.reviewAmount==0 &&
           <div>
             <hr style={hrStyle} />
             <p style={noReviewStyle}>== No Review ==</p>
