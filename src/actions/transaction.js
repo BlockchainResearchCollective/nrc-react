@@ -52,66 +52,45 @@ export const updateReviewAmount = (reviewAmount) => ({
 })
 
 export const initialize = (url, ethAddress) => dispatch => {
-  console.log("address: " + ethAddress)
+  dispatch(initializeStart())
+  var storeName;
+  var storeId
   if (checkUrlStatus(url)){
-    console.log(url)
-    console.log(getStoreIdFromUrl(url))
-    console.log(getStoreNameFromUrl(url))
-    /* update storeSelected, storeName, storeId */
-    var storeName = getStoreNameFromUrl(url)
-    var storeId = getStoreIdFromUrl(url)
-    dispatch(checkURL(true, storeName, storeId))
-    searchImage(getStoreNameFromUrl(url), storeURL => {
-      /* update storeURL */
-      dispatch(updateImage(storeURL))
-      readCredibility(ethAddress, rawCredibility => {
-        /* update credibility */
-        dispatch(updateCredibility(rawCredibility/200))
-        storeExist(storeId, storeExist => {
-          if (storeExist){
-            /* update storeExist */
-            dispatch(updateStoreExist(storeExist))
-            readOverallScore(storeId, (storeOverallScore, reviewAmount) => {
-              /* update storeOverallScore */
-              dispatch(updateOverallScore(storeOverallScore))
-              /* update reviewAmount */
-              dispatch(updateReviewAmount(reviewAmount))
-              dispatch(initializeEnd())
-            })
-          } else {
-            dispatch(updateStoreExist(false))
-            dispatch(initializeEnd())
-          }
-        })
-      })
-    })
+    storeName = getStoreNameFromUrl(url)
+    storeId = getStoreIdFromUrl(url)
   } else {
-    /* update storeSelected, storeName, storeId */
-    dispatch(checkURL(true, "Sushi Express @ Jurong Point 2", "SushiExpress@JurongPoint2--1.339--103.705"))
-    searchImage("Sushi Express @ Jurong Point 2", storeURL => {
-      /* update storeURL */
-      dispatch(updateImage(storeURL))
-      readCredibility(ethAddress, rawCredibility => {
-        /* update credibility */
-        dispatch(updateCredibility(rawCredibility/200))
-        storeExist("SushiExpress@JurongPoint2--1.339--103.705", storeExist => {
-          if (storeExist){
-            /* update storeExist */
-            dispatch(updateStoreExist(storeExist))
-            readOverallScore("SushiExpress@JurongPoint2--1.339--103.705", (storeOverallScore, reviewAmount) => {
-              /* update storeOverallScore */
-              dispatch(updateOverallScore(storeOverallScore))
-              /* update reviewAmount */
-              dispatch(updateReviewAmount(reviewAmount))
-              dispatch(initializeEnd())
-            })
-          } else {
-            dispatch(initializeEnd())
-          }
-        })
-      })
-    })
+    storeName = 'Sushi Express @ Jurong Point 2'
+    storeId = 'SushiExpress@JurongPoint2--1.339--103.705'
   }
+  /* hardcode storeSelected, storeName, storeId */
+  dispatch(checkURL(true, storeName, storeId))
+  searchImage(storeName)
+  .then(storeURL => {
+    /* update storeURL */
+    dispatch(updateImage(storeURL))
+    return readCredibility(ethAddress)
+  })
+  .then(rawCredibility => {
+    /* update credibility */
+    dispatch(updateCredibility(rawCredibility/200))
+    return storeExist(storeId)
+  })
+  .then(storeExist => {
+    /* update storeExist */
+    dispatch(updateStoreExist(storeExist))
+    if (storeExist){
+      return readOverallScore(storeId)
+    } 
+  })
+  .then((storeOverallScore, reviewAmount) => {
+    if (storeOverallScore!==undefined && reviewAmount!==undefined){
+      /* update storeOverallScore */
+      dispatch(updateOverallScore(storeOverallScore))
+      /* update reviewAmount */
+      dispatch(updateReviewAmount(reviewAmount))
+    }
+    return dispatch(initializeEnd())
+  })
 }
 
 export const newStoreCreatedAction = (storeId) => dispatch => {
