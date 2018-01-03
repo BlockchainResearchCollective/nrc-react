@@ -1,13 +1,15 @@
 import {
   PROCESS_START, PROCESS_END, INITIALIZE_START, INITIALIZE_END,
-  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
-  UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT
+  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY, REVIEW_AMOUNT_PLUS_ONE,
+  UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT,
+  UPDATE_ALL_REVIEWS, UPDATE_MY_REVIEW_INDEX,
+  READ_REVIEWS_START, READ_REVIEWS_END, ADD_NEW_REVIEW
 } from './ActionTypes'
-import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage } from '../service/util'
+import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
 import {
-  storeExist, readOverallScore, readCredibility, createStore, writeReview
+  storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview
 } from '../service/blockchain'
-import { writeHistory } from '../service/backend'
+import { writeHistory, addressToUsername } from '../service/backend'
 import { alertMessage } from './system'
 
 /* Transaction Action Creators */
@@ -49,6 +51,27 @@ export const updateOverallScore = (storeOverallScore) => ({
 export const updateReviewAmount = (reviewAmount) => ({
 	type: UPDATE_REVIEW_AMOUNT,
   reviewAmount
+})
+export const reviewAmountPlusOne = () => ({
+  type: REVIEW_AMOUNT_PLUS_ONE
+})
+export const updateAllReviews = (reviews) => ({
+  type: UPDATE_ALL_REVIEWS,
+  reviews
+})
+export const updateMyReviewIndex = (index) => ({
+  type: UPDATE_MY_REVIEW_INDEX,
+  index
+})
+export const readReviewStart = () => ({
+  type: READ_REVIEWS_START
+})
+export const readReviewEnd = () => ({
+  type: READ_REVIEWS_END
+})
+export const addNewReview = (review) => ({
+  type: ADD_NEW_REVIEW,
+  review
 })
 
 export const initialize = (url, ethAddress) => dispatch => {
@@ -140,6 +163,7 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
       dispatch(alertMessage("Write review failed!"))
       dispatch(processEnd())
     } else {
+      dispatch(addNewReviewAction(commment, score, record.originalReviewer))
       /* write history */
       record.txHash = transactionHash
       writeHistory(record, (flag) => {
@@ -149,5 +173,50 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
       })
       dispatch(processEnd())
     }
+  })
+}
+
+export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => dispatch => {
+  if (totalReviewAmount == 0){
+    dispatch(readReviewEnd())
+  } else {
+    dispatch(readReviewStart())
+    dispatch(updateMyReviewIndex(-1))
+    let reviews = []
+    let counter = totalReviewAmount
+    for (let i=0; i<totalReviewAmount; i++){
+      readReview(storeId, i, (review) => {
+        if (ethAddress == review.reviewerAddress){
+          dispatch(updateMyReviewIndex(i))
+        }
+        review.time = timeConverter(parseInt(review.timestamp) * 1000)
+        review.score = parseInt(review.score)/20
+        addressToUsername(review.reviewerAddress, (reviewer) => {
+          review.reviewer = reviewer
+          reviews.push(review)
+          counter--
+          if (counter==0){
+            dispatch(updateAllReviews(reviews))
+            dispatch(readReviewEnd())
+          }
+        })
+      })
+    }
+  }
+}
+
+export const addNewReviewAction = (content, score, reviewer) => dispatch => {
+  let review = {
+    reviewer,
+    content,
+    score,
+    upvote: 0,
+    downvote: 0,
+    time: 'pending...'
+  }
+  addressToUsername(reviewer, (reviewer) => {
+    review.reviewer = reviewer
+    dispatch(reviewAmountPlusOne())
+    dispatch(addNewReview(review))
   })
 }

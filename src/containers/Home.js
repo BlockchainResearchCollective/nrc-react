@@ -34,6 +34,7 @@ class Home extends React.Component {
     this.timer = setInterval( () => {
       if (window.location.href !== url && window.location.href !== url+'#'){
         url = window.location.href
+        console.log("url: " + url)
         this.props.dispatch(initialize(url, this.props.profile.ethAddress))
       }
     },
@@ -98,11 +99,13 @@ class Home extends React.Component {
                 storeOverallScore={this.props.storeOverallScore}
                 button='Write Review'
               />
-              { !this.props.isProcessing && this.props.storeSelected && this.props.storeExist &&
-                <HomeReviewList
-                  storeId={this.props.storeId}
-                  reviewAmount={parseInt(this.props.reviewAmount, 10)}
-                />
+              { !this.props.isProcessing && this.props.storeSelected && this.props.storeExist && this.props.reviewReady &&
+                <HomeReviewList/>
+              }
+              { !this.props.isProcessing && this.props.storeSelected && this.props.storeExist && !this.props.reviewReady &&
+                <div style={loadingStyle}>
+                  <Spin size="large" />
+                </div>
               }
               { !this.props.isProcessing && this.props.storeSelected && !this.props.storeExist &&
                 <CreateStore
@@ -137,6 +140,7 @@ class Home extends React.Component {
                   storeName={this.props.storeName}
                   ethAddress={this.props.profile.ethAddress}
                   ethBalance={this.props.ethBalance}
+                  handleBack={this.handleBack}
                 />
               </div>
             }
@@ -180,9 +184,10 @@ const mapStateToProps = state => {
     storeName: state.transaction.storeName,
     storeId: state.transaction.storeId,
     storeOverallScore: state.transaction.storeOverallScore,
-    reviewAmount: state.transaction.reviewAmount,
+    reviewAmount: parseInt(state.transaction.reviewAmount, 10),
     credibility: state.transaction.credibility,
-    ethBalance: state.user.ethBalance
+    ethBalance: state.user.ethBalance,
+    reviewReady: state.transaction.reviewReady
   }
 }
 

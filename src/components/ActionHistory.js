@@ -50,14 +50,23 @@ class ActionHistory extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pageNumber: 1,
       recordAmount: 1,
       records: []
     }
   }
 
   componentDidMount() {
-    readHistory(this.state.pageNumber, (response) => {
+    readHistory(1, (response) => {
+      this.setState({
+        records: response.txHistory,
+        recordAmount: response.total
+      })
+    })
+  }
+
+  handleChange = (page) => {
+    console.log('Change to page ' + page)
+    readHistory(page, (response) => {
       this.setState({
         records: response.txHistory,
         recordAmount: response.total
@@ -91,10 +100,10 @@ class ActionHistory extends React.Component {
           }
           <div style={paginationStyle}>
             <Pagination
-              defaultCurrent={this.state.pageNumber}
               pageSize={5}
               total={this.state.recordAmount}
               size='small'
+              onChange={this.handleChange}
             />
           </div>
         </div>
