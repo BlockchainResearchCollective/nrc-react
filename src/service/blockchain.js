@@ -113,6 +113,26 @@ const voteReview = (storeId, reviewer, isUpvote, cb) => {
 exports.voteReview = voteReview;
 //End of addVote function
 
+const settle = (address, cb) => {
+	escrow_instance.methods.settle(address).send({
+	  from: ethAccountAddress,
+	  gas: 4000000,
+	  gasPrice: '10000000000'
+	}, cb);
+}
+exports.settle = settle;
+//End of settle function
+
+const claim = (address, cb) => {
+	escrow_instance.methods.claim(address).send({
+	  from: ethAccountAddress,
+	  gas: 4000000,
+	  gasPrice: '10000000000'
+	}, cb);
+}
+exports.claim = claim;
+//End of claim function
+
 /*
 	Blockchain Read
 */
@@ -242,4 +262,19 @@ const readVoted = (storeId, voter, reviewer, cb) => {
 		}
 	);
 }
-exports.readVoted = readVoted
+exports.readVoted = readVoted;
+// End of ReadVoted function
+
+const checkVetting = (address, cb) => {
+	escrow_instance.methods.noMaturedVetting("0xdF211399e5627b3C6Ef9Bbb462eb19231BD48E93").call().then(result => {
+	  cb(result);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			checkVetting(address, cb);
+		}
+	);
+}
+exports.checkVetting = checkVetting;
+// End of checkVetting function
