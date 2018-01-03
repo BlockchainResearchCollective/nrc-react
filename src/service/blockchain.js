@@ -83,13 +83,7 @@ const writeReview = (storeId, content, score, cb) => {
 	    gasPrice: '10000000000',
 			value: 10000000000000000
 		}, cb);
-	}).catch(
-    // Log the rejection reason
-   (reason) => {
-      console.log('Handle rejected promise ('+reason+') here.');
-      writeReview(storeId, content, score, cb);
-    }
-  )
+	})
 }
 exports.writeReview = writeReview;
 //End of writeReview function
@@ -111,105 +105,65 @@ exports.voteReview = function(storeId, reviewer, isUpvote, cb){
 	Blockchain Read
 */
 
-const storeExist = (storeId, cb) => {
-  store_registry_instance.methods.getStoreAddress(storeId).call().then(result => {
+exports.storeExist = (storeId) => {
+  return store_registry_instance.methods.getStoreAddress(storeId).call().then(result => {
     console.log('store address: '+result);
     var is_exist;
     if (result == 0x0){
       console.log('Store doesn\'t exist.');
       is_exist = false;
-			cb(false);
+			return false
     }
     else{
       console.log('Store does exist.');
       is_exist = true;
-			cb(true);
+			return true
     }
-  }).catch(
-    // Log the rejection reason
-   (reason) => {
-      console.log('Handle rejected promise ('+reason+') here.');
-      storeExist(storeId, cb);
-    }
-  )
+  })
 }
-exports.storeExist = storeExist;
 //End of storeExist function
 
-const readCredibility = (address, cb) => {
-	escrow_instance.methods.credibility(address).call().then(credibility => {
+exports.readCredibility = address => {
+	return escrow_instance.methods.credibility(address).call().then(credibility => {
 		console.log('raw credibility: ' + credibility);
-		cb(credibility);
-	}).catch(
-		// Log the rejection reason
-	 (reason) => {
-			console.log('Handle rejected promise ('+reason+') here.');
-			readCredibility(address, cb);
-		}
-	);
+		return credibility;
+	})
 }
-exports.readCredibility = readCredibility;
 //End of readCredibility function
 
-const readReview = (storeId, index, cb) => {
+exports.readReview = (storeId, index) => {
 	store_registry_instance.methods.getStoreAddress(storeId).call().then(store_address => {
 		var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
     store_contract_instance.methods.allReviews(index).call().then(review => {
-			cb({
+			return {
 				'content': review[0],
 				'score': review[1],
 				'reviewerAddress': review[2],
 				'upvote': review[3],
 				'downvote': review[4],
 				'timestamp': review[5]
-			});
-		}).catch(
-			// Log the rejection reason
-		 (reason) => {
-				console.log('Handle rejected promise ('+reason+') here.');
-				readReview(storeId, index, cb);
-			}
-		);
-	}).catch(
-		// Log the rejection reason
-	 (reason) => {
-			console.log('Handle rejected promise ('+reason+') here.');
-			readReview(storeId, index, cb);
-		}
-	);
+			};
+		})
+	})
 }
-exports.readReview = readReview;
 //End of readReview function
 
-const readOverallScore = (storeId, cb) => {
-	store_registry_instance.methods.getStoreAddress(storeId).call().then(store_address => {
+exports.readOverallScore = (storeId) => {
+	var store_contract_instance
+	var totalScore
+	return store_registry_instance.methods.getStoreAddress(storeId).call().then(store_address => {
 		if (store_address){
-			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-	    store_contract_instance.methods.totalScore().call().then(totalScore => {
-				store_contract_instance.methods.totalReviewAmount().call().then(totalReviewAmount => {
-					cb(parseFloat(totalScore)/parseFloat(totalReviewAmount), totalReviewAmount);
-				}).catch(
-					// Log the rejection reason
-				 (reason) => {
-						console.log('Handle rejected promise ('+reason+') here.');
-						readOverallScore(storeId, cb);
-					}
-				);
-			}).catch(
-				// Log the rejection reason
-			 (reason) => {
-					console.log('Handle rejected promise ('+reason+') here.');
-					readOverallScore(storeId, cb);
-				}
-			);
+			store_contract_instance = new web3.eth.Contract(store_abi, store_address);
+	    return store_contract_instance.methods.totalScore().call()
 		}
-	}).catch(
-		// Log the rejection reason
-	 (reason) => {
-			console.log('Handle rejected promise ('+reason+') here.');
-			readOverallScore(storeId, cb);
-		}
-	);
+	})
+	.then(score => {
+		totalScore = score
+		return store_contract_instance.methods.totalReviewAmount().call()
+	})
+	.then(totalReviewAmount => {
+		return (parseFloat(totalScore)/parseFloat(totalReviewAmount), totalReviewAmount);
+	})
 }
-exports.readOverallScore = readOverallScore;
+
 // End of readOverallScore function

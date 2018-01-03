@@ -1,14 +1,19 @@
 var exports = module.exports = {};
 
-exports.searchImage = function(keyword, callback){
-  var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200) {
-			callback(JSON.parse(xhttp.responseText).url)
-		}
-	}
-	xhttp.open('GET', 'http://188.166.190.168:3001/image/search/' + keyword, true);
-  xhttp.send();
+exports.searchImage = keyword => {
+  return fetch(`http://188.166.190.168:3001/image/search/`+ keyword, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (response.status == 200) {
+      return response.json()
+    }
+  })
+  .then(json => json.url)
+  .catch(err => new Error(err))
 }
 
 exports.checkUrlStatus = function(url){
