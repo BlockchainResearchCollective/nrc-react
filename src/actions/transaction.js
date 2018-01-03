@@ -111,22 +111,18 @@ export const initialize = (url, ethAddress) => dispatch => {
       })
     })
   } else {
-    /* update storeSelected, storeName, storeId */
+    dispatch(initializeEnd())
+    /*
     dispatch(checkURL(true, "North Spine Food Court", "NorthSpineFoodCourt--1.347--103.680"))
     searchImage("North Spine Food Court", storeURL => {
-      /* update storeURL */
       dispatch(updateImage(storeURL))
       readCredibility(ethAddress, rawCredibility => {
-        /* update credibility */
         dispatch(updateCredibility(rawCredibility/200))
         storeExist("NorthSpineFoodCourt--1.347--103.680", storeExist => {
           if (storeExist){
-            /* update storeExist */
             dispatch(updateStoreExist(storeExist))
             readOverallScore("NorthSpineFoodCourt--1.347--103.680", (storeOverallScore, reviewAmount) => {
-              /* update storeOverallScore */
               dispatch(updateOverallScore(storeOverallScore))
-              /* update reviewAmount */
               dispatch(updateReviewAmount(reviewAmount))
               dispatch(initializeEnd())
               dispatch(readAllReviewsAction("NorthSpineFoodCourt--1.347--103.680", reviewAmount, ethAddress))
@@ -136,7 +132,7 @@ export const initialize = (url, ethAddress) => dispatch => {
           }
         })
       })
-    })
+    })*/
   }
 }
 
