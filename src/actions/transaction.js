@@ -7,7 +7,7 @@ import {
 } from './ActionTypes'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
 import {
-  storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview
+  storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview, readVoted
 } from '../service/blockchain'
 import { writeHistory, addressToUsername } from '../service/backend'
 import { alertMessage } from './system'
@@ -215,15 +215,17 @@ export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => 
         }
         review.time = timeConverter(parseInt(review.timestamp) * 1000)
         review.score = parseInt(review.score)/20
-        review.voted = false
-        addressToUsername(review.reviewerAddress, (reviewer) => {
-          review.reviewer = reviewer
-          reviews.push(review)
-          counter--
-          if (counter==0){
-            dispatch(updateAllReviews(reviews))
-            dispatch(readReviewEnd())
-          }
+        readVoted(storeId, ethAddress, review.reviewerAddress, (voted) => {
+          review.voted = voted
+          addressToUsername(review.reviewerAddress, (reviewer) => {
+            review.reviewer = reviewer
+            reviews.push(review)
+            counter--
+            if (counter==0){
+              dispatch(updateAllReviews(reviews))
+              dispatch(readReviewEnd())
+            }
+          })
         })
       })
     }

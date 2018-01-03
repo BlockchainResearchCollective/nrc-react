@@ -219,3 +219,27 @@ const readOverallScore = (storeId, cb) => {
 }
 exports.readOverallScore = readOverallScore;
 // End of readOverallScore function
+
+const readVoted = (storeId, voter, reviewer, cb) => {
+	store_registry_instance.methods.getStoreAddress(storeId).call().then(store_address => {
+		if (store_address){
+			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
+	    store_contract_instance.methods.voted(voter, reviewer).call().then(result => {
+				cb(result)
+			}).catch(
+				// Log the rejection reason
+			 (reason) => {
+					console.log('Handle rejected promise ('+reason+') here.');
+					readVoted(storeId, voter, reviewer, cb);
+				}
+			);
+		}
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readVoted(storeId, voter, reviewer, cb);
+		}
+	);
+}
+exports.readVoted = readVoted

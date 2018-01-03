@@ -143,14 +143,14 @@ class HomeReviewListItem extends React.Component {
           </p>
           { this.state.voted && this.state.isUpvote &&
             <div style={disabledVoteStyle}>
-              <span style={disabledUpvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
-              <span style={downvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
+              <span style={upvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
+              <span style={disabledDownvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
             </div>
           }
           { this.state.voted && !this.state.isUpvote &&
             <div style={disabledVoteStyle}>
-              <span style={upvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
-              <span style={disabledDownvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
+              <span style={disabledUpvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
+              <span style={downvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
             </div>
           }
           { !this.state.voted &&

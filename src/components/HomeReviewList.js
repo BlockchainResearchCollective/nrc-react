@@ -50,7 +50,7 @@ class HomeReviewList extends React.Component {
               <div key={index}>
                 <HomeReviewListItem
                   review={review}
-                  voted={this.state.reviews.voted}
+                  voted={review.voted}
                   storeId={this.props.storeId}
                   ethBalance={this.props.ethBalance}
                   storeName={this.props.storeName}
