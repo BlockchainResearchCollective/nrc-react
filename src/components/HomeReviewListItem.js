@@ -1,5 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Rate, Icon } from 'antd'
+import { voteReviewAction } from '../actions/transaction'
 
 const divStyle = {
   paddingLeft: '20px',
@@ -33,7 +35,8 @@ const contentStyle = {
 }
 
 const voteStyle = {
-  color: 'white'
+  color: 'white',
+  cursor: 'pointer'
 }
 
 const upvoteStyle = {
@@ -44,28 +47,122 @@ const downvoteStyle = {
   marginRight: '20px'
 }
 
-const HomeReviewListItem = (props) => {
-  return (
-    <div>
-      <hr style={hrStyle} />
-      <div style={divStyle}>
-        <div style={titleStyle}>
-          <span>{props.review.reviewer}: </span>
-          <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled defaultValue={parseInt(props.review.score, 10)} />
-        </div>
-        <div style={timeStyle}>
-          {props.review.time}
-        </div>
-        <p style={contentStyle}>
-          {props.review.content}
-        </p>
-        <div style={voteStyle}>
-          <span style={upvoteStyle}>{props.review.upvote} <Icon type="like-o" /></span>
-          <span style={downvoteStyle}>{props.review.downvote} <Icon type="dislike-o" /></span>
-        </div>
-      </div>
-    </div>
-  )
+const disabledVoteStyle = {
+  color: 'grey',
+  cursor: 'not-allowed'
 }
 
-export default HomeReviewListItem
+const disabledUpvoteStyle = {
+  color: 'white',
+  marginRight: '20px'
+}
+
+const disabledDownvoteStyle = {
+  color: 'white',
+  marginRight: '20px',
+
+}
+
+class HomeReviewListItem extends React.Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      upvote: 0,
+      downvote: 0,
+      voted: true,
+      isUpvote: undefined,
+    }
+  }
+
+  componentDidMount = () => {
+    this.setState({
+      upvote: parseInt(this.props.review.upvote),
+      downvote: parseInt(this.props.review.downvote),
+      voted: this.props.voted,
+      isUpvote: this.props.isUpvote,
+    })
+  }
+
+  handleUpvoteClick = () => {
+    console.log("upvote")
+    if (!this.state.voted){
+      this.setState((prevState) => {
+        return {
+          upvote: prevState.upvote + 1,
+          voted: true,
+          isUpvote: true,
+        }
+      })
+      let record = {
+        storeName: this.props.storeName,
+        balance: this.props.ethBalance,
+        originalReviewer: this.props.review.reviewerAddress,
+        action: "Vote Review"
+      }
+      /* vote review */
+      this.props.dispatch(voteReviewAction(this.props.storeId, this.props.review.reviewerAddress, true, record))
+    }
+  }
+
+  handleDownvoteClick = () => {
+    console.log("downvote")
+    if (!this.state.voted){
+      this.setState((prevState) => {
+        return {
+          downvote: prevState.downvote + 1,
+          voted: true,
+          isUpvote: false,
+        }
+      })
+      let record = {
+        storeName: this.props.storeName,
+        balance: this.props.ethBalance,
+        originalReviewer: this.props.review.reviewerAddress,
+        action: "Vote Review"
+      }
+      /* vote review */
+      this.props.dispatch(voteReviewAction(this.props.storeId, this.props.review.reviewerAddress, false, record))
+    }
+  }
+
+  render(){
+    return(
+      <div>
+        <hr style={hrStyle} />
+        <div style={divStyle}>
+          <div style={titleStyle}>
+            <span>{this.props.review.reviewer}: </span>
+            <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled defaultValue={parseInt(this.props.review.score, 10)} />
+          </div>
+          <div style={timeStyle}>
+            {this.props.review.time}
+          </div>
+          <p style={contentStyle}>
+            {this.props.review.content}
+          </p>
+          { this.state.voted && this.state.isUpvote &&
+            <div style={disabledVoteStyle}>
+              <span style={disabledUpvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
+              <span style={downvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
+            </div>
+          }
+          { this.state.voted && !this.state.isUpvote &&
+            <div style={disabledVoteStyle}>
+              <span style={upvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
+              <span style={disabledDownvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
+            </div>
+          }
+          { !this.state.voted &&
+            <div style={voteStyle}>
+              <span style={upvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
+              <span style={downvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
+            </div>
+          }
+        </div>
+      </div>
+    )
+  }
+}
+
+export default connect()(HomeReviewListItem)

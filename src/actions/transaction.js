@@ -7,7 +7,7 @@ import {
 } from './ActionTypes'
 import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
 import {
-  storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview
+  storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview
 } from '../service/blockchain'
 import { writeHistory, addressToUsername } from '../service/backend'
 import { alertMessage } from './system'
@@ -215,6 +215,7 @@ export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => 
         }
         review.time = timeConverter(parseInt(review.timestamp) * 1000)
         review.score = parseInt(review.score)/20
+        review.voted = false
         addressToUsername(review.reviewerAddress, (reviewer) => {
           review.reviewer = reviewer
           reviews.push(review)
@@ -236,11 +237,29 @@ export const addNewReviewAction = (content, score, reviewer) => dispatch => {
     score,
     upvote: 0,
     downvote: 0,
-    time: 'pending...'
+    time: 'pending...',
+    voted: false
   }
   addressToUsername(reviewer, (reviewer) => {
     review.reviewer = reviewer
     dispatch(reviewAmountPlusOne())
     dispatch(addNewReview(review))
+  })
+}
+
+export const voteReviewAction = (storeId, reviewer, isUpvote, record) => dispatch => {
+  voteReview(storeId, reviewer, isUpvote, (error, transactionHash) => {
+    if (error){
+      console.log(error)
+      dispatch(alertMessage("Vote review failed!"))
+    } else {
+      /* write history */
+      record.txHash = transactionHash
+      writeHistory(record, (flag) => {
+        if (flag){
+          console.log("history logged")
+        }
+      })
+    }
   })
 }

@@ -89,22 +89,28 @@ const writeReview = (storeId, content, score, cb) => {
       console.log('Handle rejected promise ('+reason+') here.');
       writeReview(storeId, content, score, cb);
     }
-  )
+  );
 }
 exports.writeReview = writeReview;
 //End of writeReview function
 
-exports.voteReview = function(storeId, reviewer, isUpvote, cb){
-	store_registry_instance.methods.getStoreAddress(storeId).call()
-		.then(store_address => {
-			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
-		    store_contract_instance.methods.voteReview(ethAccountAddress, reviewer, isUpvote).send({
-			    from: ethAccountAddress,
-			    gas: 4000000,
-			    gasPrice: '10000000000'
-			}, cb);
-		});
+const voteReview = (storeId, reviewer, isUpvote, cb) => {
+	store_registry_instance.methods.getStoreAddress(storeId).call().then(store_address => {
+		console.log('Voting to store: ' + store_address);
+	  escrow_instance.methods.vote(store_address, ethAccountAddress, reviewer, isUpvote).send({
+	    from: ethAccountAddress,
+	    gas: 4000000,
+	    gasPrice: '10000000000'
+		}, cb);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			voteReview(storeId, reviewer, isUpvote, cb);
+		}
+	);
 }
+exports.voteReview = voteReview;
 //End of addVote function
 
 /*

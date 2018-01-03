@@ -50,6 +50,10 @@ class HomeReviewList extends React.Component {
               <div key={index}>
                 <HomeReviewListItem
                   review={review}
+                  voted={this.state.reviews.voted}
+                  storeId={this.props.storeId}
+                  ethBalance={this.props.ethBalance}
+                  storeName={this.props.storeName}
                 />
               </div>
             )}
@@ -78,7 +82,10 @@ class HomeReviewList extends React.Component {
 const mapStateToProps = state => {
   return {
     reviews: state.transaction.reviews,
-    reviewAmount: parseInt(state.transaction.reviewAmount, 10)
+    reviewAmount: parseInt(state.transaction.reviewAmount, 10),
+    storeId: state.transaction.storeId,
+    storeName: state.transaction.storeName,
+    ethBalance: state.user.ethBalance
   }
 }
 

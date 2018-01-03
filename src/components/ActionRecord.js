@@ -44,7 +44,7 @@ const ActionRecord = (props) => {
           <p style={{color: 'red'}}>Write Review</p>
         }
         { props.record.action==='Vote Review' &&
-          <p style={{color: 'yello'}}>Vote Review</p>
+          <p style={{color: 'purple'}}>Vote Review</p>
         }
         { props.record.action==='Create Store' &&
           <p style={{color: 'green'}}>Create Store</p>
