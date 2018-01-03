@@ -38,6 +38,15 @@ class WriteReviewForm extends React.Component {
     callback()
   }
 
+  componentDidMount = () => {
+    if (this.props.myReviewIndex != -1){
+      this.props.form.setFieldsValue({
+        rate: this.props.reviews[this.props.myReviewIndex].score,
+        content: this.props.reviews[this.props.myReviewIndex].content
+      })
+    }
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -57,16 +66,32 @@ class WriteReviewForm extends React.Component {
             <TextArea rows={5} placeholder="Review Content" />
           )}
         </FormItem>
-        <FormItem>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Submit
-          </Button>
-        </FormItem>
+        { this.props.myReviewIndex==-1 &&
+          <FormItem>
+            <Button type="primary" htmlType="submit" className="login-form-button">
+              Submit
+            </Button>
+          </FormItem>
+        }
+        { this.props.myReviewIndex!=-1 &&
+          <FormItem>
+            <Button type="primary" htmlType="submit" className="login-form-button">
+              Update
+            </Button>
+          </FormItem>
+        }
       </Form>
     );
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    myReviewIndex: state.transaction.myReviewIndex,
+    reviews: state.transaction.reviews
+  }
+}
+
 const WrappedWriteReviewForm = Form.create()(WriteReviewForm)
 
-export default connect()(WrappedWriteReviewForm)
+export default connect(mapStateToProps)(WrappedWriteReviewForm)
