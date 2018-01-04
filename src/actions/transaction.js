@@ -5,12 +5,13 @@ import {
   UPDATE_ALL_REVIEWS, UPDATE_MY_REVIEW_INDEX,
   READ_REVIEWS_START, READ_REVIEWS_END, ADD_NEW_REVIEW
 } from './ActionTypes'
-import { checkUrlStatus, getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
+import { getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
 import {
   storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview, readVoted
 } from '../service/blockchain'
 import { writeHistory, addressToUsername } from '../service/backend'
 import { alertMessage } from './system'
+import { updateEthBalance } from './user'
 
 /* Transaction Action Creators */
 
@@ -77,73 +78,49 @@ export const addNewReview = (review) => ({
 export const initialize = (url, ethAddress) => dispatch => {
   dispatch(initializeStart())
   console.log("address: " + ethAddress)
-  if (checkUrlStatus(url)){
-    console.log(url)
-    console.log(getStoreIdFromUrl(url))
-    console.log(getStoreNameFromUrl(url))
-    /* update storeSelected, storeName, storeId */
-    var storeName = getStoreNameFromUrl(url)
-    var storeId = getStoreIdFromUrl(url)
-    dispatch(checkURL(true, storeName, storeId))
-    searchImage(getStoreNameFromUrl(url), storeURL => {
-      /* update storeURL */
-      dispatch(updateImage(storeURL))
-      readCredibility(ethAddress, rawCredibility => {
-        /* update credibility */
-        dispatch(updateCredibility(rawCredibility/200))
-        storeExist(storeId, storeExist => {
-          if (storeExist){
-            /* update storeExist */
-            dispatch(updateStoreExist(true))
-            readOverallScore(storeId, (storeOverallScore, reviewAmount) => {
-              /* update storeOverallScore */
-              dispatch(updateOverallScore(storeOverallScore))
-              /* update reviewAmount */
-              dispatch(updateReviewAmount(reviewAmount))
-              dispatch(initializeEnd())
-              dispatch(readAllReviewsAction(storeId, reviewAmount, ethAddress))
-            })
-          } else {
-            /* update storeExist */
-            dispatch(updateStoreExist(false))
+  console.log(url)
+  console.log(getStoreIdFromUrl(url))
+  console.log(getStoreNameFromUrl(url))
+  /* update storeSelected, storeName, storeId */
+  var storeName = getStoreNameFromUrl(url)
+  var storeId = getStoreIdFromUrl(url)
+  dispatch(checkURL(true, storeName, storeId))
+  searchImage(getStoreNameFromUrl(url), storeURL => {
+    /* update storeURL */
+    dispatch(updateImage(storeURL))
+    readCredibility(ethAddress, rawCredibility => {
+      /* update credibility */
+      dispatch(updateCredibility(rawCredibility/200))
+      storeExist(storeId, storeExist => {
+        if (storeExist){
+          /* update storeExist */
+          dispatch(updateStoreExist(true))
+          readOverallScore(storeId, (storeOverallScore, reviewAmount) => {
             /* update storeOverallScore */
-            dispatch(updateOverallScore(0))
+            dispatch(updateOverallScore(storeOverallScore))
             /* update reviewAmount */
-            dispatch(updateReviewAmount(0))
-            dispatch(updateStoreExist(false))
+            dispatch(updateReviewAmount(reviewAmount))
             dispatch(initializeEnd())
-          }
-        })
+            dispatch(readAllReviewsAction(storeId, reviewAmount, ethAddress))
+          })
+        } else {
+          /* update storeExist */
+          dispatch(updateStoreExist(false))
+          /* update storeOverallScore */
+          dispatch(updateOverallScore(0))
+          /* update reviewAmount */
+          dispatch(updateReviewAmount(0))
+          dispatch(updateStoreExist(false))
+          dispatch(initializeEnd())
+        }
       })
     })
-  } else {
-    dispatch(initializeEnd())
-    /*
-    dispatch(checkURL(true, "North Spine Food Court", "NorthSpineFoodCourt--1.347--103.680"))
-    searchImage("North Spine Food Court", storeURL => {
-      dispatch(updateImage(storeURL))
-      readCredibility(ethAddress, rawCredibility => {
-        dispatch(updateCredibility(rawCredibility/200))
-        storeExist("NorthSpineFoodCourt--1.347--103.680", storeExist => {
-          if (storeExist){
-            dispatch(updateStoreExist(storeExist))
-            readOverallScore("NorthSpineFoodCourt--1.347--103.680", (storeOverallScore, reviewAmount) => {
-              dispatch(updateOverallScore(storeOverallScore))
-              dispatch(updateReviewAmount(reviewAmount))
-              dispatch(initializeEnd())
-              dispatch(readAllReviewsAction("NorthSpineFoodCourt--1.347--103.680", reviewAmount, ethAddress))
-            })
-          } else {
-            dispatch(initializeEnd())
-          }
-        })
-      })
-    })*/
-  }
+  })
 }
 
-export const newStoreCreatedAction = (storeId) => dispatch => {
+export const newStoreCreatedAction = (storeId, ethAddress) => dispatch => {
   dispatch(updateStoreExist(true))
+  dispatch(updateEthBalance(ethAddress))
   readOverallScore(storeId, (storeOverallScore, reviewAmount) => {
     /* update storeOverallScore */
     dispatch(updateOverallScore(storeOverallScore))
@@ -173,10 +150,10 @@ export const createStoreAction = (storeId, record) => dispatch => {
   				if (is_exist){
             dispatch(alertMessage("Create store success!"))
   					clearInterval(refreshCheck);
-            dispatch(newStoreCreatedAction(storeId))
+            dispatch(newStoreCreatedAction(storeId, record.originalReviewer))
   				}
   			})
-			}, 1000)
+			}, 3000)
     }
   })
 }

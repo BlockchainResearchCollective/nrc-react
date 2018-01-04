@@ -10,6 +10,7 @@ import WriteReview from '../components/WriteReview'
 import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
 import { initialize, decryptKey } from '../actions'
+import { checkUrlStatus, getStoreIdFromUrl } from '../service/util'
 
 const writeReviewStyle = {
   margin: '30px'
@@ -30,15 +31,14 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    var url
+    var storeId
     this.timer = setInterval( () => {
-      if (window.location.href !== url && window.location.href !== url+'#'){
-        url = window.location.href
-        console.log("url: " + url)
-        this.props.dispatch(initialize(url, this.props.profile.ethAddress))
+      if (checkUrlStatus(window.location.href) && getStoreIdFromUrl(window.location.href) !== storeId){
+        storeId = getStoreIdFromUrl(window.location.href)
+        this.props.dispatch(initialize(window.location.href, this.props.profile.ethAddress))
       }
     },
-      1000
+      3000
     )
     decryptKey(this.props.profile.ethAddress, this.props.profile.encryptedAccount, this.props.profile.hashedPassword)
   }
