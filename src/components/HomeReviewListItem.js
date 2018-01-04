@@ -52,17 +52,6 @@ const disabledVoteStyle = {
   cursor: 'not-allowed'
 }
 
-const disabledUpvoteStyle = {
-  color: 'white',
-  marginRight: '20px'
-}
-
-const disabledDownvoteStyle = {
-  color: 'white',
-  marginRight: '20px',
-
-}
-
 class HomeReviewListItem extends React.Component {
 
   constructor(props){
@@ -71,7 +60,6 @@ class HomeReviewListItem extends React.Component {
       upvote: 0,
       downvote: 0,
       voted: true,
-      isUpvote: undefined,
     }
   }
 
@@ -80,7 +68,6 @@ class HomeReviewListItem extends React.Component {
       upvote: parseInt(this.props.review.upvote),
       downvote: parseInt(this.props.review.downvote),
       voted: this.props.voted,
-      isUpvote: this.props.isUpvote,
     })
   }
 
@@ -141,16 +128,10 @@ class HomeReviewListItem extends React.Component {
           <p style={contentStyle}>
             {this.props.review.content}
           </p>
-          { this.state.voted && this.state.isUpvote &&
+          { this.state.voted &&
             <div style={disabledVoteStyle}>
-              <span style={upvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
-              <span style={disabledDownvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
-            </div>
-          }
-          { this.state.voted && !this.state.isUpvote &&
-            <div style={disabledVoteStyle}>
-              <span style={disabledUpvoteStyle} onClick={this.handleUpvoteClick} >{this.state.upvote} <Icon type="like-o" /></span>
-              <span style={downvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
+              <span style={upvoteStyle} >{this.state.upvote} <Icon type="like-o" /></span>
+              <span style={downvoteStyle} >{this.state.downvote} <Icon type="dislike-o" /></span>
             </div>
           }
           { !this.state.voted &&
