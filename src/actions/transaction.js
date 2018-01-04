@@ -94,7 +94,7 @@ export const initialize = (url, ethAddress) => dispatch => {
         storeExist(storeId, storeExist => {
           if (storeExist){
             /* update storeExist */
-            dispatch(updateStoreExist(storeExist))
+            dispatch(updateStoreExist(true))
             readOverallScore(storeId, (storeOverallScore, reviewAmount) => {
               /* update storeOverallScore */
               dispatch(updateOverallScore(storeOverallScore))
@@ -104,6 +104,12 @@ export const initialize = (url, ethAddress) => dispatch => {
               dispatch(readAllReviewsAction(storeId, reviewAmount, ethAddress))
             })
           } else {
+            /* update storeExist */
+            dispatch(updateStoreExist(false))
+            /* update storeOverallScore */
+            dispatch(updateOverallScore(0))
+            /* update reviewAmount */
+            dispatch(updateReviewAmount(0))
             dispatch(updateStoreExist(false))
             dispatch(initializeEnd())
           }
