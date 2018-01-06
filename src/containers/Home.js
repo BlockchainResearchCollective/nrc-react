@@ -9,7 +9,7 @@ import NoStoreSelected from '../components/NoStoreSelected'
 import WriteReview from '../components/WriteReview'
 import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
-import { initialize, decryptKey } from '../actions'
+import { initialize, decryptKey, initializeEnd } from '../actions'
 import { checkUrlStatus, getStoreIdFromUrl } from '../service/util'
 
 const writeReviewStyle = {
@@ -32,10 +32,14 @@ class Home extends React.Component {
 
   componentDidMount() {
     var storeId
+    var url
     this.timer = setInterval( () => {
       if (checkUrlStatus(window.location.href) && getStoreIdFromUrl(window.location.href) !== storeId){
         storeId = getStoreIdFromUrl(window.location.href)
         this.props.dispatch(initialize(window.location.href, this.props.profile.ethAddress))
+      } else if (url != window.location.href){
+        url = window.location.href
+        this.props.dispatch(initializeEnd())
       }
     },
       3000
