@@ -52,7 +52,6 @@ class HomeReviewList extends React.Component {
                   review={review}
                   voted={review.voted}
                   storeId={this.props.storeId}
-                  ethBalance={this.props.ethBalance}
                   storeName={this.props.storeName}
                 />
               </div>
@@ -84,8 +83,7 @@ const mapStateToProps = state => {
     reviews: state.transaction.reviews,
     reviewAmount: parseInt(state.transaction.reviewAmount, 10),
     storeId: state.transaction.storeId,
-    storeName: state.transaction.storeName,
-    ethBalance: state.user.ethBalance
+    storeName: state.transaction.storeName
   }
 }
 

@@ -114,7 +114,6 @@ class Home extends React.Component {
                   storeId={this.props.storeId}
                   storeName={this.props.storeName}
                   ethAddress={this.props.profile.ethAddress}
-                  ethBalance={this.props.ethBalance}
                 />
               }
               { !this.props.isProcessing && !this.props.storeSelected &&
@@ -141,7 +140,6 @@ class Home extends React.Component {
                   storeId={this.props.storeId}
                   storeName={this.props.storeName}
                   ethAddress={this.props.profile.ethAddress}
-                  ethBalance={this.props.ethBalance}
                   handleBack={this.handleBack}
                 />
               </div>
@@ -188,7 +186,6 @@ const mapStateToProps = state => {
     storeOverallScore: state.transaction.storeOverallScore,
     reviewAmount: parseInt(state.transaction.reviewAmount, 10),
     credibility: state.transaction.credibility,
-    ethBalance: state.user.ethBalance,
     reviewReady: state.transaction.reviewReady
   }
 }

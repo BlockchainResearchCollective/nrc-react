@@ -22,7 +22,8 @@ class WriteReviewForm extends React.Component {
         console.log('Received values of form: ', values)
         let record = {
           storeName: this.props.storeName,
-          balance: this.props.ethBalance,
+          value: '0.01',
+          isPositive: false,
           originalReviewer: this.props.ethAddress,
           action: "Write Review"
         }

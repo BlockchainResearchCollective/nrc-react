@@ -18,7 +18,8 @@ const CreateStore = (props) => {
   const handleClick = () => {
     let record = {
       storeName: props.storeName,
-      balance: props.ethBalance,
+      value: '0.01',
+      isPositive: false,
       originalReviewer: props.ethAddress,
       action: "Create Store"
     }

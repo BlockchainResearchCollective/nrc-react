@@ -40,19 +40,29 @@ const ActionRecord = (props) => {
   return (
     <div style={divStyle}>
       <div style={amountStyle}>
+        { props.record.action==='Settle Review' &&
+          <p style={{color: 'red'}}>Settle Review</p>
+        }
         { props.record.action==='Write Review' &&
-          <p style={{color: 'red'}}>Write Review</p>
+          <p style={{color: 'purple'}}>Write Review</p>
         }
         { props.record.action==='Vote Review' &&
-          <p style={{color: 'purple'}}>Vote Review</p>
+          <p style={{color: 'brown'}}>Vote Review</p>
         }
         { props.record.action==='Create Store' &&
           <p style={{color: 'green'}}>Create Store</p>
         }
       </div>
-      <div style={titleStyle}>
-        <h3>{props.record.storeName}</h3>
-      </div>
+      { props.record.storeName &&
+        <div style={titleStyle}>
+          <h3>{props.record.storeName}</h3>
+        </div>
+      }
+      { !props.record.storeName &&
+        <div style={titleStyle}>
+          <h3>[Automatic Claim]</h3>
+        </div>
+      }
       <div style={dateStyle}>
         <p>{timeConverter(props.record.timestamp)}</p>
       </div>

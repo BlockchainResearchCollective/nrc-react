@@ -83,7 +83,8 @@ class HomeReviewListItem extends React.Component {
       })
       let record = {
         storeName: this.props.storeName,
-        balance: this.props.ethBalance,
+        value: '0.00',
+        isPositive: false,
         originalReviewer: this.props.review.reviewerAddress,
         action: "Vote Review"
       }
@@ -104,7 +105,8 @@ class HomeReviewListItem extends React.Component {
       })
       let record = {
         storeName: this.props.storeName,
-        balance: this.props.ethBalance,
+        value: '0.00',
+        isPositive: false,
         originalReviewer: this.props.review.reviewerAddress,
         action: "Vote Review"
       }

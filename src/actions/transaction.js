@@ -146,10 +146,10 @@ export const createStoreAction = (storeId, record) => dispatch => {
         }
       })
       var refreshCheck = setInterval( () => {
-				storeExist(storeId, function(is_exist){
+				storeExist(storeId, (is_exist) => {
   				if (is_exist){
             dispatch(alertMessage("Create store success!"))
-  					clearInterval(refreshCheck);
+  					clearInterval(refreshCheck)
             dispatch(newStoreCreatedAction(storeId, record.originalReviewer))
   				}
   			})
@@ -221,6 +221,7 @@ export const addNewReviewAction = (content, score, reviewer) => dispatch => {
     time: 'pending...',
     voted: false
   }
+  dispatch(updateOverallScore(score))
   addressToUsername(reviewer, (reviewer) => {
     review.reviewer = reviewer
     dispatch(reviewAmountPlusOne())

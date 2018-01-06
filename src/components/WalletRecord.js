@@ -39,9 +39,16 @@ const hashStyle = {
 const WalletRecord = (props) => {
   return (
     <div style={divStyle}>
-      <div style={amountStyle}>
-        <p style={{color: 'red'}}>{props.record.balance.toFixed(5)} Ether</p>
-      </div>
+      { props.record.isPositive &&
+        <div style={amountStyle}>
+          <p style={{color: 'red'}}>+ {props.record.value} Ether</p>
+        </div>
+      }
+      { !props.record.isPositive &&
+        <div style={amountStyle}>
+          <p style={{color: 'green'}}>- {props.record.value} Ether</p>
+        </div>
+      }
       <div style={titleStyle}>
         <h3>{props.record.action}</h3>
       </div>
