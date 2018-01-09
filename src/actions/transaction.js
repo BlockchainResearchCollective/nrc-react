@@ -181,6 +181,7 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
 
 export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => dispatch => {
   if (totalReviewAmount == 0){
+    dispatch(updateMyReviewIndex(-1))
     dispatch(readReviewEnd())
   } else {
     dispatch(readReviewStart())
