@@ -36,6 +36,11 @@ class Home extends React.Component {
     this.timer = setInterval( () => {
       if (checkUrlStatus(window.location.href) && getStoreIdFromUrl(window.location.href) !== storeId){
         storeId = getStoreIdFromUrl(window.location.href)
+        if (this.state.display === "writeReviewPage"){
+          this.setState({
+            display: "homePage"
+          })
+        }
         this.props.dispatch(initialize(window.location.href, this.props.profile.ethAddress))
       } else if (url != window.location.href){
         url = window.location.href
