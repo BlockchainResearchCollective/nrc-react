@@ -5,10 +5,10 @@ import {
   UPDATE_ALL_REVIEWS, UPDATE_MY_REVIEW_INDEX,
   READ_REVIEWS_START, READ_REVIEWS_END, ADD_NEW_REVIEW
 } from './ActionTypes'
-import { getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
+import { getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter, storeIdToStoreName } from '../service/util'
 import {
   storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview, readVoted,
-  checkVetting, settle, claim, readSettlement
+  checkVetting, settle, claim, readSettlement, calculateReward
 } from '../service/blockchain'
 import { writeHistory, addressToUsername } from '../service/backend'
 import { alertMessage } from './system'
@@ -78,6 +78,11 @@ export const addNewReview = (review) => ({
 
 export const initialize = (url, ethAddress) => dispatch => {
   dispatch(initializeStart())
+  /* reset period */
+  dispatch(updateMyReviewIndex(-1))
+  dispatch(updateAllReviews([]))
+  /* update Ether balance */
+  dispatch(updateEthBalance(ethAddress))
   console.log("address: " + ethAddress)
   console.log(url)
   console.log(getStoreIdFromUrl(url))
@@ -88,38 +93,46 @@ export const initialize = (url, ethAddress) => dispatch => {
       console.log("There is no review to settle and claim")
     } else {
       console.log("There are reviews to settle and claim")
-      settle(ethAddress, (error) => {
-        if (error){
-          console.log(error)
-        } else {
-          console.log("Vetting transactions are settled!")
-        }
+      /* calculate matured vetting reward */
+      calculateReward(ethAddress, (records) => {
+        settle(ethAddress, (error, transactionHash) => {
+          if (error){
+            console.log(error)
+          } else {
+            console.log("Vetting transactions are settled!")
+            /* log history */
+            records.map((record) => {
+              let history = {
+                txHash: transactionHash,
+                value: (parseFloat(record.value)/1000000000000000000).toFixed(2).toString(),
+                isPositive: record.positive,
+                storeName: storeIdToStoreName(record.storeId),
+                action: "Settle Review"
+              }
+              writeHistory(history, (flag) => {
+                if (flag){
+                  console.log("history logged")
+                }
+              })
+            })
+          }
+        })
       })
     }
   })
   /* claim deposit and reward */
   readSettlement(ethAddress, (result) => {
     if (parseFloat(result) > 0){
-      claim(ethAddress, (error, transactionHash) => {
+      claim(ethAddress, (error) => {
         if (error){
           console.log(error)
         } else {
-          let record = {
-            txHash: transactionHash,
-            value: (parseFloat(result)/1000000000000000000).toFixed(2).toString(),
-            isPositive: true,
-            storeName: "",
-            action: "Settle Review"
-          }
-          writeHistory(record, (flag) => {
-            if (flag){
-              console.log("history logged")
-            }
-          })
-          console.log("Deposits are claimed!")
+          console.log("Deposits and rewards are claimed!")
           console.log("Amount: " + result)
         }
       })
+    } else {
+      console.log("Nothing to claim")
     }
   })
   /* update storeSelected, storeName, storeId */
@@ -224,7 +237,6 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
 
 export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => dispatch => {
   if (totalReviewAmount == 0){
-    dispatch(updateMyReviewIndex(-1))
     dispatch(readReviewEnd())
   } else {
     dispatch(readReviewStart())
@@ -259,7 +271,7 @@ export const addNewReviewAction = (content, score, reviewer) => dispatch => {
   let review = {
     reviewer,
     content,
-    score,
+    score: score/20,
     upvote: 0,
     downvote: 0,
     time: 'pending...',

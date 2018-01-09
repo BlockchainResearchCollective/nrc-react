@@ -27,7 +27,11 @@ exports.getStoreNameFromUrl = function(url){
 exports.getStoreIdFromUrl = function(url){
 	var results = url.split("/");
 	var storeLatLng = results[7].split('!');
-	return results[5].split('+').join('') + "--" + storeLatLng[storeLatLng.length - 2].slice(2).match(/[0-9]+\.[0-9]{3}/g) + "--" + storeLatLng[storeLatLng.length - 1].slice(2).match(/[0-9]+\.[0-9]{3}/g);
+	return results[5] + "--" + storeLatLng[storeLatLng.length - 2].slice(2).match(/[0-9]+\.[0-9]{3}/g) + "--" + storeLatLng[storeLatLng.length - 1].slice(2).match(/[0-9]+\.[0-9]{3}/g);
+}
+
+exports.storeIdToStoreName = function(storeId){
+  return decodeURIComponent(storeId.split("--")[0].split('+').join(' '));
 }
 
 exports.timeConverter = function(UNIX_timestamp){
