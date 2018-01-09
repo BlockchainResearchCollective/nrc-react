@@ -33,7 +33,7 @@ const HomeAverageRating = (props) => {
   return (
     <div>
       <span style={ratingStyle} >{parseScore(props.storeOverallScore)}</span>
-      <Rate allowHalf disabled defaultValue={scaleConverter(parseFloat(props.storeOverallScore)/20)} />
+      <Rate allowHalf disabled value={scaleConverter(parseFloat(props.storeOverallScore)/20)} />
       <span style={reviewNumberStyle} >| {props.reviewAmount} Reviews</span>
     </div>
   )

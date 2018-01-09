@@ -79,7 +79,7 @@ class ActionHistory extends React.Component {
       <div>
         <div style={headStyle}>
           <div style={backgroundStyle}>
-            <Rate allowHalf disabled defaultValue={scaleConverter(parseFloat(this.props.credibility))} />
+            <Rate allowHalf disabled value={scaleConverter(parseFloat(this.props.credibility))} />
             <h3>Your Credibility: <span style={{color: '#f49e42'}}>{this.props.credibility}</span></h3>
           </div>
         </div>

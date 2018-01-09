@@ -122,7 +122,7 @@ class HomeReviewListItem extends React.Component {
         <div style={divStyle}>
           <div style={titleStyle}>
             <span>{this.props.review.reviewer}: </span>
-            <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled defaultValue={parseInt(this.props.review.score, 10)} />
+            <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled value={parseInt(this.props.review.score, 10)} />
           </div>
           <div style={timeStyle}>
             {this.props.review.time}

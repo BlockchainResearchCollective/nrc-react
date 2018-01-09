@@ -56,6 +56,10 @@ class Home extends React.Component {
     clearInterval(this.timer)
   }
 
+  handleRefresh = (e) => {
+    e.preventDefault()
+    this.props.dispatch(initialize(window.location.href, this.props.profile.ethAddress))
+  }
   handleHome = (e) => {
     e.preventDefault()
     this.setState({
@@ -92,6 +96,7 @@ class Home extends React.Component {
       <div>
         <HomeHeader
           email = {this.props.profile.email}
+          handleRefresh = {this.handleRefresh}
           handleHome = {this.handleHome}
           handleWallet = {this.handleWallet}
           handleActionHistory = {this.handleActionHistory}
