@@ -110,6 +110,7 @@ export const initialize = (url, ethAddress) => dispatch => {
           dispatch(updateOverallScore(0))
           /* update reviewAmount */
           dispatch(updateReviewAmount(0))
+          dispatch(updateMyReviewIndex(-1))
           dispatch(updateStoreExist(false))
           dispatch(initializeEnd())
         }
@@ -171,6 +172,7 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
       record.txHash = transactionHash
       writeHistory(record, (flag) => {
         if (flag){
+          dispatch(alertMessage("Write review success!"))
           console.log("history logged")
         }
       })
@@ -240,6 +242,7 @@ export const voteReviewAction = (storeId, reviewer, isUpvote, record) => dispatc
       record.txHash = transactionHash
       writeHistory(record, (flag) => {
         if (flag){
+          dispatch(alertMessage("Vote review success!"))
           console.log("history logged")
         }
       })
