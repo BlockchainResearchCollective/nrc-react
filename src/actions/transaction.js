@@ -7,7 +7,8 @@ import {
 } from './ActionTypes'
 import { getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter } from '../service/util'
 import {
-  storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview, readVoted
+  storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview, readVoted,
+  checkVetting, settle, claim, readSettlement
 } from '../service/blockchain'
 import { writeHistory, addressToUsername } from '../service/backend'
 import { alertMessage } from './system'
@@ -81,6 +82,46 @@ export const initialize = (url, ethAddress) => dispatch => {
   console.log(url)
   console.log(getStoreIdFromUrl(url))
   console.log(getStoreNameFromUrl(url))
+  /* settle review */
+  checkVetting(ethAddress, (result) => {
+    if (result){
+      console.log("There is no review to settle and claim")
+    } else {
+      console.log("There are reviews to settle and claim")
+      settle(ethAddress, (error) => {
+        if (error){
+          console.log(error)
+        } else {
+          console.log("Vetting transactions are settled!")
+        }
+      })
+    }
+  })
+  /* claim deposit and reward */
+  readSettlement(ethAddress, (result) => {
+    if (parseFloat(result) > 0){
+      claim(ethAddress, (error, transactionHash) => {
+        if (error){
+          console.log(error)
+        } else {
+          let record = {
+            txHash: transactionHash,
+            value: (parseFloat(result)/1000000000000000000).toFixed(2).toString(),
+            isPositive: true,
+            storeName: "",
+            action: "Settle Review"
+          }
+          writeHistory(record, (flag) => {
+            if (flag){
+              console.log("history logged")
+            }
+          })
+          console.log("Deposits are claimed!")
+          console.log("Amount: " + result)
+        }
+      })
+    }
+  })
   /* update storeSelected, storeName, storeId */
   var storeName = getStoreNameFromUrl(url)
   var storeId = getStoreIdFromUrl(url)

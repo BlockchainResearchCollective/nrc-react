@@ -7,7 +7,7 @@ import {
   REQUEST_SIGN_UP, RESPONSE_SIGN_UP,
 } from './ActionTypes'
 import { URL } from '../constants'
-import { getBalance, checkVetting, settle, claim, readSettlement } from '../service/blockchain'
+import { getBalance } from '../service/blockchain'
 import { alertMessage } from './system'
 import { setUserId, writeHistory } from '../service/backend'
 
@@ -112,44 +112,6 @@ export const checkLoginStatus = () => dispatch => {
 	.then(response => response.json())
 	.then(json => {
 		setUserId(json.profile._id)
-		checkVetting(json.profile.ethAddress, (result) => {
-			if (result){
-				console.log("There is no review to settle and claim")
-			} else {
-				console.log("There are reviews to settle and claim")
-				settle(json.profile.ethAddress, (error) => {
-					if (error){
-						console.log(error)
-					} else {
-						console.log("Vetting transactions are settled!")
-					}
-				})
-			}
-		})
-		readSettlement(json.profile.ethAddress, (result) => {
-			if (parseFloat(result) > 0){
-				claim(json.profile.ethAddress, (error, transactionHash) => {
-					if (error){
-						console.log(error)
-					} else {
-						let record = {
-							txHash: transactionHash,
-							value: (parseFloat(result)/1000000000000000000).toFixed(2).toString(),
-							isPositive: true,
-							storeName: "",
-							action: "Settle Review"
-						}
-						writeHistory(record, (flag) => {
-							if (flag){
-								console.log("history logged")
-							}
-						})
-						console.log("Deposits are claimed!")
-						console.log("Amount: " + result)
-					}
-				})
-			}
-		})
 		dispatch(responseLoginStatusAction(json.status, json.profile))
 	})
 }
