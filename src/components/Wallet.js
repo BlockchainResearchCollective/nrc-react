@@ -29,6 +29,10 @@ const hrStyle = {
   color: '#dddddd',
   width: '95%',
 }
+const noRecordStyle = {
+  textAlign: 'center',
+  color: 'white'
+}
 const paginationStyle = {
   textAlign: 'center'
 }
@@ -81,14 +85,21 @@ class Wallet extends React.Component {
               />
             </div>
           )}
-          <div style={paginationStyle}>
-            <Pagination
-              pageSize={5}
-              total={this.state.recordAmount}
-              size='small'
-              onChange={this.handleChange}
-            />
-          </div>
+          { this.state.recordAmount==0 &&
+            <div>
+              <p style={noRecordStyle}>== No Record ==</p>
+            </div>
+          }
+          { this.state.recordAmount!=0 &&
+            <div style={paginationStyle}>
+              <Pagination
+                pageSize={5}
+                total={this.state.recordAmount}
+                size='small'
+                onChange={this.handleChange}
+              />
+            </div>
+          }
         </div>
       </div>
     )

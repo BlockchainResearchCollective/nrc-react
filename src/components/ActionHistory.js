@@ -98,14 +98,16 @@ class ActionHistory extends React.Component {
               <p style={noRecordStyle}>== No Record ==</p>
             </div>
           }
-          <div style={paginationStyle}>
-            <Pagination
-              pageSize={5}
-              total={this.state.recordAmount}
-              size='small'
-              onChange={this.handleChange}
-            />
-          </div>
+          { this.state.recordAmount!=0 &&
+            <div style={paginationStyle}>
+              <Pagination
+                pageSize={5}
+                total={this.state.recordAmount}
+                size='small'
+                onChange={this.handleChange}
+              />
+            </div>
+          }
         </div>
       </div>
     )
