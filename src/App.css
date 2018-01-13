@@ -39,3 +39,12 @@
   color: #7f7993 !important;
   font-size: 12px !important;
 }
+
+.ant-upload-select-picture-card {
+	width: 95px !important;
+	height: 95px !important;
+}
+.ant-upload-list-item {
+	width: 95px !important;
+	height: 95px !important;
+}

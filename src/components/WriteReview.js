@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Button, Rate } from 'antd'
+import { Form, Input, Button, Rate, Upload, Icon, Modal } from 'antd'
 import { connect } from 'react-redux'
 import { writeReviewAction } from '../actions/transaction'
 
@@ -12,6 +12,9 @@ class WriteReviewForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: []
     }
   }
 
@@ -27,7 +30,11 @@ class WriteReviewForm extends React.Component {
           originalReviewer: this.props.ethAddress,
           action: "Write Review"
         }
-        this.props.dispatch(writeReviewAction(this.props.storeId, values.content, parseInt(values.rate)*20, record))
+        if (values.upload.length != 0){
+          console.log("process upload files")
+        } else {
+          /* this.props.dispatch(writeReviewAction(this.props.storeId, values.content, parseInt(values.rate)*20, record)) */
+        }
       }
     })
   }
@@ -38,6 +45,23 @@ class WriteReviewForm extends React.Component {
     }
     callback()
   }
+
+  normFile = (e) => {
+    console.log('Upload event:', e)
+    this.setState({
+      fileList: e.fileList
+    })
+    return e && e.fileList
+  }
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  handleCancel = () => this.setState({ previewVisible: false })
 
   componentDidMount = () => {
     if (this.props.myReviewIndex != -1){
@@ -67,6 +91,24 @@ class WriteReviewForm extends React.Component {
             <TextArea rows={5} placeholder="Review Content" />
           )}
         </FormItem>
+        <FormItem>
+          {getFieldDecorator('upload', {
+            valuePropName: 'fileList',
+            getValueFromEvent: this.normFile,
+          })(
+            <Upload name="logo" action="#" listType="picture-card" onPreview={this.handlePreview}>
+              { this.state.fileList.length < 3 &&
+                <div>
+                  <Icon type="plus" />
+                  <div className="ant-upload-text">Upload</div>
+                </div>
+              }
+            </Upload>
+          )}
+        </FormItem>
+        <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
+        </Modal>
         { this.props.myReviewIndex==-1 &&
           <FormItem>
             <Button type="primary" htmlType="submit" className="login-form-button">
