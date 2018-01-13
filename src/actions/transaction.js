@@ -1,6 +1,6 @@
 import {
   PROCESS_START, PROCESS_END, INITIALIZE_START, INITIALIZE_END,
-  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY, REVIEW_AMOUNT_PLUS_ONE,
+  CHECK_URL, UPDATE_IMAGE, UPDATE_CREDIBILITY,
   UPDATE_STORE_EXIST, UPDATE_OVERALL_SCORE, UPDATE_REVIEW_AMOUNT,
   UPDATE_ALL_REVIEWS, UPDATE_MY_REVIEW_INDEX,
   READ_REVIEWS_START, READ_REVIEWS_END, ADD_NEW_REVIEW
@@ -53,9 +53,6 @@ export const updateOverallScore = (storeOverallScore) => ({
 export const updateReviewAmount = (reviewAmount) => ({
 	type: UPDATE_REVIEW_AMOUNT,
   reviewAmount
-})
-export const reviewAmountPlusOne = () => ({
-  type: REVIEW_AMOUNT_PLUS_ONE
 })
 export const updateAllReviews = (reviews) => ({
   type: UPDATE_ALL_REVIEWS,
@@ -277,10 +274,8 @@ export const addNewReviewAction = (content, score, reviewer) => dispatch => {
     time: 'pending...',
     voted: false
   }
-  dispatch(updateOverallScore(score))
   addressToUsername(reviewer, (reviewer) => {
     review.reviewer = reviewer
-    dispatch(reviewAmountPlusOne())
     dispatch(addNewReview(review))
   })
 }
