@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Rate, Icon } from 'antd'
+import { Rate, Icon, Modal } from 'antd'
 import { voteReviewAction } from '../actions/transaction'
 
 const divStyle = {
@@ -11,7 +11,6 @@ const divStyle = {
 
 const hrStyle = {
   backgroundColor: 'grey',
-  width: '95%',
   height: '1px',
   border: 'none'
 }
@@ -36,7 +35,10 @@ const contentStyle = {
 
 const voteStyle = {
   color: 'white',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  position: 'absolute',
+  bottom: '0px',
+  right: '0px'
 }
 
 const upvoteStyle = {
@@ -49,7 +51,10 @@ const downvoteStyle = {
 
 const disabledVoteStyle = {
   color: 'grey',
-  cursor: 'not-allowed'
+  cursor: 'not-allowed',
+  position: 'absolute',
+  bottom: '0px',
+  right: '0px'
 }
 
 class HomeReviewListItem extends React.Component {
@@ -60,6 +65,10 @@ class HomeReviewListItem extends React.Component {
       upvote: 0,
       downvote: 0,
       voted: true,
+      content: "",
+      imageList: [],
+      previewVisible: false,
+      previewImage: ""
     }
   }
 
@@ -69,6 +78,19 @@ class HomeReviewListItem extends React.Component {
       downvote: parseInt(this.props.review.downvote),
       voted: this.props.voted,
     })
+    try {
+      let content = JSON.parse(this.props.review.content).text
+      let imageList = JSON.parse(this.props.review.content).images
+      this.setState({
+        content,
+        imageList
+      })
+    }
+    catch(error) {
+      this.setState({
+        content: this.props.review.content
+      })
+    }
   }
 
   handleUpvoteClick = () => {
@@ -115,6 +137,14 @@ class HomeReviewListItem extends React.Component {
     }
   }
 
+  handleCancel = () => this.setState({ previewVisible: false })
+  handlePreview = (url) => {
+    this.setState({
+      previewImage: url,
+      previewVisible: true,
+    })
+  }
+
   render(){
     return(
       <div>
@@ -128,8 +158,16 @@ class HomeReviewListItem extends React.Component {
             {this.props.review.time}
           </div>
           <p style={contentStyle}>
-            {this.props.review.content}
+            {this.state.content}
           </p>
+          <div>
+            {this.state.imageList.map((url) =>
+              <img style={{width:'70px', height:'70px', padding:'5px', cursor: 'zoom-in'}} src={url} onClick={() => this.handlePreview(url)}/>
+            )}
+            {this.state.imageList.length == 0 &&
+              <div style={{height: '10px'}}></div>
+            }
+          </div>
           { this.state.voted &&
             <div style={disabledVoteStyle}>
               <span style={upvoteStyle} >{this.state.upvote} <Icon type="like-o" /></span>
@@ -142,6 +180,9 @@ class HomeReviewListItem extends React.Component {
               <span style={downvoteStyle} onClick={this.handleDownvoteClick} >{this.state.downvote} <Icon type="dislike-o" /></span>
             </div>
           }
+          <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel} zIndex={10000} >
+            <img alt="image" style={{ width: '100%' }} src={this.state.previewImage} />
+          </Modal>
         </div>
       </div>
     )

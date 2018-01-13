@@ -5,7 +5,6 @@ import { Pagination, Spin } from 'antd'
 
 const hrStyle = {
   backgroundColor: 'white',
-  width: '95%',
   height: '1px',
   border: 'none'
 }

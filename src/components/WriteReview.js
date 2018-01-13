@@ -114,7 +114,7 @@ class WriteReviewForm extends React.Component {
             </Upload>
           )}
         </FormItem>
-        <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+        <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel} zIndex={10000} >
           <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
         </Modal>
         { this.props.myReviewIndex==-1 &&
