@@ -73,9 +73,19 @@ class WriteReviewForm extends React.Component {
 
   componentDidMount = () => {
     if (this.props.myReviewIndex != -1){
+      try {
+        let content = (JSON.parse(this.props.reviews[this.props.myReviewIndex].content)).text
+        this.props.form.setFieldsValue({
+          content
+        })
+      }
+      catch(error) {
+        this.props.form.setFieldsValue({
+          content: this.props.reviews[this.props.myReviewIndex].content
+        })
+      }
       this.props.form.setFieldsValue({
-        rate: this.props.reviews[this.props.myReviewIndex].score,
-        content: this.props.reviews[this.props.myReviewIndex].content
+        rate: this.props.reviews[this.props.myReviewIndex].score
       })
     }
   }
