@@ -30,11 +30,19 @@ class WriteReviewForm extends React.Component {
           originalReviewer: this.props.ethAddress,
           action: "Write Review"
         }
-        if (values.upload.length != 0){
-          console.log("process upload files")
-        } else {
-          /* this.props.dispatch(writeReviewAction(this.props.storeId, values.content, parseInt(values.rate)*20, record)) */
+        let content = {
+          text: values.content,
+          images: []
         }
+        if (values.upload.length != 0){
+          for (let i=0; i<values.upload.length; i++){
+            if (values.upload[i].response.url){
+              content.images.push(values.upload[i].response.url)
+            }
+          }
+        }
+        console.log(JSON.stringify(content))
+        this.props.dispatch(writeReviewAction(this.props.storeId, JSON.stringify(content), parseInt(values.rate)*20, record))
       }
     })
   }
@@ -96,7 +104,7 @@ class WriteReviewForm extends React.Component {
             valuePropName: 'fileList',
             getValueFromEvent: this.normFile,
           })(
-            <Upload name="logo" action="#" listType="picture-card" onPreview={this.handlePreview}>
+            <Upload name="logo" action="http://188.166.190.168:3001/upload" listType="picture-card" onPreview={this.handlePreview}>
               { this.state.fileList.length < 3 &&
                 <div>
                   <Icon type="plus" />
