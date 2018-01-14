@@ -242,9 +242,6 @@ export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => 
     let counter = totalReviewAmount
     for (let i=0; i<totalReviewAmount; i++){
       readReview(storeId, i, (review) => {
-        if (ethAddress == review.reviewerAddress){
-          dispatch(updateMyReviewIndex(i))
-        }
         review.time = timeConverter(parseInt(review.timestamp) * 1000)
         review.score = parseInt(review.score)/20
         readVoted(storeId, ethAddress, review.reviewerAddress, (voted) => {
@@ -254,6 +251,11 @@ export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => 
             reviews.push(review)
             counter--
             if (counter==0){
+              for (let i=0; i<totalReviewAmount; i++){
+                if (ethAddress == reviews[i].reviewerAddress){
+                  dispatch(updateMyReviewIndex(i))
+                }
+              }
               dispatch(updateAllReviews(reviews))
               dispatch(readReviewEnd())
             }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Input, Button, Rate, Upload, Icon, Modal } from 'antd'
 import { connect } from 'react-redux'
 import { writeReviewAction } from '../actions/transaction'
+import { URL } from '../constants'
 
 const FormItem = Form.Item
 
@@ -36,8 +37,10 @@ class WriteReviewForm extends React.Component {
         }
         if (values.upload.length != 0){
           for (let i=0; i<values.upload.length; i++){
-            if (values.upload[i].response.url){
-              content.images.push(values.upload[i].response.url)
+            if (values.upload[i].response && values.upload[i].response.hash){
+              content.images.push(values.upload[i].response.hash)
+            } else if (values.upload[i].name){
+              content.images.push(values.upload[i].name)
             }
           }
         }
@@ -74,12 +77,25 @@ class WriteReviewForm extends React.Component {
   componentDidMount = () => {
     if (this.props.myReviewIndex != -1){
       try {
-        let content = (JSON.parse(this.props.reviews[this.props.myReviewIndex].content)).text
+        let content = JSON.parse(this.props.reviews[this.props.myReviewIndex].content).text
         this.props.form.setFieldsValue({
           content
         })
+        let imageList = []
+        JSON.parse(this.props.reviews[this.props.myReviewIndex].content).images.map((hash, index) => {
+          imageList.push({
+            uid: index,
+            name: hash,
+            status: 'done',
+            url: `${URL}/uploads/${hash}`
+          })
+        })
+        this.props.form.setFieldsValue({
+          upload: imageList
+        })
       }
       catch(error) {
+        console.log(error)
         this.props.form.setFieldsValue({
           content: this.props.reviews[this.props.myReviewIndex].content
         })
@@ -114,7 +130,7 @@ class WriteReviewForm extends React.Component {
             valuePropName: 'fileList',
             getValueFromEvent: this.normFile,
           })(
-            <Upload name="logo" action="http://188.166.190.168:3001/upload" listType="picture-card" onPreview={this.handlePreview}>
+            <Upload name="logo" action={`${URL}/upload`} listType="picture-card" onPreview={this.handlePreview}>
               { this.state.fileList.length < 3 &&
                 <div>
                   <Icon type="plus" />

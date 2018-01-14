@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Rate, Icon, Modal } from 'antd'
 import { voteReviewAction } from '../actions/transaction'
+import { URL } from '../constants'
 
 const divStyle = {
   paddingLeft: '20px',
@@ -161,8 +162,8 @@ class HomeReviewListItem extends React.Component {
             {this.state.content}
           </p>
           <div>
-            {this.state.imageList.map((url) =>
-              <img style={{width:'70px', height:'70px', padding:'5px', cursor: 'zoom-in'}} src={url} onClick={() => this.handlePreview(url)}/>
+            {this.state.imageList.map((hash) =>
+              <img style={{width:'70px', height:'70px', padding:'5px', cursor: 'zoom-in'}} src={`${URL}/uploads/${hash}`} onClick={() => this.handlePreview(`${URL}/uploads/${hash}`)}/>
             )}
             {this.state.imageList.length == 0 &&
               <div style={{height: '10px'}}></div>
