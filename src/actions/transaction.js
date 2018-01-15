@@ -8,7 +8,7 @@ import {
 import { getStoreNameFromUrl, getStoreIdFromUrl, searchImage, timeConverter, storeIdToStoreName } from '../service/util'
 import {
   storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview, readVoted,
-  checkVetting, settle, claim, readSettlement, calculateReward
+  checkVetting, settle, claim, readSettlement, calculateReward, reviewIndexPlusOneByReviewer
 } from '../service/blockchain'
 import { writeHistory, addressToUsername } from '../service/backend'
 import { alertMessage } from './system'
@@ -210,24 +210,77 @@ export const createStoreAction = (storeId, record) => dispatch => {
   })
 }
 
+export const writeReviewRefreshCheck = (storeId, reviewer, last_update) => dispatch => {
+  console.log("last_update: " + last_update)
+  var refreshCheck = setInterval( () => {
+    reviewIndexPlusOneByReviewer(storeId, reviewer, (index) => {
+      if (index!=0){
+        if (last_update==0){
+          dispatch(alertMessage("Write review success!"))
+          clearInterval(refreshCheck)
+          dispatch(processEnd())
+          dispatch(initialize(window.location.href, reviewer))
+        } else {
+          readReview(storeId, index-1, (review) => {
+            console.log("last_update: " + last_update)
+            console.log("review:")
+            console.log(reviewer)
+            if (review.timestamp != last_update){
+              dispatch(alertMessage("Write review success!"))
+              clearInterval(refreshCheck)
+              dispatch(processEnd())
+              dispatch(initialize(window.location.href, reviewer))
+            }
+          })
+        }
+      }
+    })
+  }, 3000)
+}
+
 export const writeReviewAction = (storeId, commment, score, record) => dispatch => {
   dispatch(processStart())
-  writeReview(storeId, commment, score, (error, transactionHash) => {
-    if (error){
-      console.log(error)
-      dispatch(alertMessage("Write review failed!"))
-      dispatch(processEnd())
+  let last_update = 0
+  reviewIndexPlusOneByReviewer(storeId, record.originalReviewer, (index) => {
+    if (index!=0){
+      /* for old review */
+      readReview(storeId, index-1, (review) => {
+        last_update = review.timestamp
+        writeReview(storeId, commment, score, 0, (error, transactionHash) => {
+          if (error){
+            console.log(error)
+            dispatch(alertMessage("Write review failed!"))
+            dispatch(processEnd())
+          } else {
+            /* write history */
+            record.txHash = transactionHash
+            writeHistory(record, (flag) => {
+              if (flag){
+                console.log("history logged")
+              }
+            })
+            dispatch(writeReviewRefreshCheck(storeId, record.originalReviewer, last_update))
+          }
+        })
+      })
     } else {
-      dispatch(addNewReviewAction(commment, score, record.originalReviewer))
-      /* write history */
-      record.txHash = transactionHash
-      writeHistory(record, (flag) => {
-        if (flag){
-          dispatch(alertMessage("Write review success!"))
-          console.log("history logged")
+      /* for new review */
+      writeReview(storeId, commment, score, 10000000000000000, (error, transactionHash) => {
+        if (error){
+          console.log(error)
+          dispatch(alertMessage("Write review failed!"))
+          dispatch(processEnd())
+        } else {
+          /* write history */
+          record.txHash = transactionHash
+          writeHistory(record, (flag) => {
+            if (flag){
+              console.log("history logged")
+            }
+          })
+          dispatch(writeReviewRefreshCheck(storeId, record.originalReviewer, last_update))
         }
       })
-      dispatch(processEnd())
     }
   })
 }

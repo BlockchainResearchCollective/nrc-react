@@ -46,6 +46,7 @@ class WriteReviewForm extends React.Component {
         }
         console.log(JSON.stringify(content))
         this.props.dispatch(writeReviewAction(this.props.storeId, JSON.stringify(content), parseInt(values.rate)*20, record))
+        this.props.handleBack(e)
       }
     })
   }
