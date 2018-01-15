@@ -306,7 +306,10 @@ export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => 
             if (counter==0){
               for (let i=0; i<totalReviewAmount; i++){
                 if (ethAddress == reviews[i].reviewerAddress){
-                  dispatch(updateMyReviewIndex(i))
+                  let temp = review[0]
+                  review[0] = review[i]
+                  review[i] = temp
+                  dispatch(updateMyReviewIndex(0))
                 }
               }
               dispatch(updateAllReviews(reviews))
