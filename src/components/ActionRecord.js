@@ -40,17 +40,26 @@ const ActionRecord = (props) => {
   return (
     <div style={divStyle}>
       <div style={amountStyle}>
-        { props.record.action==='Settle Review' &&
-          <p style={{color: 'red'}}>Settle Review</p>
+        { props.record.status==='Authentic Review' &&
+          <p style={{color: 'green'}}>Authentic Review</p>
         }
-        { props.record.action==='Write Review' &&
-          <p style={{color: 'purple'}}>Write Review</p>
+        { props.record.status==='Authentic Vote' &&
+          <p style={{color: 'green'}}>Authentic Vote</p>
         }
-        { props.record.action==='Vote Review' &&
-          <p style={{color: 'brown'}}>Vote Review</p>
+        { props.record.status==='Inauthentic Review' &&
+          <p style={{color: 'red'}}>Inauthentic Review</p>
         }
-        { props.record.action==='Create Store' &&
-          <p style={{color: 'green'}}>Create Store</p>
+        { props.record.status==='Inauthentic Vote' &&
+          <p style={{color: 'red'}}>Inauthentic Vote</p>
+        }
+        { props.record.status==='Store Created' &&
+          <p style={{color: 'purple'}}>Store Created</p>
+        }
+        { props.record.status==='Processing Review' &&
+          <p style={{color: 'blue'}}>Processing Review</p>
+        }
+        { props.record.status==='Processing Vote' &&
+          <p style={{color: 'blue'}}>Processing Vote</p>
         }
       </div>
       { props.record.storeName &&

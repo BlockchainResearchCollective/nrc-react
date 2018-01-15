@@ -120,7 +120,7 @@ export const initialize = (url, ethAddress) => dispatch => {
                 value: record.value,
                 isPositive: record.positive,
                 storeName: storeIdToStoreName(record.storeId),
-                action: "Settle Review",
+                action: "Settle Vote",
                 status: record.status
               }
               /* we should not add others' history, but just for demo purpose */

@@ -41,12 +41,12 @@ const WalletRecord = (props) => {
     <div style={divStyle}>
       { props.record.isPositive &&
         <div style={amountStyle}>
-          <p style={{color: 'red'}}>+ {props.record.value} Ether</p>
+          <p style={{color: 'green'}}>+ {props.record.value} Ether</p>
         </div>
       }
       { !props.record.isPositive &&
         <div style={amountStyle}>
-          <p style={{color: 'green'}}>- {props.record.value} Ether</p>
+          <p style={{color: 'red'}}>- {props.record.value} Ether</p>
         </div>
       }
       <div style={titleStyle}>
