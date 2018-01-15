@@ -106,10 +106,11 @@ class HomeReviewListItem extends React.Component {
       })
       let record = {
         storeName: this.props.storeName,
-        value: '0.00',
+        value: '0.001',
         isPositive: false,
         originalReviewer: this.props.review.reviewerAddress,
-        action: "Vote Review"
+        action: "Vote Review",
+        status: "Processing Vote"
       }
       /* vote review */
       this.props.dispatch(voteReviewAction(this.props.storeId, this.props.review.reviewerAddress, true, record))
@@ -128,10 +129,11 @@ class HomeReviewListItem extends React.Component {
       })
       let record = {
         storeName: this.props.storeName,
-        value: '0.00',
+        value: '0.001',
         isPositive: false,
         originalReviewer: this.props.review.reviewerAddress,
-        action: "Vote Review"
+        action: "Vote Review",
+        status: "Processing Vote"
       }
       /* vote review */
       this.props.dispatch(voteReviewAction(this.props.storeId, this.props.review.reviewerAddress, false, record))

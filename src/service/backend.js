@@ -23,6 +23,23 @@ exports.writeHistory = function(record, callback){
   xhttp.send(JSON.stringify(record));
 }
 
+exports.writeOthersHistory = function(address, record, callback){
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+		if (this.readyState === 4) {
+      if (this.status === 200){
+        callback(true);
+      } else {
+        callback(false);
+      }
+		}
+	}
+	xhttp.open('POST', 'http://188.166.190.168:3001/history/address/' + address, true);
+  xhttp.withCredentials = true;
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.send(JSON.stringify(record));
+}
+
 exports.readHistory = function(pageNum, callback){
   var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {

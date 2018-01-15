@@ -18,10 +18,11 @@ const CreateStore = (props) => {
   const handleClick = () => {
     let record = {
       storeName: props.storeName,
-      value: '0.01',
+      value: '0.010',
       isPositive: false,
       originalReviewer: props.ethAddress,
-      action: "Create Store"
+      action: "Create Store",
+      status: "Store Created"
     }
     props.dispatch(createStoreAction(props.storeId, record))
   }

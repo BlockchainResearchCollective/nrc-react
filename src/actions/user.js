@@ -9,6 +9,7 @@ import {
 import { URL } from '../constants'
 import { getBalance } from '../service/blockchain'
 import { alertMessage } from './system'
+import { initializeStart, initializeEnd } from './transaction'
 import { setUserId, writeHistory } from '../service/backend'
 
 /* User Action Creators*/
@@ -117,6 +118,7 @@ export const checkLoginStatus = () => dispatch => {
 }
 
 export const login = (username, password) => dispatch => {
+	dispatch(initializeStart())
 	dispatch(requestLoginAction(username))
 	return fetch(`${URL}/user/login`, {
 		method: 'POST',
@@ -135,6 +137,7 @@ export const login = (username, password) => dispatch => {
 			dispatch(checkLoginStatus())
 		} else {
 			dispatch(alertMessage("Incorrect username or password!"))
+			dispatch(initializeEnd())
 		}
 	})
 }

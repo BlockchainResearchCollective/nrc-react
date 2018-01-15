@@ -26,16 +26,17 @@ class WriteReviewForm extends React.Component {
         console.log('Received values of form: ', values)
         let record = {
           storeName: this.props.storeName,
-          value: '0.01',
+          value: '0.011',
           isPositive: false,
           originalReviewer: this.props.ethAddress,
-          action: "Write Review"
+          action: "Write Review",
+          status: "Processing Review"
         }
         let content = {
           text: values.content,
           images: []
         }
-        if (values.upload.length != 0){
+        if (values.upload && values.upload.length != 0){
           for (let i=0; i<values.upload.length; i++){
             if (values.upload[i].response && values.upload[i].response.hash){
               content.images.push(values.upload[i].response.hash)

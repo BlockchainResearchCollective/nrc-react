@@ -17,7 +17,7 @@ else{
 const store_registry_abi =
 [{"constant":true,"inputs":[],"name":"escrowAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_placeID","type":"string"}],"name":"addStore","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"registry","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_placeID","type":"string"}],"name":"getStoreAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_placeID","type":"string"}],"name":"storeExist","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"store_address","type":"address"}],"name":"LogStoreCreated","type":"event"}]
 const escrow_abi =
-[{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"activeVettingIndexListByUser","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_claimer","type":"address"}],"name":"claim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"credibility","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_index","type":"uint256"}],"name":"upvotersLengthByVetting","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_index","type":"uint256"}],"name":"downvotersLengthByVetting","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_reviewer","type":"address"}],"name":"settle","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"storeRegistry","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"}],"name":"noVettingReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_reviewer","type":"address"}],"name":"noMaturedVetting","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_voter","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_is_upvote","type":"bool"}],"name":"vote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_reviewer","type":"address"}],"name":"activeVettingIndexListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"vettingIndex","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"settlements","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"}],"name":"review","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"vettings","outputs":[{"name":"store","type":"address"},{"name":"reviewer","type":"address"},{"name":"deposit","type":"uint256"},{"name":"last_update","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_registry","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"}]
+[{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"activeVettingIndexListByUser","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_claimer","type":"address"}],"name":"claim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_vindex","type":"uint256"},{"name":"_index","type":"uint256"}],"name":"upvoterByVetting","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"credibility","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_index","type":"uint256"}],"name":"upvotersLengthByVetting","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_index","type":"uint256"}],"name":"downvotersLengthByVetting","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_reviewer","type":"address"}],"name":"settle","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"storeRegistry","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"}],"name":"noVettingReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_reviewer","type":"address"}],"name":"noMaturedVetting","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_voter","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_is_upvote","type":"bool"}],"name":"vote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_vindex","type":"uint256"},{"name":"_index","type":"uint256"}],"name":"downvoterByVetting","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_reviewer","type":"address"}],"name":"activeVettingIndexListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"vettingIndex","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"settlements","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_store","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"}],"name":"review","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"vettings","outputs":[{"name":"store","type":"address"},{"name":"reviewer","type":"address"},{"name":"deposit","type":"uint256"},{"name":"last_update","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_registry","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"}]
 const store_abi =
 [{"constant":true,"inputs":[],"name":"totalReviewAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"escrowAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"reviewIndexPlusOneByReviewer","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"placeID","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_voter","type":"address"},{"name":"_reviewer","type":"address"},{"name":"_is_upvote","type":"bool"},{"name":"_credibility","type":"uint256"}],"name":"voteReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"voted","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"},{"name":"_uploader","type":"address"}],"name":"addReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalScore","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_reviewer","type":"address"}],"name":"getImpact","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"allReviews","outputs":[{"name":"comment","type":"string"},{"name":"score","type":"uint256"},{"name":"uploader","type":"address"},{"name":"upvote","type":"uint256"},{"name":"downvote","type":"uint256"},{"name":"last_update","type":"uint256"},{"name":"positive_impact","type":"uint256"},{"name":"negative_impact","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_placeID","type":"string"},{"name":"_escrowAddress","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"voter","type":"address"},{"indexed":true,"name":"reviewer","type":"address"},{"indexed":false,"name":"is_upvote","type":"bool"}],"name":"LogVoteAdded","type":"event"}]
 
@@ -27,8 +27,8 @@ const escrow_address = "0xaeade1dc5fb3b39e7a95e1ad631fcc63a309c9ff";
 */
 
 /* demo address, 10 minutes for settlement */
-const store_registry_address = "0x665498baf04ff37908c8bb9cf0f1329e464ffc58";
-const escrow_address = "0x4dae3413fe40b5ecc5c5f4d7a7f1d088bdafd6a3";
+const store_registry_address = "0xd7b3a452cbba85df0024a12c2b0d2d4b94d92fb2";
+const escrow_address = "0xf38d6628b8ca54c46c0a45fd4e84faebcf83a1cd";
 
 const store_registry_instance = new web3.eth.Contract(store_registry_abi, store_registry_address);
 const escrow_instance = new web3.eth.Contract(escrow_abi, escrow_address);
@@ -381,57 +381,174 @@ const readVettings = (index, cb) => {
 		}
 	);
 }
+const readVotersLengthByVetting = (index, cb) => {
+	escrow_instance.methods.upvotersLengthByVetting(index).call().then(upvoters_length => {
+		escrow_instance.methods.downvotersLengthByVetting(index).call().then(downvoters_length => {
+			cb(upvoters_length, downvoters_length);
+		}).catch(
+			// Log the rejection reason
+		 (reason) => {
+				console.log('Handle rejected promise ('+reason+') here.');
+				readVotersLengthByVetting(index, cb);
+			}
+		);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readVotersLengthByVetting(index, cb);
+		}
+	);
+}
+const readUpvoterByVetting = (v_index, index, cb) => {
+	escrow_instance.methods.upvoterByVetting(v_index, index).call().then(address => {
+		cb(address);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readUpvoterByVetting(v_index, index, cb);
+		}
+	);
+}
+const readDownvoterByVetting = (v_index, index, cb) => {
+	escrow_instance.methods.downvoterByVetting(v_index, index).call().then(address => {
+		cb(address);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readDownvoterByVetting(v_index, index, cb);
+		}
+	);
+}
+const readVotersByVetting = (index, cb) => {
+	escrow_instance.methods.upvotersLengthByVetting(index).call().then(upvoters_length => {
+		escrow_instance.methods.downvotersLengthByVetting(index).call().then(downvoters_length => {
+			cb(upvoters_length, downvoters_length);
+		}).catch(
+			// Log the rejection reason
+		 (reason) => {
+				console.log('Handle rejected promise ('+reason+') here.');
+				readVotersLengthByVetting(index, cb);
+			}
+		);
+	}).catch(
+		// Log the rejection reason
+	 (reason) => {
+			console.log('Handle rejected promise ('+reason+') here.');
+			readVotersLengthByVetting(index, cb);
+		}
+	);
+}
 const calculateReward = (address, cb) => {
 	let records = [];
+	let voteRecords = [];
 	console.log("Reward Calculation Started!");
 	readActiveVettingIndexListLength(address, (length) => {
 		console.log("Active Vetting List Length: " + length);
 		let counter = 1;
 		for (let i=0; i<length; i++){
+			/* settle active vetting reviews one by one */
 			readActiveVettingIndexListByUser(address, i, (index) => {
 				if (index == 0){
 					if (counter == length){
 						console.log("Reward Calculation Completed!");
-						cb(records);
+						cb(records, voteRecords);
 					} else {
 						counter++;
 					}
 				} else {
 					readVettings(index, (vetting) => {
-						if (new Date().getTime() > vetting.last_update + 600){
+						if (new Date().getTime() > (parseInt(vetting.last_update) + 600) * 1000){
+							/* calculate the net impact of active reviews going to be settled */
 							readImpact(vetting.store, address, (posImpact, negImpact) => {
 								console.log("posImpact: " + posImpact);
 								console.log("negImpact: " + negImpact);
 								let record;
 								readStoreName(vetting.store, (storeId) => {
 									if (posImpact >= negImpact){
-										record = {
+										records.push({
 											storeId,
 											positive: true,
-											value: parseInt(vetting.deposit)+100000000000000+(posImpact-negImpact)*1000000000000
-										}
+											value: parseInt(vetting.deposit)+10000000000000000+(posImpact-negImpact)*10000000000000,
+											status: 'Authentic Review'
+										});
+										/* create voters' history record */
+										readVotersByVetting(index, (upvoters_length, downvoters_length) => {
+											for (let j=0; j<upvoters_length; j++){
+												readUpvoterByVetting(index, j, _address => {
+													voteRecords.push({
+														storeId,
+														voter: _address,
+														positive: true,
+														value: '0.002',
+														status: 'Authentic Vote'
+													});
+												});
+											}
+											for (let k=0; k<downvoters_length; k++){
+												readDownvoterByVetting(index, k, _address => {
+													voteRecords.push({
+														storeId,
+														voter: _address,
+														positive: false,
+														value: '0.000',
+														status: 'Inauthentic Vote'
+													});
+												});
+											}
+											if (counter == length){
+												console.log("Reward Calculation Completed!");
+												cb(records, voteRecords);
+											} else {
+												counter++;
+											}
+										});
 									} else {
-										record = {
+										records.push({
 											storeId,
 											positive: false,
-											value: 0
-										}
-									}
-									console.log("counter: " + counter);
-									console.log(record);
-									records.push(record);
-									if (counter == length){
-										console.log("Reward Calculation Completed!");
-										cb(records);
-									} else {
-										counter++;
+											value: 0,
+											status: 'Inauthentic Review'
+										});
+										readVotersLengthByVetting(index, (upvoters_length, downvoters_length) => {
+											for (let j=0; j<upvoters_length; j++){
+												readUpvoterByVetting(index, j, _address => {
+													voteRecords.push({
+														storeId,
+														voter: _address,
+														positive: false,
+														value: '0.000',
+														status: 'Inauthentic Vote'
+													});
+												});
+											}
+											for (let k=0; k<downvoters_length; k++){
+												readDownvoterByVetting(index, k, _address => {
+													voteRecords.push({
+														storeId,
+														voter: _address,
+														positive: true,
+														value: '0.002',
+														status: 'Authentic Vote'
+													});
+												});
+											}
+											if (counter == length){
+												console.log("Reward Calculation Completed!");
+												cb(records, voteRecords);
+											} else {
+												counter++;
+											}
+										});
 									}
 								})
 							})
 						} else {
 							if (counter == length){
 								console.log("Reward Calculation Completed!");
-								cb(records);
+								cb(records, voteRecords);
 							} else {
 								counter++;
 							}

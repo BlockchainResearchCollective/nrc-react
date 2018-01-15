@@ -10,7 +10,7 @@ import {
   storeExist, readOverallScore, readCredibility, createStore, writeReview, readReview, voteReview, readVoted,
   checkVetting, settle, claim, readSettlement, calculateReward, reviewIndexPlusOneByReviewer
 } from '../service/blockchain'
-import { writeHistory, addressToUsername } from '../service/backend'
+import { writeHistory, addressToUsername, writeOthersHistory } from '../service/backend'
 import { alertMessage } from './system'
 import { updateEthBalance } from './user'
 
@@ -91,22 +91,40 @@ export const initialize = (url, ethAddress) => dispatch => {
     } else {
       console.log("There are reviews to settle and claim")
       /* calculate matured vetting reward */
-      calculateReward(ethAddress, (records) => {
+      calculateReward(ethAddress, (reviewRecords, voteRecords) => {
         settle(ethAddress, (error, transactionHash) => {
           if (error){
             console.log(error)
           } else {
             console.log("Vetting transactions are settled!")
-            /* log history */
-            records.map((record) => {
+            /* log review history */
+            reviewRecords.map((record) => {
               let history = {
                 txHash: transactionHash,
-                value: (parseFloat(record.value)/1000000000000000000).toFixed(2).toString(),
+                value: (parseFloat(record.value)/1000000000000000000).toFixed(3).toString(),
                 isPositive: record.positive,
                 storeName: storeIdToStoreName(record.storeId),
-                action: "Settle Review"
+                action: "Settle Review",
+                status: record.status
               }
               writeHistory(history, (flag) => {
+                if (flag){
+                  console.log("history logged")
+                }
+              })
+            })
+            /* log vote history */
+            voteRecords.map((record) => {
+              let history = {
+                txHash: transactionHash,
+                value: record.value,
+                isPositive: record.positive,
+                storeName: storeIdToStoreName(record.storeId),
+                action: "Settle Review",
+                status: record.status
+              }
+              /* we should not add others' history, but just for demo purpose */
+              writeOthersHistory(record.voter, history, (flag) => {
                 if (flag){
                   console.log("history logged")
                 }
@@ -306,9 +324,10 @@ export const readAllReviewsAction = (storeId, totalReviewAmount, ethAddress) => 
             if (counter==0){
               for (let i=0; i<totalReviewAmount; i++){
                 if (ethAddress == reviews[i].reviewerAddress){
-                  let temp = review[0]
-                  review[0] = review[i]
-                  review[i] = temp
+                  let temp = reviews[0]
+                  reviews[i].reviewer = reviews[i].reviewer + "(you)"
+                  reviews[0] = reviews[i]
+                  reviews[i] = temp
                   dispatch(updateMyReviewIndex(0))
                 }
               }
