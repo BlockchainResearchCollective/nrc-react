@@ -2,17 +2,8 @@ import React from 'react'
 import { Icon } from 'antd'
 import { timeConverter } from '../service/util'
 
-const divStyle = {
-  border: '1px solid',
-  borderRadius: '5px',
-  backgroundColor: 'white',
-  boxShadow: '1px 1px 1px black',
-  height: '70px',
-  position: 'relative',
-  marginBottom: '10px',
-}
 const titleStyle = {
-  color: 'black',
+  color: '#58595b',
   fontSize: '14px',
   padding: '10px',
 }
@@ -37,34 +28,53 @@ const hashStyle = {
 }
 
 const ActionRecord = (props) => {
+  let divStyle = {
+    border: '1px solid',
+    borderRadius: '5px',
+    backgroundColor: 'white',
+    boxShadow: '1px 1px 1px black',
+    height: '70px',
+    position: 'relative',
+    marginBottom: '10px',
+    borderLeftWidth: '5px'
+  }
+  if (props.record.status==='Authentic Review' || props.record.status==='Authentic Vote'){
+    divStyle.borderLeftColor = '#58c989'
+  } else if (props.record.status==='Inauthentic Review' || props.record.status==='Inauthentic Vote'){
+    divStyle.borderLeftColor = '#f06664'
+  } else if (props.record.status==='Store Created'){
+    divStyle.borderLeftColor = '#ff00ff'
+  } else {
+    divStyle.borderLeftColor = '#6699ff'
+  }
   return (
     <div style={divStyle}>
       <div style={amountStyle}>
         { props.record.status==='Authentic Review' &&
-          <p style={{color: 'green'}}>Authentic Review</p>
+          <p style={{color: '#58c989'}}>Authentic Review</p>
         }
         { props.record.status==='Authentic Vote' &&
-          <p style={{color: 'green'}}>Authentic Vote</p>
+          <p style={{color: '#58c989'}}>Authentic Vote</p>
         }
         { props.record.status==='Inauthentic Review' &&
-          <p style={{color: 'red'}}>Inauthentic Review</p>
+          <p style={{color: '#f06664'}}>Inauthentic Review</p>
         }
         { props.record.status==='Inauthentic Vote' &&
-          <p style={{color: 'red'}}>Inauthentic Vote</p>
+          <p style={{color: '#f06664'}}>Inauthentic Vote</p>
         }
         { props.record.status==='Store Created' &&
-          <p style={{color: 'purple'}}>Store Created</p>
+          <p style={{color: '#ff00ff'}}>Store Created</p>
         }
         { props.record.status==='Processing Review' &&
-          <p style={{color: 'blue'}}>Processing Review</p>
+          <p style={{color: '#6699ff'}}>Processing Review</p>
         }
         { props.record.status==='Processing Vote' &&
-          <p style={{color: 'blue'}}>Processing Vote</p>
+          <p style={{color: '#6699ff'}}>Processing Vote</p>
         }
       </div>
       { props.record.storeName &&
         <div style={titleStyle}>
-          <h3>{props.record.storeName}</h3>
+          <h3>{props.record.storeName.slice(0,20) + '...'}</h3>
         </div>
       }
       { !props.record.storeName &&

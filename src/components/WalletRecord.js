@@ -2,17 +2,8 @@ import React from 'react'
 import { Icon } from 'antd'
 import { timeConverter } from '../service/util'
 
-const divStyle = {
-  border: '1px solid',
-  borderRadius: '5px',
-  backgroundColor: 'white',
-  boxShadow: '1px 1px 1px black',
-  height: '70px',
-  position: 'relative',
-  marginBottom: '10px',
-}
 const titleStyle = {
-  color: 'black',
+  color: '#58595b',
   fontSize: '14px',
   padding: '10px',
 }
@@ -37,16 +28,31 @@ const hashStyle = {
 }
 
 const WalletRecord = (props) => {
+  let divStyle = {
+    border: '1px solid',
+    borderRadius: '5px',
+    backgroundColor: 'white',
+    boxShadow: '1px 1px 1px black',
+    height: '70px',
+    position: 'relative',
+    marginBottom: '10px',
+    borderLeftWidth: '5px'
+  }
+  if (props.record.isPositive){
+    divStyle.borderLeftColor = '#58c989'
+  } else {
+    divStyle.borderLeftColor = '#f06664'
+  }
   return (
     <div style={divStyle}>
       { props.record.isPositive &&
         <div style={amountStyle}>
-          <p style={{color: 'green'}}>+ {props.record.value} Ether</p>
+          <p style={{color: '#58c989'}}>+ {props.record.value} Ether</p>
         </div>
       }
       { !props.record.isPositive &&
         <div style={amountStyle}>
-          <p style={{color: 'red'}}>- {props.record.value} Ether</p>
+          <p style={{color: '#f06664'}}>- {props.record.value} Ether</p>
         </div>
       }
       <div style={titleStyle}>
