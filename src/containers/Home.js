@@ -11,14 +11,19 @@ import Wallet from '../components/Wallet'
 import ActionHistory from '../components/ActionHistory'
 import { initialize, decryptKey, initializeEnd } from '../actions'
 import { checkUrlStatus, getStoreIdFromUrl } from '../service/util'
+import { URL } from '../constants'
 
 const writeReviewStyle = {
   margin: '30px'
 }
-
 const loadingStyle = {
   margin: '50px',
   textAlign: 'center'
+}
+const logoStyle = {
+  height: '80px',
+  width: '80px',
+  margin: '10px'
 }
 
 class Home extends React.Component {
@@ -173,13 +178,20 @@ class Home extends React.Component {
         {
           !this.props.isReady &&
           <div style={loadingStyle}>
+            <div>
+              <img src={`${URL}/images/Icon_refreshingleft.svg`} style={logoStyle} alt="logo" />
+              <span style={{fontSize: '12px', color: 'white'}}>Loading...</span>
+              <img src={`${URL}/images/Icon_refreshingright.svg`} style={logoStyle} alt="logo" />
+            </div>
             <Spin size="large" />
           </div>
         }
         {
           this.props.isProcessing &&
           <div style={loadingStyle}>
-            <Spin size="large" />
+            <img src={`${URL}/images/Icon_refreshingleft.svg`} style={logoStyle} alt="logo" />
+            <span style={{fontSize: '12px', color: 'white'}}>Processing...</span>
+            <img src={`${URL}/images/Icon_refreshingright.svg`} style={logoStyle} alt="logo" />
           </div>
         }
       </div>
