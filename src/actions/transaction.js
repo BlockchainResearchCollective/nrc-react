@@ -272,6 +272,8 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
           } else {
             /* write history */
             record.txHash = transactionHash
+            record.value = '0.001'
+            record.action = "Update Review"
             writeHistory(record, (flag) => {
               if (flag){
                 console.log("history logged")
@@ -291,6 +293,8 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
         } else {
           /* write history */
           record.txHash = transactionHash
+          record.value = '0.011'
+          record.action = "Write Review"
           writeHistory(record, (flag) => {
             if (flag){
               console.log("history logged")
