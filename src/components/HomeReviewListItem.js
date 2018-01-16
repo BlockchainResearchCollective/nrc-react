@@ -104,13 +104,25 @@ class HomeReviewListItem extends React.Component {
           isUpvote: true,
         }
       })
-      let record = {
-        storeName: this.props.storeName,
-        value: '0.001',
-        isPositive: false,
-        originalReviewer: this.props.review.reviewerAddress,
-        action: "Vote Review",
-        status: "Processing Vote"
+      let record
+      if (new Date().getTime() > (parseInt(this.props.review.timestamp) + 600) * 1000){
+        record = {
+          storeName: this.props.storeName,
+          value: '0.001',
+          isPositive: false,
+          originalReviewer: this.props.review.reviewerAddress,
+          action: "Vote Review",
+          status: "Normal Vote"
+        }
+      } else {
+        record = {
+          storeName: this.props.storeName,
+          value: '0.001',
+          isPositive: false,
+          originalReviewer: this.props.review.reviewerAddress,
+          action: "Vote Review",
+          status: "Processing Vote"
+        }
       }
       /* vote review */
       this.props.dispatch(voteReviewAction(this.props.storeId, this.props.review.reviewerAddress, true, record))
@@ -127,13 +139,25 @@ class HomeReviewListItem extends React.Component {
           isUpvote: false,
         }
       })
-      let record = {
-        storeName: this.props.storeName,
-        value: '0.001',
-        isPositive: false,
-        originalReviewer: this.props.review.reviewerAddress,
-        action: "Vote Review",
-        status: "Processing Vote"
+      let record
+      if (new Date().getTime() > (parseInt(this.props.review.timestamp) + 600) * 1000){
+        record = {
+          storeName: this.props.storeName,
+          value: '0.001',
+          isPositive: false,
+          originalReviewer: this.props.review.reviewerAddress,
+          action: "Vote Review",
+          status: "Normal Vote"
+        }
+      } else {
+        record = {
+          storeName: this.props.storeName,
+          value: '0.001',
+          isPositive: false,
+          originalReviewer: this.props.review.reviewerAddress,
+          action: "Vote Review",
+          status: "Processing Vote"
+        }
       }
       /* vote review */
       this.props.dispatch(voteReviewAction(this.props.storeId, this.props.review.reviewerAddress, false, record))

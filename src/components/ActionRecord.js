@@ -71,6 +71,9 @@ const ActionRecord = (props) => {
         { props.record.status==='Processing Vote' &&
           <p style={{color: '#6699ff'}}>Processing Vote</p>
         }
+        { props.record.status==='Normal Vote' &&
+          <p style={{color: '#6699ff'}}>Normal Vote</p>
+        }
       </div>
       { props.record.storeName &&
         <div style={titleStyle}>
