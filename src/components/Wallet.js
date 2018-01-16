@@ -71,7 +71,7 @@ class Wallet extends React.Component {
       <div>
         <div style={headStyle}>
           <div style={backgroundStyle}>
-            <h3><Icon type='wallet'/> Your Account</h3>
+            <h3><Icon type='wallet'/> Your Account <a href={'https://kovan.etherscan.io/address/'+this.props.address} target='_blank'><Icon type="link" /></a></h3>
             <p>{this.props.address}</p>
           </div>
         </div>
