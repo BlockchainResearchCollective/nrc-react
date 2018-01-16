@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Spin } from 'antd'
+import { Spin, Icon } from 'antd'
 import HomeHeader from '../components/HomeHeader'
 import HomeStoreName from '../components/HomeStoreName'
 import HomeReviewList from '../components/HomeReviewList'
@@ -111,14 +111,12 @@ class Home extends React.Component {
             <div>
               <HomeStoreName
                 handleWriteReview = {this.handleWriteReview}
-                handleBack = {this.handleBack}
                 storeSelected={this.props.storeSelected}
                 storeURL={this.props.storeURL}
                 storeName={this.props.storeName}
                 storeExist={this.props.storeExist}
                 reviewAmount={this.props.reviewAmount}
                 storeOverallScore={this.props.storeOverallScore}
-                button='Write Review'
               />
               { !this.props.isProcessing && this.props.storeSelected && this.props.storeExist && this.props.reviewReady &&
                 <HomeReviewList/>
@@ -142,17 +140,11 @@ class Home extends React.Component {
         }
         { this.props.isReady && this.state.display === "writeReviewPage" &&
           <div>
-            <HomeStoreName
-              handleWriteReview = {this.handleWriteReview}
-              handleBack = {this.handleBack}
-              storeSelected={this.props.storeSelected}
-              storeURL={this.props.storeURL}
-              storeName={this.props.storeName}
-              storeExist={this.props.storeExist}
-              reviewAmount={this.props.reviewAmount}
-              storeOverallScore={this.props.storeOverallScore}
-              button='Back'
-            />
+            <div style={{textAlign:'center'}}>
+              <span onClick={this.handleBack} style={{color:'#ffdc85', cursor:'pointer', fontSize:'20px'}}>
+                <Icon type="arrow-left" /> {this.props.storeName}
+              </span>
+            </div>
             { !this.props.isProcessing &&
               <div style={writeReviewStyle} >
                 <WriteReview

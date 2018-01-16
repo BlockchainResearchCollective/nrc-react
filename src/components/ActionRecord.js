@@ -1,11 +1,12 @@
 import React from 'react'
-import { Icon } from 'antd'
+import { Icon, Tooltip } from 'antd'
 import { timeConverter } from '../service/util'
 
 const titleStyle = {
   color: '#58595b',
   fontSize: '14px',
   padding: '10px',
+  cursor: 'help'
 }
 const amountStyle = {
   fontSize: '16px',
@@ -77,12 +78,9 @@ const ActionRecord = (props) => {
       </div>
       { props.record.storeName &&
         <div style={titleStyle}>
-          <h3>{props.record.storeName.slice(0,20) + '...'}</h3>
-        </div>
-      }
-      { !props.record.storeName &&
-        <div style={titleStyle}>
-          <h3>[Automatic Claim]</h3>
+          <Tooltip placement="topLeft" title={props.record.storeName} overlayStyle={{zIndex:'10000'}}>
+            <h3>{props.record.storeName.length > 20 ? (props.record.storeName.slice(0,20) + '...') : props.record.storeName}</h3>
+          </Tooltip>
         </div>
       }
       <div style={dateStyle}>

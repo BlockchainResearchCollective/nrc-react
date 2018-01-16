@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { URL } from '../constants'
-import { Row, Col, Menu, Dropdown, Icon } from 'antd'
+import { Row, Col, Menu, Dropdown, Icon, Tooltip } from 'antd'
 import { logout, updateEthBalance } from '../actions'
 
 const divStyle = {
@@ -20,7 +20,7 @@ const balanceStyle ={
 const warningStyle ={
 	color: 'red',
 	fontSize: '16px',
-  fontFamily: 'Open Sans',
+  marginLeft: '5px'
 }
 const logoStyle = {
   height: '40px',
@@ -71,11 +71,15 @@ class HomeHeader extends React.Component{
 				<Row>
 					<Col offset={0} span={19}>
 						<div style={greetingStyle}><a onClick={this.props.handleRefresh} href="#"><Icon type="reload" /></a> Hi, {this.props.username}</div>
-            { this.props.email && this.props.isReady && this.props.ethBalance >= 0.05 &&
-              <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether</div>
-            }
-            { this.props.email && this.props.isReady && this.props.ethBalance < 0.05 &&
-              <div style={balanceStyle}>Balance: <span>{this.props.ethBalance.toFixed(5)}</span> Ether <span style={warningStyle}>(Insufficient)</span></div>
+            { this.props.email && this.props.isReady &&
+              <div style={balanceStyle}>
+                Balance: <span style={{color:'#ffdc85'}}>{this.props.ethBalance.toFixed(5)}</span> Ether
+                { this.props.ethBalance < 0.05 &&
+                  <Tooltip title="Insufficient Balance" overlayStyle={{zIndex: '10000'}}>
+                    <Icon type="exclamation-circle-o" style={warningStyle}/>
+                  </Tooltip>
+                }
+              </div>
             }
             { !this.props.email &&
               <div style={warningStyle}>Unverified Account</div>

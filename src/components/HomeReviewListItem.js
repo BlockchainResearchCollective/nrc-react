@@ -11,27 +11,28 @@ const divStyle = {
 }
 
 const hrStyle = {
-  backgroundColor: 'grey',
+  backgroundColor: '#67627c',
   height: '1px',
-  border: 'none'
+  border: 'none',
+  marginBottom: '0px'
 }
 
 const titleStyle = {
   color: 'white',
-  fontSize: '18px',
+  fontSize: '16px',
 }
 
 const timeStyle = {
-  color: 'grey',
-  fontSize: '14px',
+  color: '#67627c',
+  fontSize: '12px',
   position: 'absolute',
-  top: '0px',
+  top: '8px',
   right: '20px'
 }
 
 const contentStyle = {
-  color: 'white',
-  fontSize: '14px'
+  color: '#ddd',
+  fontSize: '12px'
 }
 
 const voteStyle = {
@@ -178,8 +179,8 @@ class HomeReviewListItem extends React.Component {
         <hr style={hrStyle} />
         <div style={divStyle}>
           <div style={titleStyle}>
-            <span>{this.props.review.reviewer}: </span>
-            <Rate character={<Icon type="star" style={{ fontSize: 16 }} />} disabled value={parseInt(this.props.review.score, 10)} />
+            <span><Icon type="user" /> {this.props.review.reviewer}: </span>
+            <Rate character={<Icon type="star" style={{ fontSize:'14px' }} />} disabled value={parseInt(this.props.review.score, 10)} />
           </div>
           <div style={timeStyle}>
             {this.props.review.time}

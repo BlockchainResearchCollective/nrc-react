@@ -1,5 +1,5 @@
 import React from 'react'
-import { Rate } from 'antd'
+import { Rate, Icon } from 'antd'
 
 const ratingStyle = {
   fontSize: '14px',
@@ -33,8 +33,10 @@ const HomeAverageRating = (props) => {
   return (
     <div>
       <span style={ratingStyle} >{parseScore(props.storeOverallScore)}</span>
-      <Rate allowHalf disabled value={scaleConverter(parseFloat(props.storeOverallScore)/20)} />
-      <span style={reviewNumberStyle} >| {props.reviewAmount} Reviews</span>
+      <Rate allowHalf disabled value={scaleConverter(parseFloat(props.storeOverallScore)/20)} style={{fontSize:'14px'}}/>
+      <span style={reviewNumberStyle} >
+        | {props.reviewAmount} Reviews <span onClick={props.handleWriteReview}><Icon type="edit" style={{color:'#ffdc85', cursor:'pointer', fontSize:'16px'}}/></span>
+      </span>
     </div>
   )
 }

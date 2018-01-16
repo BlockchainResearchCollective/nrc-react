@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon } from 'antd'
+import { Button, Icon, Tooltip } from 'antd'
 import { URL } from '../constants'
 import HomeAverageRating from './HomeAverageRating'
 
@@ -11,20 +11,25 @@ const backgroundStyle = {
 
 const subDivStyle = {
   position: 'absolute',
-  top: '70px',
-  right: '110px',
-  padding: '10px'
+  left: '20px',
+  bottom: '15px'
 }
 
 const titleStyle = {
-  fontSize: '18px',
+  fontSize: '20px',
   color: '#fff',
-  textTransform: 'uppercase'
+  textTransform: 'uppercase',
+  cursor: 'help'
 }
 
 const buttonStyle = {
-  marginTop: '20px',
-  marginLeft: '30px'
+  position: 'absolute',
+  right: '20px',
+  bottom: '10px',
+  fontSize: '12px',
+  width: '120px',
+  height: '26px',
+  padding: '0px'
 }
 
 const displayName = (storeName) => {
@@ -62,18 +67,19 @@ const HomeStoreName = (props) => {
   return (
     <div style={divStyle}>
       <div style={backgroundStyle}>
-        { props.storeSelected && props.storeExist && props.button==="Write Review" &&
-          <Button onClick={props.handleWriteReview} style={buttonStyle} type="primary"><Icon type="arrow-right" />Write Review</Button>
-        }
-        { props.storeSelected && props.storeExist && props.button==="Back" &&
-          <Button onClick={props.handleBack} style={buttonStyle} type="primary"><Icon type="arrow-left" />All Reviews</Button>
-        }
         <div style={subDivStyle}>
-          <div style={titleStyle} >{displayName(props.storeName)}</div>
+          <div style={titleStyle} >
+            <Tooltip title={props.storeName} overlayStyle={{zIndex: '10000'}}>
+              <span>
+                {displayName(props.storeName)}
+              </span>
+            </Tooltip>
+          </div>
           <div>
             <HomeAverageRating
               reviewAmount={props.reviewAmount}
               storeOverallScore={props.storeOverallScore}
+              handleWriteReview={props.handleWriteReview}
             />
           </div>
         </div>

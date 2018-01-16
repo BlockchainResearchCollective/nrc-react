@@ -110,7 +110,7 @@ class WriteReviewForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
+        <FormItem style={{textAlign: 'center'}}>
           {getFieldDecorator('rate', {
             initialValue: 0,
             rules: [{ validator: this.handleRate }],
@@ -122,9 +122,10 @@ class WriteReviewForm extends React.Component {
           {getFieldDecorator('content', {
             rules: [{ required: true, message: 'Please input content!' }],
           })(
-            <TextArea rows={5} placeholder="Review Content" />
+            <TextArea rows={10} placeholder="Review Content" />
           )}
         </FormItem>
+        <p style={{color:'#ddd'}}>Please upload your photos: </p>
         <FormItem>
           {getFieldDecorator('upload', {
             valuePropName: 'fileList',
