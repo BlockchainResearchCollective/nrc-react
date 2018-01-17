@@ -28,11 +28,19 @@ const buttonStyle = {
   top: '20px',
 }
 
+const logoStyle = {
+  position: 'absolute',
+  right: '10px',
+  top: '10px',
+  width: '80px',
+  height: '80px'
+}
+
 const displayName = (storeName) => {
   let storeNameList = storeName.split(' ')
   let i = 1
   let display = storeNameList[0]
-  while (i < storeNameList.length && display.length + storeNameList[i].length < 30){
+  while (i < storeNameList.length && display.length + storeNameList[i].length < 25){
     display = display + " " + storeNameList[i]
     i++
   }
@@ -63,6 +71,7 @@ const HomeStoreName = (props) => {
   return (
     <div style={divStyle}>
       <div style={backgroundStyle}>
+        <img src={`${URL}/images/Icon_Badge_1.svg`} style={logoStyle} alt="logo" />
         { props.storeSelected && props.storeExist &&
           <Button onClick={props.handleWriteReview} style={buttonStyle} type="primary"><Icon type="arrow-right" />Write Review</Button>
         }
