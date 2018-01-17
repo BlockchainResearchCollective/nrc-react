@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Rate, Icon, Modal } from 'antd'
 import { voteReviewAction } from '../actions/transaction'
 import { URL } from '../constants'
@@ -63,35 +62,50 @@ class HomeReviewListItem extends React.Component {
 
   constructor(props){
     super(props)
+    let upvote = parseInt(props.review.upvote)
+    let downvote = parseInt(props.review.downvote)
+    let voted = props.voted
+    let content
+    let imageList
+    try {
+      content = JSON.parse(props.review.content).text
+      imageList = JSON.parse(props.review.content).images
+    }
+    catch(error) {
+      content = props.review.content
+      imageList = []
+    }
     this.state = {
-      upvote: 0,
-      downvote: 0,
-      voted: true,
-      content: "",
-      imageList: [],
+      upvote,
+      downvote,
+      voted,
+      content,
+      imageList,
       previewVisible: false,
       previewImage: ""
     }
   }
 
-  componentDidMount = () => {
-    this.setState({
-      upvote: parseInt(this.props.review.upvote),
-      downvote: parseInt(this.props.review.downvote),
-      voted: this.props.voted,
-    })
-    try {
-      let content = JSON.parse(this.props.review.content).text
-      let imageList = JSON.parse(this.props.review.content).images
+  componentDidUpdate = (prevProps) => {
+    if (prevProps !== this.props){
       this.setState({
-        content,
-        imageList
+        upvote: parseInt(this.props.review.upvote),
+        downvote: parseInt(this.props.review.downvote),
+        voted: this.props.voted,
       })
-    }
-    catch(error) {
-      this.setState({
-        content: this.props.review.content
-      })
+      try {
+        let content = JSON.parse(this.props.review.content).text
+        let imageList = JSON.parse(this.props.review.content).images
+        this.setState({
+          content,
+          imageList
+        })
+      }
+      catch(error) {
+        this.setState({
+          content: this.props.review.content
+        })
+      }
     }
   }
 
@@ -217,4 +231,4 @@ class HomeReviewListItem extends React.Component {
   }
 }
 
-export default connect()(HomeReviewListItem)
+export default HomeReviewListItem

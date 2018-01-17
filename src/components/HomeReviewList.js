@@ -25,19 +25,16 @@ class HomeReviewList extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      reviews: []
+      page: 1,
+      index: 0
     }
   }
 
   handleChange = (page) => {
-    var index = (page - 1) * 3
     this.setState({
-      reviews: this.props.reviews.slice(index, index + 3)
+      page,
+      index: (page - 1) * 3
     })
-  }
-
-  componentDidMount() {
-    this.handleChange(1)
   }
 
   render(){
@@ -45,7 +42,7 @@ class HomeReviewList extends React.Component {
       <div>
         { this.props.reviewAmount>0 &&
           <div>
-            {this.state.reviews.map((review, index) =>
+            {this.props.reviews.slice(this.state.index, this.state.index + 3).map((review, index) =>
               <div key={index}>
                 <HomeReviewListItem
                   review={review}
@@ -58,6 +55,7 @@ class HomeReviewList extends React.Component {
             <hr style={hrStyle} />
             <div style={paginationStyle}>
               <Pagination
+                current={this.state.page}
                 pageSize={3}
                 total={this.props.reviewAmount}
                 size='small'
