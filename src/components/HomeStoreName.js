@@ -24,19 +24,15 @@ const titleStyle = {
 
 const buttonStyle = {
   position: 'absolute',
-  right: '20px',
-  bottom: '10px',
-  fontSize: '12px',
-  width: '120px',
-  height: '26px',
-  padding: '0px'
+  left: '20px',
+  top: '20px',
 }
 
 const displayName = (storeName) => {
   let storeNameList = storeName.split(' ')
   let i = 1
   let display = storeNameList[0]
-  while (i < storeNameList.length && display.length + storeNameList[i].length < 23){
+  while (i < storeNameList.length && display.length + storeNameList[i].length < 30){
     display = display + " " + storeNameList[i]
     i++
   }
@@ -67,6 +63,9 @@ const HomeStoreName = (props) => {
   return (
     <div style={divStyle}>
       <div style={backgroundStyle}>
+        { props.storeSelected && props.storeExist &&
+          <Button onClick={props.handleWriteReview} style={buttonStyle} type="primary"><Icon type="arrow-right" />Write Review</Button>
+        }
         <div style={subDivStyle}>
           <div style={titleStyle} >
             <Tooltip title={props.storeName} overlayStyle={{zIndex: '10000'}}>

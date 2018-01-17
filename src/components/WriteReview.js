@@ -27,8 +27,7 @@ class WriteReviewForm extends React.Component {
         let record = {
           storeName: this.props.storeName,
           isPositive: false,
-          originalReviewer: this.props.ethAddress,
-          status: "Processing Review"
+          originalReviewer: this.props.ethAddress
         }
         let content = {
           text: values.content,

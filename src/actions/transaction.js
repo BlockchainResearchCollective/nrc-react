@@ -230,6 +230,7 @@ export const createStoreAction = (storeId, record) => dispatch => {
 
 export const writeReviewRefreshCheck = (storeId, reviewer, last_update) => dispatch => {
   console.log("last_update: " + last_update)
+  let counter = 0
   var refreshCheck = setInterval( () => {
     reviewIndexPlusOneByReviewer(storeId, reviewer, (index) => {
       if (index!=0){
@@ -241,8 +242,8 @@ export const writeReviewRefreshCheck = (storeId, reviewer, last_update) => dispa
         } else {
           readReview(storeId, index-1, (review) => {
             console.log("last_update: " + last_update)
-            console.log("review:")
-            console.log(reviewer)
+            console.log("review: " + review)
+            counter++
             if (review.timestamp != last_update){
               dispatch(alertMessage("Write review success!"))
               clearInterval(refreshCheck)
@@ -251,6 +252,13 @@ export const writeReviewRefreshCheck = (storeId, reviewer, last_update) => dispa
             }
           })
         }
+      } else {
+        counter++
+      }
+      if (counter==10){
+        clearInterval(refreshCheck)
+        dispatch(alertMessage("Write review failed!"))
+        dispatch(processEnd())
       }
     })
   }, 3000)
@@ -264,24 +272,49 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
       /* for old review */
       readReview(storeId, index-1, (review) => {
         last_update = review.timestamp
-        writeReview(storeId, commment, score, 0, (error, transactionHash) => {
-          if (error){
-            console.log(error)
-            dispatch(alertMessage("Write review failed!"))
-            dispatch(processEnd())
-          } else {
-            /* write history */
-            record.txHash = transactionHash
-            record.value = '0.001'
-            record.action = "Update Review"
-            writeHistory(record, (flag) => {
-              if (flag){
-                console.log("history logged")
-              }
-            })
-            dispatch(writeReviewRefreshCheck(storeId, record.originalReviewer, last_update))
-          }
-        })
+        if (new Date().getTime() > (parseInt(last_update) + 600) * 1000){
+          /* for new vetting */
+          writeReview(storeId, commment, score, 10000000000000000, (error, transactionHash) => {
+            if (error){
+              console.log(error)
+              dispatch(alertMessage("Write review failed!"))
+              dispatch(processEnd())
+            } else {
+              /* write history */
+              record.txHash = transactionHash
+              record.value = '0.011'
+              record.action = "Write Review"
+              record.status = "Processing Review"
+              writeHistory(record, (flag) => {
+                if (flag){
+                  console.log("history logged")
+                }
+              })
+              dispatch(writeReviewRefreshCheck(storeId, record.originalReviewer, last_update))
+            }
+          })
+        } else {
+          /* for existed vetting */
+          writeReview(storeId, commment, score, 0, (error, transactionHash) => {
+            if (error){
+              console.log(error)
+              dispatch(alertMessage("Write review failed!"))
+              dispatch(processEnd())
+            } else {
+              /* write history */
+              record.txHash = transactionHash
+              record.value = '0.001'
+              record.action = "Update Review"
+              record.status = "Review Updated"
+              writeHistory(record, (flag) => {
+                if (flag){
+                  console.log("history logged")
+                }
+              })
+              dispatch(writeReviewRefreshCheck(storeId, record.originalReviewer, last_update))
+            }
+          })
+        }
       })
     } else {
       /* for new review */
@@ -295,6 +328,7 @@ export const writeReviewAction = (storeId, commment, score, record) => dispatch 
           record.txHash = transactionHash
           record.value = '0.011'
           record.action = "Write Review"
+          record.status = "Processing Review"
           writeHistory(record, (flag) => {
             if (flag){
               console.log("history logged")

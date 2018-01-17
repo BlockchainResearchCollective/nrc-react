@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Rate, Icon, Modal } from 'antd'
 import { voteReviewAction } from '../actions/transaction'
 import { URL } from '../constants'
@@ -231,4 +232,4 @@ class HomeReviewListItem extends React.Component {
   }
 }
 
-export default HomeReviewListItem
+export default connect()(HomeReviewListItem)
