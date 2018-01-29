@@ -27,7 +27,13 @@ exports.getStoreNameFromUrl = function(url){
 exports.getStoreIdFromUrl = function(url){
 	var results = url.split("/");
 	var storeLatLng = results[7].split('!');
-	return results[5] + "--" + storeLatLng[storeLatLng.length - 2].slice(2).match(/[0-9]+\.[0-9]{3}/g) + "--" + storeLatLng[storeLatLng.length - 1].slice(2).match(/[0-9]+\.[0-9]{3}/g);
+  var lat = storeLatLng[storeLatLng.length - 2].slice(2).match(/[0-9]+\.[0-9]{3}/g);
+  var lng = storeLatLng[storeLatLng.length - 1].slice(2).match(/[0-9]+\.[0-9]{3}/g);
+  if (!lat && !lng){
+    lat = storeLatLng[storeLatLng.length - 4].slice(2).match(/[0-9]+\.[0-9]{3}/g);
+    lng = storeLatLng[storeLatLng.length - 3].slice(2).match(/[0-9]+\.[0-9]{3}/g);
+  }
+	return results[5] + "--" + lat + "--" + lng;
 }
 
 exports.storeIdToStoreName = function(storeId){
